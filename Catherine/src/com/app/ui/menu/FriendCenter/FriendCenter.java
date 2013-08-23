@@ -307,7 +307,7 @@ OnClickListener editTextOnClickListener = new OnClickListener() {
 	    {
 	        tempTag = PinYinComparator.getPinYin((String)hMap.get("fname")).charAt(0) + "";
 	        tempTag = tempTag.toUpperCase();
-	        if (tempTag != currentTag)
+	        if (!tempTag.equals(currentTag))
 	        {
 	            currentTag = tempTag;
 	            HashMap<String, Object> tempMap = new HashMap<String, Object>();
@@ -315,7 +315,7 @@ OnClickListener editTextOnClickListener = new OnClickListener() {
 	            tempMap.put("fname", currentTag);
 	            int pos = tempList.size();
 	            tempIndex.put(currentTag, pos);
-	            tempList.add(tempMap);
+	            tempList.add(tempMap); 
 	        }
 	        tempList.add(hMap);
 	    }
