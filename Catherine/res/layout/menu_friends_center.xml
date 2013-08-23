@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/gray">
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible" 
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/TextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@drawable/side" />
+
+        <EditText
+            android:id="@+id/menu_friend_center_searchmyfriend"
+            android:background="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="7000"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/menu_friend_center_searchmyfriendBtn"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/search" />
+
+        
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp" >
+
+     	<ListView 
+        	android:id="@+id/menu_friend_center_functions"
+       		android:layout_width="match_parent"
+       		android:layout_height="wrap_content">
+   		</ListView>
+   		
+        <ListView
+            android:id="@+id/menu_friend_center_friendlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:layout_below="@id/menu_friend_center_functions">
+        </ListView>
+        
+        <com.app.widget.LetterSidebar
+            android:id="@+id/lettersidebar" 
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

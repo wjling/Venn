@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    	android:layout_width="wrap_content"
+	   	 	android:layout_height="wrap_content"
+	   	 	android:layout_marginTop="5dip"
+	   	 	android:layout_marginLeft="5dip"
+    		android:layout_marginRight="5dip"
+    		android:background="#ffffff"
+	    	>
+	    	
+		    	<LinearLayout 
+		    	    android:id="@+id/activityDate"
+		    	    android:layout_width="55dip"
+		    	    android:layout_height="85dip"
+		    	    android:layout_marginLeft="5dip"
+		    	    android:background="@drawable/date"
+		    	    android:orientation="vertical"
+		    	    >
+		    	    <TextView
+		    	        android:id="@+id/day"
+		    	        android:layout_width="match_parent"
+		    	        android:layout_height="wrap_content"
+						android:gravity="center_horizontal"	    	        
+		    	        android:textSize="30sp" 
+		    	        android:textColor="#ffffff"
+		    	        android:text="27"		    	        
+		    	        />
+		    	    <TextView
+		    	        android:id="@+id/monthAndYear"
+		    	        android:layout_width="match_parent"
+		    	        android:layout_height="wrap_content"	
+		    	        android:gravity="center_horizontal"	
+		    	        android:textSize="10sp" 
+		    	        android:textColor="#ffffff"
+		    	        android:text="7月 2013" />
+		    	</LinearLayout>
+		    	
+		    	<RelativeLayout
+		    	    android:id="@+id/activityInfoAll"
+		    	    android:layout_width="225dip"
+		    	    android:layout_height="wrap_content"
+		    	    android:layout_toRightOf="@+id/activityDate" >
+
+			    	    <LinearLayout
+			    	        android:id="@+id/activityInfo"
+			    	        android:layout_width="match_parent"
+			    	        android:layout_height="wrap_content"
+			    	        android:orientation="vertical" >
+
+				    	    <TextView 
+				    	        android:id="@+id/activityTitle"
+				    	        android:layout_width="match_parent"
+				    	        android:layout_height="wrap_content"
+				    	        android:gravity="center_horizontal"	
+				    	        android:layout_marginTop="5dip"
+				    	        android:textSize="17sp" 
+				    	        android:textColor="#333333"
+				    	        android:text="周末一起来加班吧！"/>
+				    	    				    	   
+			    	       <TextView 
+			    	           android:id="@+id/launcher"
+			    	           android:layout_width="match_parent"
+			    	           android:layout_height="wrap_content"
+			    	           android:singleLine="true"
+			    	           android:layout_marginTop="0dip"
+			    	           android:layout_marginRight="12dip"
+			    	           android:gravity="right"
+			    	           android:textSize="11sp" 
+					    	   android:textColor="#b2b2b2"
+			    	           android:text="By Yll"/>
+		    	   					    	   
+				    	    <LinearLayout 
+				    	        android:layout_width="wrap_content"
+				    	        android:layout_height="wrap_content"
+				    	        android:layout_marginTop="10dip"
+				    	        android:layout_marginLeft="5dip"
+				    	        android:orientation="horizontal">
+					    	        <ImageView 
+					    	            android:layout_height="wrap_content"
+					    	            android:layout_width="wrap_content"
+					    	            android:layout_gravity="center"
+					    	            android:padding="2dip"
+					    	            android:src="@drawable/time"
+					    	            />
+					    	         <TextView 
+					    	             android:id="@+id/time"
+						    	        android:layout_width="wrap_content"
+						    	        android:layout_height="wrap_content"	
+						    	        android:textSize="11sp" 
+						    	        android:textColor="#b2b2b2"
+						    	        android:text="09:00~18:00"/>			    	         
+				    	    </LinearLayout>
+		    	    
+				    	     <LinearLayout 
+				    	        android:layout_width="wrap_content"
+				    	        android:layout_height="wrap_content"
+				    	        android:layout_marginLeft="5dip"
+				    	        android:orientation="horizontal">
+					    	         <ImageView 
+					    	            android:layout_height="wrap_content"
+					    	            android:layout_width="wrap_content"
+					    	            android:layout_gravity="center"
+					    	            android:padding="1dip"
+					    	            android:src="@drawable/site"
+					    	            />
+					    	        <TextView 
+					    	            android:id="@+id/location"
+						    	        android:layout_width="wrap_content"
+						    	        android:layout_height="wrap_content"	
+						    	        android:singleLine="true"
+						    	        android:textSize="11sp" 
+						    	        android:textColor="#b2b2b2"
+						    	        android:text="中山大学信科楼516室"/>
+				    	    </LinearLayout>		    	   		    	   
+		    		</LinearLayout>
+		    				    			    	   	
+			    	<LinearLayout 
+			    	    android:id="@+id/activityRemark"
+			    	    android:layout_below="@+id/activityInfo"
+			    	    android:layout_width="match_parent"
+			    	    android:layout_marginTop="10dip"
+			    	    android:layout_height="wrap_content"
+			    	   	>
+			    	    <TextView
+			    	        android:id="@+id/remark"
+			    	        android:layout_width="match_parent"
+			    	        android:layout_height="55dip"
+			    	        android:maxLines="3"
+			    	        android:textSize="11sp" 
+						    android:textColor="#999999"						    
+						    android:paddingLeft="8dip"
+						    android:paddingRight="3dip"
+						    android:lineSpacingExtra="3dip"
+			    	        android:text="出来混，最紧要系要有义气！混口饭吃嗟使唔使甘样纸啊？肚子饿，就吃饭呗，实在是没有对白了，就唱歌咯"	    	        
+			    	        />
+			    	</LinearLayout>		    	
+		    	</RelativeLayout>
+		    			    			    	
+		    	<RelativeLayout 
+		    	    android:id="@+id/btnGroup"
+		    	    android:layout_toRightOf="@+id/activityInfoAll"		  	    		    	 
+		    	    android:layout_width="30dip"
+		    	    android:layout_height="wrap_content"
+		    	    >
+			    	<Button
+		    	        android:id="@+id/comment_btn"
+		    	        android:layout_width="match_parent"
+		    	        android:layout_height="wrap_content"
+		    	        android:focusable="false"
+		    	        android:background="@drawable/viewposts_btn" />	
+			    	<Button
+		    	        android:id="@+id/takephoto_btn"
+		    	        android:layout_below="@+id/comment_btn"
+		    	        android:layout_width="match_parent"
+		    	        android:layout_height="wrap_content"
+		    	        android:focusable="false"
+		    	        android:background="@drawable/takephotos_btn" />		    	    	    	    
+		    	</RelativeLayout>		    			    		    	    
+		    			    	
+		    	<RelativeLayout 
+		    	    android:id="@+id/userInfo"
+		    	    android:layout_below="@+id/activityInfoAll"
+		    	    android:layout_width="285dip"
+		    	    android:layout_height="wrap_content"
+		    	    android:layout_marginTop="0dip">
+		    	     <RelativeLayout 
+			    	    android:id="@+id/joinBlock"
+			    	    android:layout_width="wrap_content"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_marginLeft="13dip"
+			    	    android:layout_marginRight="15dip"
+			    	    android:focusable="false"
+			    	    android:padding="2dip">
+
+    					<com.app.addActivityPack.CircularImage
+        					android:id="@+id/joinBtn"
+					        android:layout_width="30.0dip"
+					        android:layout_height="30.0dip"
+					        android:layout_centerInParent="true" />
+			    	</RelativeLayout>
+			    	
+			    	<RelativeLayout 
+			    	    android:id="@+id/user1Block"
+			    	    android:layout_width="wrap_content"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_toRightOf="@+id/joinBlock"
+			    	    android:padding="2dip">
+			    	    <ImageView
+        					android:layout_width="30.0dip"
+        					android:layout_height="30.0dip"
+        					android:layout_centerInParent="true"
+        					android:contentDescription="@null"
+        					android:src="@drawable/head_bg" />
+
+    					<com.app.addActivityPack.CircularImage
+        					android:id="@+id/user1"
+					        android:layout_width="30.0dip"
+					        android:layout_height="30.0dip"
+					        android:layout_centerInParent="true" />
+			    	</RelativeLayout>
+			    	
+			    	<RelativeLayout 
+			    	    android:id="@+id/user2Block"			    	    
+			    	    android:layout_width="wrap_content"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_toRightOf="@+id/user1Block"
+			    	    android:padding="2dip">
+			    	    <ImageView
+        					android:layout_width="30.0dip"
+        					android:layout_height="30.0dip"
+        					android:layout_centerInParent="true"
+        					android:contentDescription="@null"
+        					android:src="@drawable/head_bg" />
+
+    					<com.app.addActivityPack.CircularImage
+        					android:id="@+id/user2"
+					        android:layout_width="30.0dip"
+					        android:layout_height="30.0dip"
+					        android:layout_centerInParent="true" />
+			    	</RelativeLayout>
+			    	    
+			        <RelativeLayout 
+			    	    android:id="@+id/user3Block"			    	    
+			    	    android:layout_width="wrap_content"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_toRightOf="@+id/user2Block"
+			    	    android:padding="2dip">
+			    	    <ImageView
+        					android:layout_width="30.0dip"
+        					android:layout_height="30.0dip"
+        					android:layout_centerInParent="true"
+        					android:contentDescription="@null"
+        					android:src="@drawable/head_bg" />
+
+    					<com.app.addActivityPack.CircularImage
+        					android:id="@+id/user3"
+					        android:layout_width="30.0dip"
+					        android:layout_height="30.0dip"
+					        android:layout_centerInParent="true" />
+			    	</RelativeLayout>
+			    	
+			        <RelativeLayout 
+			    	    android:id="@+id/user4Block"			    	    
+			    	    android:layout_width="wrap_content"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_toRightOf="@+id/user3Block"
+			    	    android:padding="2dip">
+			    	    <ImageView
+        					android:layout_width="30.0dip"
+        					android:layout_height="30.0dip"
+        					android:layout_centerInParent="true"
+        					android:contentDescription="@null"
+        					android:src="@drawable/head_bg" />
+
+    					<com.app.addActivityPack.CircularImage
+        					android:id="@+id/user4"
+					        android:layout_width="30.0dip"
+					        android:layout_height="30.0dip"
+					        android:layout_centerInParent="true" />
+			    	</RelativeLayout>				    				          
+			    	
+			        <RelativeLayout 
+			            android:layout_marginTop="10dip"
+			            android:layout_alignParentRight="true"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content">
+			            
+			            <TextView
+			                android:id="@+id/participantsNum"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:textSize="11sp" 
+						    android:textColor="#999999"
+			                android:text="115 " 
+			                />
+			            <TextView
+			                android:layout_toRightOf="@+id/participantsNum"
+			                 android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:paddingRight="12dip"
+			                android:textSize="11sp" 
+						    android:textColor="#999999"
+			                android:text="人参加 >" 
+			                />
+
+			        </RelativeLayout>	
+		    	</RelativeLayout>
+		    	
+
+</RelativeLayout>

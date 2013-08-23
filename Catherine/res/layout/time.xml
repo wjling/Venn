@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/timeContent"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="2013-07-15 11:19" 
+        />
+    
+   <Button
+        android:id="@+id/deleteTimeContentBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="delete" />
+    
+
+</LinearLayout>

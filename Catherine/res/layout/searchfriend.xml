@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:id="@+id/searchFriend"
+    android:gravity="center"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+                android:id="@+id/rela_search_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip" >
+
+                <Button
+                    android:id="@+id/search_friend_tag"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="查找好友"
+                    android:textColor="#1c4a72"
+                    android:textSize="22sp" />
+
+                <RelativeLayout
+                    android:id="@+id/rela_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" >
+                    <LinearLayout 
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        >
+                         <EditText
+                        	android:id="@+id/search_email"
+                        	android:layout_width="fill_parent"
+                        	android:layout_height="wrap_content"
+
+                        	android:hint="输入好友邮箱"
+                        	android:maxLength="20"
+                        	android:padding="3dip"
+                        	android:layout_weight="1.0"
+                        	android:text=""
+                        	android:textColor="#000000" />
+
+                    	<Button
+                        	android:id="@+id/search_friend_btn"
+                        	android:layout_width="fill_parent"
+                        	android:layout_height="wrap_content"
+                        	android:layout_toRightOf="@+id/edit_text"
+
+                        	android:layout_weight="3.5"
+                        	android:text="查找"
+                        	android:textColor="#1c4a72"
+                        	android:textSize="22sp" />
+                    </LinearLayout>                
+            </RelativeLayout>
+            
+      </RelativeLayout>
+      
+      <RelativeLayout
+        	android:id="@+id/rela_result"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_marginLeft="5dip"
+        	android:layout_marginRight="5dip"
+        	android:layout_marginTop="20dip" >
+
+			<TextView
+                	android:id="@+id/searchResultHint"
+                	android:layout_width="fill_parent"
+                	android:layout_height="wrap_content"
+                	android:text=""
+                	android:textColor="#000000" 
+                	/>      
+             <Button
+                    android:id="@+id/searchResult"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/edit_text"
+                    android:layout_weight="3.5"
+                    android:text=""
+                    android:textColor="#1c4a72"
+                    android:textSize="22sp"  
+                    android:visibility="gone" 
+                    />
+    	</RelativeLayout>
+
+</LinearLayout>
