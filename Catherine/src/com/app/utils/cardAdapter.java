@@ -9,12 +9,14 @@ import org.json.JSONObject;
 
 import com.app.addActivityPack.CircularImage;
 import com.app.catherine.R;
+import com.app.comment.CommentPage;
 import com.app.localDataBase.NotificationTableAdapter;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -42,6 +44,8 @@ public class cardAdapter extends BaseAdapter
 	private int toAvatar[];
 	private imageUtil forImageUtil  = imageUtil.getInstance();
 	private boolean inActivity;
+	
+	private int userId = -1;
 
 	private myHandler ncHandler = new myHandler();
 	
@@ -51,7 +55,7 @@ public class cardAdapter extends BaseAdapter
 	}
 	
 	public cardAdapter(Context context, ArrayList<HashMap<String, Object>> list, int resource,
-			String []from, int []to, int screenW, int []toAvatar, boolean inActivity) {
+			String []from, int []to, int screenW, int []toAvatar, boolean inActivity, int userId) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
@@ -62,6 +66,7 @@ public class cardAdapter extends BaseAdapter
 		this.screenW = screenW;
 		this.inActivity = inActivity;
 		this.toAvatar = toAvatar;
+		this.userId = userId;
 		Log.e("cardAdapter",   "in cardadapter constructor");
 	}
 	
@@ -199,12 +204,12 @@ public class cardAdapter extends BaseAdapter
 							case R.id.joinBtn:
 								join(pos);
 								break;
-							case R.id.comment_btn:
-								Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
-								break;
-							case R.id.takephoto_btn:
-								Toast.makeText(context, "take photo", Toast.LENGTH_SHORT).show();
-								break;
+//							case R.id.comment_btn:
+//								Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
+//								break;
+//							case R.id.takephoto_btn:
+//								Toast.makeText(context, "take photo", Toast.LENGTH_SHORT).show();
+//								break;
 							default:
 								break;
 							}
@@ -218,9 +223,44 @@ public class cardAdapter extends BaseAdapter
 //			join.setVisibility(View.GONE);
 		}
 		
+		View comment_btn = view.findViewById(R.id.comment_btn);
+		View takephoto_btn = view.findViewById(R.id.takephoto_btn);
+		
+		comment_btn.setTag(pos);
+		comment_btn.setOnClickListener(buttonsOnClickListener);
+		takephoto_btn.setOnClickListener(buttonsOnClickListener);
 //		view.findViewById(R.id.comment_btn).setOnClickListener(BtnListener);
 //		view.findViewById(R.id.takephoto_btn).setOnClickListener(BtnListener);
 	}
+	
+	private OnClickListener buttonsOnClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch ( v.getId() ) {
+//			case R.id.joinBtn:
+//				join(pos);
+//				break;
+			case R.id.comment_btn:
+				Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
+				int position = (Integer) v.getTag();
+				HashMap<String, Object> an_activity = list.get(position);
+				int event_id = Integer.parseInt(an_activity.get("event_id").toString());
+				Intent intent = new Intent();
+				intent.putExtra("userId", userId);
+				intent.putExtra("eventId", event_id);
+				intent.setClass(context, CommentPage.class);
+				context.startActivity(intent);
+				break;
+			case R.id.takephoto_btn:
+				Toast.makeText(context, "take photo", Toast.LENGTH_SHORT).show();
+				break;
+			default:
+				break;
+			}
+		}
+	};
 	
 	private void join( final int pos)
 	{

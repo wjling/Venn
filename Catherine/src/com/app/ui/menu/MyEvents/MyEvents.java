@@ -209,7 +209,8 @@ public class MyEvents {
 				new int[]{R.id.activityTitle, R.id.day, R.id.monthAndYear, R.id.time, R.id.location, R.id.launcher, R.id.remark, R.id.participantsNum},
 				screenWidth,
 				new int[]{R.id.user1, R.id.user2, R.id.user3, R.id.user4},
-				true
+				true,
+				userId
 		);
 		
 		myEventsListView.setAdapter(myEventsAdapter);
