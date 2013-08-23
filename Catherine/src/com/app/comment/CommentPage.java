@@ -350,6 +350,7 @@ public class CommentPage extends Activity{
 					{
 						commentStruct = commentList.get(index);
 						ArrayList<HashMap<String, Object>> replies = commentStruct.replies;
+						commentStruct.reply_sequence = master;
 						replies.add(0,map);
 						Log.i(TAG,"加上了replies之后的commentAdapter.commentList: "+commentAdapter.commentList.get(0).replies.toString());
 					}

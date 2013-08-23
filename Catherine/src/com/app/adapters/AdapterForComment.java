@@ -258,7 +258,7 @@ public class AdapterForComment extends BaseAdapter{
 				clickCommentZan(v);
 				break;
 			case R.id.comment_item_reply:
-				clickCommentReply(v);
+				clickAddCommentReply(v);
 				break;
 			case R.id.comment_item_moreReply:
 				clickMoreReplies(v);
@@ -342,7 +342,7 @@ public class AdapterForComment extends BaseAdapter{
 		}
 	}
 	
-	protected void clickCommentReply(View v) {
+	protected void clickAddCommentReply(View v) {
 		// TODO Auto-generated method stub
 		int index_comment = (Integer) v.getTag();
 		final HashMap<String, Object> comment = commentList.get(index_comment).comment;
