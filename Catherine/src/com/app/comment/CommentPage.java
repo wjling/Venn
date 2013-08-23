@@ -9,9 +9,12 @@ import org.json.JSONObject;
 
 import com.app.adapters.AdapterForComment;
 import com.app.catherine.R;
+import com.app.ui.menu.FriendCenter.FriendCenter;
 import com.app.utils.HttpSender;
+import com.app.utils.Messager;
 import com.app.utils.OperationCode;
 import com.app.utils.ReturnCode;
+import com.app.utils.imageUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -77,6 +80,7 @@ public class CommentPage extends Activity{
 		footerTextView.setText("点击查看更多");
 //		footerView.setOnClickListener(buttonsOnClickListener);
 		footerTextView.setOnClickListener(buttonsOnClickListener);
+		imageUtil.getInstance().registerHandler(cpHandler, "CommentPage");
 		
 		
 		commentAdapter = new AdapterForComment(this, commentList, 
@@ -394,6 +398,21 @@ public class CommentPage extends Activity{
 		}
 		return -1;
 	}
+	
+	
+	/**
+     * @author CL
+     * @description 
+     * Unregister avatar display util
+     * 
+     * @return
+     */
+	@Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        imageUtil.getInstance().unregisterHandler("CommentPage");
+        super.onBackPressed();
+    }
 
 
 	private class myHandler extends Handler
@@ -442,6 +461,9 @@ public class CommentPage extends Activity{
 				break;
 			case OperationCode.ADD_GOOD:
 				break;
+			case FriendCenter.MSG_WHAT_ON_UPDATE_AVATAR:
+			    commentAdapter.notifyDataSetChanged();
+			    break;
 				default: break;
 			}
 		}

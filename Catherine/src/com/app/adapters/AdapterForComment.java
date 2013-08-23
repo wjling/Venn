@@ -10,6 +10,7 @@ import com.app.catherine.R;
 import com.app.comment.CommentStruct;
 import com.app.utils.HttpSender;
 import com.app.utils.OperationCode;
+import com.app.utils.imageUtil;
 
 import android.app.AlertDialog;
 
@@ -18,6 +19,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
@@ -162,7 +164,14 @@ public class AdapterForComment extends BaseAdapter{
 		{
 			commentViewHolder.comment_replyList.removeViews(1, count-1);
 		}
-		commentViewHolder.comment_authorAvatar.setImageDrawable(resources.getDrawable(R.drawable.defaultavatar));
+		Bitmap avatar_bmp = imageUtil.getInstance().getAvatar(Integer.parseInt(comment.comment.get("author_id").toString()));
+        if (null != avatar_bmp)
+        {
+            commentViewHolder.comment_authorAvatar.setImageBitmap(avatar_bmp);
+        }
+        else {
+            commentViewHolder.comment_authorAvatar.setImageDrawable(resources.getDrawable(R.drawable.defaultavatar));
+        }
 		commentViewHolder.comment_authorName.setText(comment.comment.get("author").toString());
 		commentViewHolder.comment_time.setText(comment.comment.get("time").toString());
 		commentViewHolder.comment_replyImage.setImageDrawable(resources.getDrawable(R.drawable.re));
