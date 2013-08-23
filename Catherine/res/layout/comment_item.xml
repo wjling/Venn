@@ -19,8 +19,7 @@
             <ImageView
                 android:id="@+id/comment_item_authorAvatar"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/defaultavatar" />
+                android:layout_height="50dp"/>
 
             <TextView
                 android:id="@+id/comment_item_authorName"
@@ -117,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/comment"
-                        android:text="哟嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯嚯~~" />
+                        android:text="" />
                 </LinearLayout>
 
                 <TextView

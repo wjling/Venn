@@ -238,7 +238,7 @@ OnClickListener editTextOnClickListener = new OnClickListener() {
 		JSONObject params = new JSONObject();
 		try {
 			params.put("id", userId);
-			params.put("friends_number", tbFriends.size());
+			params.put("friends_number", tbFriends.size(userId));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -344,7 +344,7 @@ OnClickListener editTextOnClickListener = new OnClickListener() {
 				}
 				else
 				{
-					tbFriends.deleteFriendsTable();
+					tbFriends.deleteFriendsTable(userId);
 					for(int i=0;i<length;i++)
 					{
 						JSONObject jo = jsArray.getJSONObject(i);
