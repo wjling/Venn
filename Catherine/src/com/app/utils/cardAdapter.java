@@ -148,7 +148,7 @@ public class cardAdapter extends BaseAdapter
 		Log.e("cardAdapter", "toAvatar length: "+ toAvatar.length);
 		try {
 			int i=0;
-			for ( ; i < length; i++) 
+			for ( ; i < length && i<4; i++) 
 			{
 				int id = avatarJsonArray.getInt(i);
 //				if( imageUtil.fileExist(id) )       //本地有头像就用本地头像

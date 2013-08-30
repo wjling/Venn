@@ -118,6 +118,12 @@ public class MessagaAdapter extends BaseAdapter{
                     noticeString = context.getResources().getString(R.string.refuse_friend_request);
                 }
                 break;
+            case ReturnCode.NEW_EVENT_NOTIFICATION:
+                layoutID = R.layout.friend_requests;
+                fid = jo.getInt("launcher_id");
+                event_id = jo.getInt("event_id");
+                noticeString = context.getResources().getString(R.string.request_event_invitation) + " [ " + jo.getString("subject") + " ] ";
+                break;
             case ReturnCode.EVENT_INVITE_RESPONSE:
                 layoutID = R.layout.friend_requests;
                 fid = jo.getInt("id");
@@ -178,7 +184,12 @@ public class MessagaAdapter extends BaseAdapter{
             viewHolder = (ViewHolder)convertView.getTag();
         }
         try {
-            viewHolder.fname.setText(jo.getString("name"));
+            if (type == ReturnCode.NEW_EVENT_NOTIFICATION || type == ReturnCode.REQUEST_EVENT_RESPONSE) {
+                viewHolder.fname.setText(jo.getString("launcher"));
+            }
+            else {
+                viewHolder.fname.setText(jo.getString("name"));
+            }
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -266,6 +277,7 @@ public class MessagaAdapter extends BaseAdapter{
             viewHolder.rightBtn.setText(R.string.refuse);
             break;
         case ReturnCode.ADD_FRIEND_RESULT:
+        case ReturnCode.NEW_EVENT_NOTIFICATION:
         case ReturnCode.EVENT_INVITE_RESPONSE:
         case ReturnCode.REQUEST_EVENT_RESPONSE:
             viewHolder.leftBtn.setVisibility(View.GONE);

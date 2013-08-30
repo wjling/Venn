@@ -79,7 +79,7 @@ public class NotificationCenter extends Activity{
 		NotificationTableAdapter adapter = new NotificationTableAdapter(this);
 		ArrayList<notificationObject> addFriendRequestList = adapter.queryData("ADD_FRIEND_REQUEST", userId);
 		ArrayList<notificationObject> addFriendVerifyList = adapter.queryData("ADD_FRIEND_VERIFY", userId);
-//		ArrayList<notificationObject> addActivityRequestList = adapter.queryData("ADD_ACTIVITY_INVITATION", userId);
+		ArrayList<notificationObject> addActivityRequestList = adapter.queryData("ADD_ACTIVITY_INVITATION", userId);
 		ArrayList<notificationObject> addActivityFeedBackList = adapter.queryData("ADD_ACTIVITY_FEEDBACK", userId);
 		ArrayList<notificationObject> requestIntoActivityList = adapter.queryData("REQUEST_INTO_ACTIVITY", userId);
 		ArrayList<notificationObject> responseIntoActivityList = adapter.queryData("RESPONSE_INTO_ACTIVITY", userId);
@@ -87,6 +87,7 @@ public class NotificationCenter extends Activity{
 		messageList.clear();
 		messageList.addAll(addFriendRequestList);
 		messageList.addAll(addFriendVerifyList);
+		messageList.addAll(addActivityRequestList);
 		messageList.addAll(addActivityFeedBackList);
 		messageList.addAll(requestIntoActivityList);
 		messageList.addAll(responseIntoActivityList);
