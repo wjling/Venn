@@ -11,6 +11,7 @@ import com.app.utils.RegUtils;
 import com.app.utils.ReturnCode;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -107,7 +108,17 @@ private OnClickListener clickListener = new OnClickListener() {
 			register.this.finish();
 				break;
 			case R.id.regBtn:
-				toregister();
+//				toregister();
+				ProgressDialog progressDialog = new ProgressDialog(register.this);
+				progressDialog.setMessage("正在注册...请确保你已经联网");
+				progressDialog.setTitle("请稍候");
+				progressDialog.show();
+				new Thread()
+				{
+					public void run() {
+						toregister();
+					}
+				}.start();
 				break;
 			default:
 				break;

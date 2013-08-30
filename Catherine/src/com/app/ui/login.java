@@ -10,6 +10,7 @@ import com.app.utils.RegUtils;
 import com.app.utils.ReturnCode;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -105,7 +106,17 @@ public class login extends Activity
 				login.this.finish();
 				break;
 			case R.id.loginBtn:
-				tologin();
+				ProgressDialog progressDialog = new ProgressDialog(login.this);
+				progressDialog.setMessage("登录中...请确保你已经联网");
+				progressDialog.setTitle("请稍候");
+				progressDialog.show();
+				new Thread()
+				{
+					public void run() {
+						tologin();
+					}
+				}.start();
+//				tologin();
 				break;
 			default:
 				break;
