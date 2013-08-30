@@ -47,6 +47,8 @@ public class login extends Activity
 	private int userId;
 	private MyBroadcastReceiver broadcastReceiver;
 	private Intent serviceIntent = null;
+	
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,7 @@ public class login extends Activity
 				login.this.finish();
 				break;
 			case R.id.loginBtn:
-				ProgressDialog progressDialog = new ProgressDialog(login.this);
+				progressDialog = new ProgressDialog(login.this);
 				progressDialog.setMessage("登录中...请确保你已经联网");
 				progressDialog.setTitle("请稍候");
 				progressDialog.show();
@@ -220,6 +222,7 @@ public class login extends Activity
 			switch(msg.what)
 			{									 
 				case OperationCode.GET_SALT_VALUE:
+					progressDialog.dismiss();
 					try {
 						String responseGetSalt = null;
 						JSONObject responseGetSaltJson;
@@ -236,8 +239,20 @@ public class login extends Activity
 									responseSalt = responseGetSaltJson.getString("salt");	
 									Log.i("Login", "盐值: " + responseSalt);
 									//如果responseSalt==null，说明用户不存在; 否则，向服务器请求登录
-									if( null != responseSalt )						
-										loginTry();	
+									if( null != responseSalt )
+									{
+//										loginTry();	
+										progressDialog = new ProgressDialog(login.this);
+										progressDialog.setMessage("登录中...请确保你已经联网");
+										progressDialog.setTitle("请稍候");
+										progressDialog.show();
+										new Thread()
+										{
+											public void run() {
+												loginTry();
+											}
+										}.start();
+									}
 								}
 								else if( ReturnCode.USER_NOT_FOUND==cmdGetSalt)  //用户不存在的话，只是提示，不跳转														
 									Toast.makeText(login.this, "用户不存在,请先注册", Toast.LENGTH_SHORT).show();							
@@ -256,6 +271,7 @@ public class login extends Activity
 					break;
 					
 				case OperationCode.LOGIN:
+					progressDialog.dismiss();
 					try {
 						String responseLogin;
 						JSONObject respLoginJson;

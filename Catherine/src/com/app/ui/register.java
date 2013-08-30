@@ -41,6 +41,9 @@ public class register extends Activity
 	private HttpSender sender;
 	private int userId;
 	private Intent serviceIntent = null;
+	private 		JSONObject reqparams;
+	
+	private ProgressDialog progressDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,17 +111,8 @@ private OnClickListener clickListener = new OnClickListener() {
 			register.this.finish();
 				break;
 			case R.id.regBtn:
-//				toregister();
-				ProgressDialog progressDialog = new ProgressDialog(register.this);
-				progressDialog.setMessage("正在注册...请确保你已经联网");
-				progressDialog.setTitle("请稍候");
-				progressDialog.show();
-				new Thread()
-				{
-					public void run() {
-						toregister();
-					}
-				}.start();
+				toregister();
+
 				break;
 			default:
 				break;
@@ -142,15 +136,25 @@ private OnClickListener clickListener = new OnClickListener() {
 					regGender = getRegGender();
 					saltStr = RegUtils.getRandomString(6);
 					
-					JSONObject params = new JSONObject();
+					reqparams = new JSONObject();
 					try{
-						params.put("email", regEmail);
-						params.put("name", regName);
-						params.put("passwd", RegUtils.Md5(  regPwd + saltStr ));
-						params.put("salt", saltStr);
-						params.put("gender", regGender);
+						reqparams.put("email", regEmail);
+						reqparams.put("name", regName);
+						reqparams.put("passwd", RegUtils.Md5(  regPwd + saltStr ));
+						reqparams.put("salt", saltStr);
+						reqparams.put("gender", regGender);
 						
-						sender.Httppost(OperationCode.REGISTER, params, handler);
+						progressDialog = new ProgressDialog(register.this);
+						progressDialog.setMessage("正在注册...请确保你已经联网");
+						progressDialog.setTitle("请稍候");
+						progressDialog.show();
+						new Thread()
+						{
+							public void run() {
+								sender.Httppost(OperationCode.REGISTER, reqparams, handler);
+							}
+						}.start();
+//						sender.Httppost(OperationCode.REGISTER, params, handler);
 					}
 					catch (JSONException e) {
 	                    // TODO Auto-generated catch block
@@ -247,6 +251,7 @@ private OnClickListener clickListener = new OnClickListener() {
 			switch(msg.what)
 			{
 				case OperationCode.REGISTER:
+					progressDialog.dismiss();
 					 String response = msg.obj.toString();
 					 try{
 							if (response != "DEFAULT")
