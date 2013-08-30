@@ -433,7 +433,7 @@ public class PullUpDownView extends LinearLayout implements onScrollListViewList
 				break;
 			case MSG_WHAT_GET_MORE_DONE:
 				isGettingMore = false;
-				footerTextView.setText("点击我还有更多哦~~亲");
+				footerTextView.setText("暂时没有更多了~");
 				footerLoadingView.setVisibility(View.GONE);
 				break;
 			case MSG_WHAT_SET_HEADER_HEIGHT:
