@@ -20,10 +20,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -137,6 +140,28 @@ public class cardAdapter extends BaseAdapter
 		
 		return view;
 	}
+	
+	OnTouchListener itemOnTouchListener = new OnTouchListener() {
+		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			// TODO Auto-generated method stub
+			int action = event.getAction();
+			if(action == MotionEvent.ACTION_DOWN)
+			{
+				
+			}
+			else if(action == MotionEvent.ACTION_MOVE)
+			{
+				
+			}
+			else if(action == MotionEvent.ACTION_UP)
+			{
+				
+			}
+			return false;
+		}
+	};
 	
 	private void init(View view, final int pos)
 	{
