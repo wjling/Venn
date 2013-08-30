@@ -47,7 +47,7 @@ GestureDetector.OnGestureListener
 	private GestureDetector UIGestureDetector;
 	private int window_width;
 	private static float FLIP_DISTANCE_X = 400;	//检测甩手动作时候的最低速度值
-	private int speed = 30;					//用于菜单栏自动回滚过程中的速度
+	private int speed = 50;					//用于菜单栏自动回滚过程中的速度
 	private int menu_width = 0;
 	private int mScrollX;		//Scroll过程中X轴方向的位移
 	private boolean isScrolling = false;	//是否滚动
