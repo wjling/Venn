@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.app.addFriendPack.searchFriend;
 import com.app.catherine.R;
 import com.app.localDataBase.FriendStruct;
 import com.app.utils.HttpSender;
@@ -218,13 +219,13 @@ public class AdapterForFriendInfo extends BaseAdapter {
                     int cmdSearch   = jo.getInt("cmd");
                     if( ReturnCode.NORMAL_REPLY == cmdSearch)
                     {
-                        Toast.makeText(context, "请等待对方验证", Toast.LENGTH_SHORT);
+                        Toast.makeText(context, "请等待对方验证", Toast.LENGTH_SHORT).show();
                     }
                     else if( ReturnCode.ALREADY_FRIENDS==cmdSearch)  {     
-                        Toast.makeText(context, R.string.already_friends, Toast.LENGTH_SHORT);
+                        Toast.makeText(context, R.string.already_friends, Toast.LENGTH_SHORT).show();
                     }
                     else 
-                        Toast.makeText(context, "未知错误", Toast.LENGTH_SHORT);
+                        Toast.makeText(context, "未知错误", Toast.LENGTH_SHORT).show();
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }               
