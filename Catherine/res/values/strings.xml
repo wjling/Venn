@@ -60,5 +60,7 @@
     <string name="request_for_event">申请加入活动</string>
     <string name="already_friends">你们已经是好友</string>
     <string name="already_in_event">你已经在该活动中</string>
+    <string name="request_event_invitation">邀请你加入活动</string>
+    <string name="add_friend_button">加为好友</string>
 
 </resources>
