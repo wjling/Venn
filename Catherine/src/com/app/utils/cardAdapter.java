@@ -220,33 +220,15 @@ public class cardAdapter extends BaseAdapter
 		
 		if( inActivity==false )
 		{
-		join.setImageResource(R.drawable.join);	
-		join.setOnClickListener(	new OnClickListener(){
+			join.setImageResource(R.drawable.join);	
+			join.setOnClickListener(	new OnClickListener(){
 
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							switch ( v.getId() ) {
-							case R.id.joinBtn:
-								join(pos);
-								break;
-//							case R.id.comment_btn:
-//								Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
-//								break;
-//							case R.id.takephoto_btn:
-//								Toast.makeText(context, "take photo", Toast.LENGTH_SHORT).show();
-//								break;
-							default:
-								break;
-							}
-						}
-						
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						join(pos);					
 					}
-				);
-		}
-		else
-		{
-//			join.setVisibility(View.GONE);
+			});
 		}
 		
 		View comment_btn = view.findViewById(R.id.comment_btn);

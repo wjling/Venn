@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.app.catherine.R;
-import com.app.ui.loginAndreg.MsgHandler;
 import com.app.utils.HttpSender;
 import com.app.utils.OperationCode;
 import com.app.utils.RegUtils;
