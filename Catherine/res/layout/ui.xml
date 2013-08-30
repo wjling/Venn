@@ -135,7 +135,7 @@
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:layout_alignParentRight="true"
-			        android:background="@layout/buttons"
+			        android:background="@drawable/buttons"
 			        android:gravity="center_vertical"
 			        android:visibility="gone"
 			        android:minWidth="48dp" />

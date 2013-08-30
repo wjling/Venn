@@ -172,23 +172,6 @@ public class CommentPage extends Activity{
 		}
 	}
 	
-	//something wrong 
-	private void onGetMoreReplies()
-	{
-		JSONObject params = new JSONObject();
-		try {
-			params.put("id", userId);
-			params.put("event_id", eventId);
-			params.put("master", 0);
-			params.put("sequence", comment_sequence);
-			HttpSender httpSender = new HttpSender();
-			httpSender.Httppost(OperationCode.GET_COMMENTS, params, cpHandler);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	public void getCommentsDone(Message msg)
 	{
 		try {
@@ -254,7 +237,7 @@ public class CommentPage extends Activity{
 				commentAdapter.comment_sequence = comment_sequence;
 				commentAdapter.notifyDataSetChanged();
 				Log.i(TAG,"adapter commentList: "+ commentAdapter.commentList.toString());
-				
+
 			}
 			else
 			{
@@ -353,6 +336,8 @@ public class CommentPage extends Activity{
 					if(index != -1)
 					{
 						commentStruct = commentList.get(index);
+						int comment_num = Integer.parseInt(commentStruct.comment.get("comment_num").toString());
+						commentStruct.comment.put("comment_num", comment_num+1);
 						ArrayList<HashMap<String, Object>> replies = commentStruct.replies;
 						commentStruct.reply_sequence = master;
 						replies.add(0,map);
