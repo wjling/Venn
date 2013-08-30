@@ -14,7 +14,7 @@ Bug List:
 + 没有申请加入一个活动的功能。
 + 添加好友的按钮太大。
 
-+添加好友结果的toast好像怎么都toast不出来，帮我看看，
+-添加好友结果的toast好像怎么都toast不出来，帮我看看，
 在AdapterForFriendInfo的handler那里，
 然后好友推荐可以用这个adpater
 
