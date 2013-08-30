@@ -80,10 +80,10 @@ public class MyEvents {
 	private imageUtil forImageUtil;
 	
 	//My Events 
-	private static final int MSG_WHAT_ON_LOAD_DATA = -3;
-	private static final int MSG_WHAT_LOAD_DATA_DONE = -4;
-	private static final int MSG_WHAT_REFRESH_DONE = -5;
-	private static final int MSG_WHAT_GET_MORE_DONE = -6;
+	private static final int MSG_WHAT_ON_LOAD_DATA = -4;
+	private static final int MSG_WHAT_LOAD_DATA_DONE = -5;
+	private static final int MSG_WHAT_REFRESH_DONE = -6;
+	private static final int MSG_WHAT_GET_MORE_DONE = -7;
 //	
 //	private OnClickListener buttonsOnClickListener = new OnClickListener() {
 //		

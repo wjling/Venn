@@ -145,6 +145,7 @@ public class cardAdapter extends BaseAdapter
 		
 		int length = avatarJsonArray.length();
 		Log.e("cardAdapter", length + " = length");
+		Log.e("cardAdapter", "toAvatar length: "+ toAvatar.length);
 		try {
 			int i=0;
 			for ( ; i < length; i++) 
