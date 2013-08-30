@@ -156,7 +156,12 @@ public class EventMainPage extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(EventMainPage.this, "你想加入干嘛？", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(EventMainPage.this, "你想加入干嘛？", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent();
+					intent.putExtra("userId", id);
+					intent.putExtra("event_id", event_id);
+					intent.setClass(EventMainPage.this, AddMoreParticipants.class);
+				startActivity(intent);	
 			}
 		});
 	}
