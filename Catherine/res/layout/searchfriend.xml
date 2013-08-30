@@ -2,88 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:id="@+id/searchFriend"
-    android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/gray">"
     
-    <RelativeLayout
-                android:id="@+id/rela_search_friend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip" >
-
-                <Button
-                    android:id="@+id/search_friend_tag"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-
-                    android:text="查找好友"
-                    android:textColor="#1c4a72"
-                    android:textSize="22sp" />
-
-                <RelativeLayout
-                    android:id="@+id/rela_search"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" >
-                    <LinearLayout 
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        >
-                         <EditText
-                        	android:id="@+id/search_email"
-                        	android:layout_width="fill_parent"
-                        	android:layout_height="wrap_content"
-
-                        	android:hint="输入好友邮箱"
-                        	android:maxLength="20"
-                        	android:padding="3dip"
-                        	android:layout_weight="1.0"
-                        	android:text=""
-                        	android:textColor="#000000" />
-
-                    	<Button
-                        	android:id="@+id/search_friend_btn"
-                        	android:layout_width="fill_parent"
-                        	android:layout_height="wrap_content"
-                        	android:layout_toRightOf="@+id/edit_text"
-
-                        	android:layout_weight="3.5"
-                        	android:text="查找"
-                        	android:textColor="#1c4a72"
-                        	android:textSize="22sp" />
-                    </LinearLayout>                
-            </RelativeLayout>
-            
-      </RelativeLayout>
-      
-      <RelativeLayout
-        	android:id="@+id/rela_result"
-        	android:layout_width="fill_parent"
-        	android:layout_height="wrap_content"
-        	android:layout_marginLeft="5dip"
-        	android:layout_marginRight="5dip"
-        	android:layout_marginTop="20dip" >
-
-			<TextView
-                	android:id="@+id/searchResultHint"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content"
-                	android:text=""
-                	android:textColor="#000000" 
-                	/>      
-             <Button
-                    android:id="@+id/searchResult"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/edit_text"
-                    android:layout_weight="3.5"
-                    android:text=""
-                    android:textColor="#1c4a72"
-                    android:textSize="22sp"  
-                    android:visibility="gone" 
-                    />
-    	</RelativeLayout>
-
+   <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:layout_marginTop="5dp">
+        
+    <Button
+        android:id="@+id/search_friend_button"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/search"
+        android:layout_alignParentRight="true"/>
+    
+     <EditText
+        android:id="@+id/search_friend_content"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_toLeftOf="@id/search_friend_button"/>
+    
+    </RelativeLayout>
+    
+   <TextView
+       android:id="@+id/search_friend_hint"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text=""
+       android:textColor="#111111"
+       android:textSize="15sp"
+       android:paddingLeft="5dp"
+       android:paddingTop="5dp"/>
+    
+   <ListView 
+       android:id="@+id/search_friend_list"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content" 
+       android:paddingTop="5dp"/>
+   
 </LinearLayout>

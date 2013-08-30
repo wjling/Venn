@@ -29,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.adapters.AdapterForFriendList.ViewHolder;
 import com.app.catherine.R;
 import com.app.localDataBase.FriendStruct;
 import com.app.localDataBase.NotificationTableAdapter;
@@ -329,7 +328,7 @@ public class MessagaAdapter extends BaseAdapter{
         }
     }
     
-    static class ViewHolder
+    private class ViewHolder
     {
         TextView fname;
         TextView confirm_msg;

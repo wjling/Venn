@@ -3,13 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="#eeeeee">
+    android:background="#eeeeee"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    >
     
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="10dp" 
         android:background="#ffffff"
         android:orientation="vertical">
@@ -34,16 +39,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:paddingTop="10dp" 
         android:paddingBottom="10dp"
         android:background="#ffffff">
 
         <ImageView
             android:id="@+id/friend_info_avatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:src="@drawable/defaultavatar"/>
         
         <ImageView
@@ -61,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/friend_info_gender"
             android:paddingLeft="10dp"
-            android:text="gggg"
+            android:text=""
             android:textColor="#111111"
             android:textSize="15sp" />
 
@@ -73,7 +78,7 @@
             android:layout_toRightOf="@+id/friend_info_avatar"
             android:layout_marginLeft="20dp"
             android:paddingTop="10dp"
-            android:text="dddddd"
+            android:text=""
             android:textColor="#111111"
             android:textSize="15sp" />
         

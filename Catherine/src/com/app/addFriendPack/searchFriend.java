@@ -1,12 +1,19 @@
 package com.app.addFriendPack;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.app.adapters.AdapterForFriendInfo;
 import com.app.catherine.R;
+import com.app.localDataBase.FriendStruct;
+import com.app.ui.menu.FriendCenter.FriendCenter;
 import com.app.utils.HttpSender;
+import com.app.utils.Messager;
 import com.app.utils.OperationCode;
 import com.app.utils.ReturnCode;
+import com.app.utils.imageUtil;
 
 import android.R.integer;
 import android.app.Activity;
@@ -20,30 +27,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class searchFriend extends Activity{
 	
-	private Button searchFriendTag;
-	private View searchView;
 	private EditText friendEmailET;
-	private String searchEmail;
 	private Button searchFriendBtn;
-	private Button searchResultBtn;
-	private TextView searchResultHint;
-	private String searchResultStr;
-	private int friendUid;
-	private String friendEmail;
-	private String friendName;
-	private int gender;
+	private ListView searchResult;
+	private ArrayList<FriendStruct> result_list;
+	private TextView searchHint;
+	private String searchString;
 	private int userId;
 	private MessageHandler handler;
+	private AdapterForFriendInfo adapter;
 	
-	JSONObject searchParams = new JSONObject();
-	String respSearch = null;
-	JSONObject respSearchJson;
-	int cmdSearch;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,84 +51,52 @@ public class searchFriend extends Activity{
 		setContentView(R.layout.searchfriend);
 		
 		userId = getIntent().getIntExtra("userId", -250);
-		searchFriendTag = (Button)findViewById(R.id.search_friend_tag);
-		searchFriendTag.setOnClickListener(searchTagListener);
-		searchView = (View)findViewById(R.id.rela_search);
-		friendEmailET = (EditText)findViewById(R.id.search_email);
-		searchResultBtn = (Button)findViewById(R.id.searchResult);
-		searchResultHint = (TextView)findViewById(R.id.searchResultHint);
+		friendEmailET = (EditText)findViewById(R.id.search_friend_content);
+		searchFriendBtn = (Button)findViewById(R.id.search_friend_button);
+		searchFriendBtn.setOnClickListener(searchListener);
+		searchResult = (ListView)findViewById(R.id.search_friend_list);
+		result_list = new ArrayList<FriendStruct>();
+		adapter = new AdapterForFriendInfo(this, result_list, userId);
+		searchResult.setAdapter(adapter);
+		searchResult.setDivider(null);
+		searchHint = (TextView)findViewById(R.id.search_friend_hint);
+		searchHint.setVisibility(View.GONE);
 		handler = new MessageHandler(Looper.myLooper());
+		imageUtil.getInstance().registerHandler(handler, "searchFriend");
 	}
 	
-	private OnClickListener searchTagListener = new OnClickListener() {
+	private OnClickListener searchListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			searchFriendTag.setVisibility(View.GONE);
-			searchView.setVisibility(View.VISIBLE);
-			
-			searchFriendBtn = (Button)findViewById(R.id.search_friend_btn);
-			searchFriendBtn.setOnClickListener(searchBtnListener);
-		}
+		    /**
+             * 先获取要搜索的Email
+             * 提示搜索中...
+             * 返回结果后，显示搜索结果
+             */     
+		    searchHint.setVisibility(View.VISIBLE);
+		    searchHint.setText("搜索中，请稍候...");
+            
+		    searchString = friendEmailET.getText().toString().trim();
+            if( searchString == null || searchString.trim().equals(""))
+            {
+                searchHint.setText("请输入用户邮箱...");
+            }
+            else
+            {// 向服务器发送请求    
+                sendSearchRequest();    
+            }          
+        }
 	};
 	
-	private OnClickListener searchBtnListener = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			/**
-			 * 先获取要搜索的Email
-			 * 提示搜索中...
-			 * 返回结果后，跳转到搜索结果页面
-			 */				
-			searchResultBtn.setVisibility(View.GONE);
-			searchResultHint.setText("搜索中，请稍候...");
-			
-			searchEmail = friendEmailET.getText().toString().trim();
-			if( searchEmail == null || searchEmail.trim().equals(""))
-			{
-				searchResultHint.setText("请输入用户邮箱...");
-			}
-			else
-			{// 向服务器发送请求	
-//				new Thread()
-//				{
-//					public void run()
-//					{
-						sendSearchRequest();	
-//					}	
-//				}.start();
-//				String result = sendSearchRequest();
-//				searchResultHint.setText(result);
-			}			
-		}
-	};
-	
-	private OnClickListener resultBtnListener = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-//			Toast.makeText(searchFriend.this, "你想添加他为好友哦", Toast.LENGTH_SHORT).show();
-			
-			Intent intent = new Intent();
-			intent.setClass(searchFriend.this, addFriend.class);
-			intent.putExtra("id", userId);
-			intent.putExtra("friendEmail", friendEmail);
-			intent.putExtra("friendName", friendName);
-			intent.putExtra("friendUid", friendUid);
-			intent.putExtra("gender", gender);			
-			
-			startActivity(intent);	
-		}
-	};
 
 	private void sendSearchRequest() 
 	{
+	    JSONObject searchParams = new JSONObject();
 		try {
-			searchParams.put("email", searchEmail);
+			searchParams.put("email", searchString);
+			searchParams.put("myId", userId);
 			HttpSender http = new HttpSender();
 			http.Httppost(OperationCode.SEARCH_FRIEND, searchParams, handler);
 //			Log.i("search friend", "http sent");
@@ -138,10 +105,17 @@ public class searchFriend extends Activity{
 		}
 	}
 	
-	public void chgHint(String str)
-	{
-		searchResultHint.setText(str);
-	}
+	private void chgHint(String newString) {
+        searchHint.setText(newString);
+    }
+	
+	@Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        imageUtil.getInstance().unregisterHandler("searchFriend");
+        super.onBackPressed();
+    }
+	
 	
 	class MessageHandler extends Handler
 	{
@@ -157,43 +131,27 @@ public class searchFriend extends Activity{
 			case OperationCode.SEARCH_FRIEND:
 				try
 				{							
-					respSearch = msg.obj.toString();
-					if( respSearch != "DEFAULT" )
-					{
-						respSearchJson = new JSONObject(respSearch);												
-						cmdSearch = respSearchJson.getInt("cmd");
-						Log.i("searchFriend", cmdSearch+"");
-						
-						// 搜索到好友后，就把好友信息放在searchResultBtn,且要把searchResultHint的值置为“”				 
-						if( ReturnCode.USER_EXIST==cmdSearch )
-						{
-							friendEmail = respSearchJson.getString("email");
-							friendName = respSearchJson.getString("name");
-							friendUid = respSearchJson.getInt("id");
-							gender = respSearchJson.getInt("gender");
-							
-							searchResultBtn.setVisibility(View.VISIBLE);
-							if( gender==1 )			
-								searchResultBtn.setText( "邮箱: " + friendEmail + "\n名字:" + friendName + "\n性别: 男");				
-							else				
-								searchResultBtn.setText( "邮箱: " + friendEmail + "\n名字:" + friendName + "\n性别: 女");
-							
-							searchResultBtn.setOnClickListener(resultBtnListener);
-							chgHint("");
-						}
-						else if( ReturnCode.USER_NOT_FOUND==cmdSearch)	//用户不存在		
-							chgHint("用户不存在哦...再试试搜索其他用户呗");
-						else 
-							chgHint("你穿越了，居然返回了其他值");
-						}
-					else 
-						chgHint("网络异常");
+				    JSONObject jo = new JSONObject(msg.obj.toString());
+					int cmdSearch	= jo.getInt("cmd");
+				    if( ReturnCode.USER_EXIST == cmdSearch)
+				    {
+				        FriendStruct fs = new FriendStruct(jo, true);
+				        searchHint.setVisibility(View.GONE);
+				        result_list.clear();
+				        result_list.add(fs);
+				        adapter.notifyDataSetChanged();
+				    }
+				    else if( ReturnCode.USER_NOT_FOUND==cmdSearch)	//用户不存在		
+				        chgHint("用户不存在哦...再试试搜索其他用户呗");
+				    else 
+				        chgHint("网络异常");
 				}catch (JSONException e) {
 					e.printStackTrace();
-				}
-				
+				}				
 				break;
-
+			case FriendCenter.MSG_WHAT_ON_UPDATE_AVATAR:
+			    adapter.notifyDataSetChanged();
+			    break;
 			default:
 				break;
 			}

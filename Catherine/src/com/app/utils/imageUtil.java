@@ -35,7 +35,7 @@ public class imageUtil
 	private int maxMemory;
 	private int cacheSize;
 	private myHandler mHandler;
-	private Handler fcHandler, ncHandler, commentHandler;
+	private Handler fcHandler, ncHandler, commentHandler, searchFriendHandler;
 	
 	private imageUtil()
 	{
@@ -56,6 +56,7 @@ public class imageUtil
 		fcHandler = null;
 		ncHandler = null;
 		commentHandler = null;
+		searchFriendHandler = null;
 	}
 	
     
@@ -296,6 +297,9 @@ public class imageUtil
 	    else if (className.equals("CommentPage")) {
 	        this.commentHandler = handler;
 	    }
+	    else if (className.equals("searchFriend")) {
+	        this.searchFriendHandler = handler;
+	    }
 	}
 	
 	private void notifyChanged()
@@ -315,6 +319,11 @@ public class imageUtil
 	        Message msg = commentHandler.obtainMessage(FriendCenter.MSG_WHAT_ON_UPDATE_AVATAR);
             msg.sendToTarget();
 	    }
+	    if (null != searchFriendHandler)
+	    {
+	        Message msg = searchFriendHandler.obtainMessage(FriendCenter.MSG_WHAT_ON_UPDATE_AVATAR);
+            msg.sendToTarget();
+	    }
 	}
 	
 	public void unregisterHandler(String className) {
@@ -326,6 +335,9 @@ public class imageUtil
         }
 	    else if (className.equals("CommentPage")) {
 	        this.commentHandler = null;
+	    }
+	    else if (className.equals("searchFriend")) {
+	        this.searchFriendHandler = null;
 	    }
 	}
 	

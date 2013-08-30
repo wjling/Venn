@@ -188,7 +188,7 @@ public class AdapterForFriendList extends BaseAdapter{
 	        return super.isEnabled(position);   
 	} 
 	
-	static class ViewHolder
+	private class ViewHolder
 	{
 		TextView fname;
 		TextView gender;

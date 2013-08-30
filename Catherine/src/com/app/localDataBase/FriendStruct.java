@@ -11,6 +11,9 @@ public class FriendStruct {
 	public String fname;
 	public String gender;
 	public String email;
+	public String location;
+	public String sign;
+	public boolean isFriend;
 	
 	public FriendStruct() {
 		// TODO Auto-generated constructor stub
@@ -19,6 +22,9 @@ public class FriendStruct {
 		fname = null;
 		gender = null;
 		email = null;
+		location = null;
+		sign = null;
+		isFriend = false;
 	}
 	
 	public FriendStruct(JSONObject jo)
@@ -29,11 +35,42 @@ public class FriendStruct {
 			fname =  jo.getString("name");
 			gender = jo.getString("gender");
 			email = jo.getString("email");
+			location = null;
+	        sign = null;
+	        isFriend = false;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	public FriendStruct(JSONObject jo, boolean extend)
+    {
+        try {
+            uid = -1;
+            fid = jo.getInt("id");
+            fname =  jo.getString("name");
+            gender = jo.getString("gender");
+            email = jo.getString("email");
+            location = null;
+            sign = null;
+            isFriend = false;
+            if (extend) {
+                location = jo.getString("location");
+                if (location.equals("null")) {
+                    location = "";
+                }
+                sign = jo.getString("sign");
+                if (sign.equals("null")) {
+                    sign = "";
+                }
+                isFriend = jo.getBoolean("isFriend");
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 	
 	public static FriendStruct getFromJSON(JSONObject jo)
 	{
