@@ -371,16 +371,16 @@ public class PullUpDownView extends LinearLayout implements onScrollListViewList
 	 */
 	private boolean isFillScreen()////////
 	{
-		int childCount = myListView.getChildCount();
-//		int firstVisiblePosition = myListView.getFirstVisiblePosition();
-//		int lastVisiblePosition = myListView.getLastVisiblePosition() - myListView.getFooterViewsCount();
-//		int visibleItemsCount = lastVisiblePosition - firstVisiblePosition + 1;
-//		int totalItemsCount = myListView.getCount() - myListView.getFooterViewsCount();
+//		int childCount = myListView.getChildCount();
+		int firstVisiblePosition = myListView.getFirstVisiblePosition();
+		int lastVisiblePosition = myListView.getLastVisiblePosition() - myListView.getFooterViewsCount();
+		int visibleItemsCount = lastVisiblePosition - firstVisiblePosition + 1;
+		int totalItemsCount = myListView.getCount() - myListView.getFooterViewsCount();
 //		Log.i("PDV","visibleCount: "+visibleItemsCount+", totalCount: "+ totalItemsCount);
-		int lastVisiblePositionBottom = footerView.getBottom();
-		int listEnd = myListView.getHeight() - myListView.getPaddingBottom();
-		if(lastVisiblePositionBottom <= listEnd) return true;
-//		if(visibleItemsCount < totalItemsCount) return true;
+//		int lastVisiblePositionBottom = footerView.getBottom();
+//		int listEnd = myListView.getHeight() - myListView.getPaddingBottom();
+//		if(lastVisiblePositionBottom <= listEnd) return true;
+		if(visibleItemsCount < totalItemsCount) return true;
 //		int visibleLastItem = lastVisiblePosition + 1;
 //		int lastItem = myListView.getCount() - myListView.getFooterViewsCount();
 //		if(visibleLastItem < lastItem) return false;
