@@ -11,6 +11,7 @@ import com.app.catherine.R;
 import com.app.localDataBase.NotificationTableAdapter;
 import com.app.localDataBase.notificationObject;
 import com.app.ui.NotificationCenter.myHandler;
+import com.app.ui.menu.MyEvents.EventMainPage;
 import com.app.utils.HttpSender;
 import com.app.utils.OperationCode;
 import com.app.utils.cardAdapter;
@@ -20,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -75,8 +77,34 @@ public class RelativeEvents
 		);
 		
 		relativeActivityLV.setAdapter(relativeEventsAdapter);
+		relativeActivityLV.setItemsCanFocus(false);
+		relativeActivityLV.setOnItemClickListener(myEventsListViewListener);
 	}
 
+	OnItemClickListener myEventsListViewListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+			// TODO Auto-generated method stub
+			HashMap<String, Object> EventItem = addActivityRequests.get(pos);
+			
+			Intent intent = new Intent();
+			intent.setClass(context, EventMainPage.class);
+				intent.putExtra("theme", (String)EventItem.get("title"));
+				intent.putExtra("location", (String)EventItem.get("location"));
+				intent.putExtra("participantsNum", (String)EventItem.get("participantsNum"));
+				intent.putExtra("launcher", (String)EventItem.get("launcher"));
+				intent.putExtra("remark", (String)EventItem.get("remark"));
+				intent.putExtra("date", (String)EventItem.get("date"));			
+				intent.putExtra("photolistJsonArray", EventItem.get("photolistJsonArray").toString());
+				
+				intent.putExtra("id", (Integer)EventItem.get("id"));
+				intent.putExtra("event_id", (Integer)EventItem.get("event_id"));
+				intent.putExtra("launcher_id", (Integer)EventItem.get("launcher_id"));
+			context.startActivity(intent);
+		}
+	};
+	
 	public void showNotification()
 	{
 		//从数据库读取添加活动的请求
