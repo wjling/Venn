@@ -132,24 +132,37 @@ public class TableFriends {
 		return friendArray;
 	}
 	
-	public int deleteFriendsTable()
+	public int deleteFriendsTable(int uid)
 	{
 		SQLiteDatabase db = myHelper.getWritableDatabase();
 		int result = -1;
-		if(db.isOpen())
-			 result = db.delete("friends", null, null);
+		if(db.isOpen()) {
+		    if (0 == uid) {
+		        result = db.delete("friends", null, null);
+		    }
+		    else {
+		        result = db.delete("friends", "uid=?", new String[]{uid+""});
+		    }
+		}
 		db.close();
 		return result;
 	}
 	
-	public int size()
+	public int size(int uid)
 	{
 		int size = 0;
 		SQLiteDatabase db = myHelper.getWritableDatabase();
 		if(db.isOpen())
 		{
-			Cursor cr = db.query("friends", null, null, null, null, null, null);
-			size = cr.getCount();
+		    if (0 == uid) {
+		        Cursor cr = db.query("friends", null, null, null, null, null, null);
+		        size = cr.getCount();
+		    }
+		    else {
+		        Cursor cr = db.query("friends", null, "uid=?", new String[]{uid+""}, null, null, null);
+		        size = cr.getCount();
+		    }
+			
 		}
 		db.close();
 		return size;

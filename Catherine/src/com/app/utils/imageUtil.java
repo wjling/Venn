@@ -10,6 +10,7 @@ import com.app.adapters.MessagaAdapter;
 import com.app.catherine.R;
 import com.app.ui.menu.FriendCenter.FriendCenter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -34,7 +35,7 @@ public class imageUtil
 	private int maxMemory;
 	private int cacheSize;
 	private myHandler mHandler;
-	private Handler fcHandler, ncHandler;
+	private Handler fcHandler, ncHandler, commentHandler;
 	
 	private imageUtil()
 	{
@@ -54,6 +55,7 @@ public class imageUtil
 		mHandler = new myHandler();
 		fcHandler = null;
 		ncHandler = null;
+		commentHandler = null;
 	}
 	
     
@@ -291,6 +293,9 @@ public class imageUtil
 	    else if (className.equals("NotificationCenter")) {
 	        this.ncHandler = handler;
 	    }
+	    else if (className.equals("CommentPage")) {
+	        this.commentHandler = handler;
+	    }
 	}
 	
 	private void notifyChanged()
@@ -305,6 +310,11 @@ public class imageUtil
 	        Message msg = ncHandler.obtainMessage(FriendCenter.MSG_WHAT_ON_UPDATE_AVATAR);
             msg.sendToTarget();
 	    }
+	    if (null != commentHandler)
+	    {
+	        Message msg = commentHandler.obtainMessage(FriendCenter.MSG_WHAT_ON_UPDATE_AVATAR);
+            msg.sendToTarget();
+	    }
 	}
 	
 	public void unregisterHandler(String className) {
@@ -314,6 +324,9 @@ public class imageUtil
 	    else if (className.equals("NotificationCenter")) {
             this.ncHandler = null;
         }
+	    else if (className.equals("CommentPage")) {
+	        this.commentHandler = null;
+	    }
 	}
 	
 	public void changeCacheImage(int uid)

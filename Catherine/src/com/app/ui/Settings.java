@@ -182,9 +182,9 @@ public class Settings {
         if (imageUtil.fileExist(userId))
         {
             Bitmap bitmap = imageUtil.getLocalBitmapBy(userId);
-            int scale = UserInterface.dip2px(activity, 70);
-            Bitmap new_bitmap = imageUtil.scaleBitmap(bitmap, scale, scale);
-            avatar.setImageBitmap(new_bitmap);
+//            int scale = UserInterface.dip2px(activity, 70);
+//            Bitmap new_bitmap = imageUtil.scaleBitmap(bitmap, scale, scale);
+            avatar.setImageBitmap(bitmap);
         }
         else
         {
@@ -503,9 +503,9 @@ public class Settings {
             if(temp!=null){
                 Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);
                 imageUtil.savePhoto(userId, bitmap);
-                int scale = UserInterface.dip2px(activity, 70);
-                Bitmap new_bitmap = imageUtil.scaleBitmap(bitmap, scale, scale);
-                avatar.setImageBitmap(new_bitmap);
+//                int scale = UserInterface.dip2px(activity, 70);
+//                Bitmap new_bitmap = imageUtil.scaleBitmap(bitmap, scale, scale);
+                avatar.setImageBitmap(bitmap);
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -669,7 +669,7 @@ public class Settings {
                         Bitmap bitmap = getBitmapFromResources(R.drawable.defaultavatar);
                         int scale = UserInterface.dip2px(activity, 70);
                         Bitmap new_bitmap = imageUtil.scaleBitmap(bitmap, scale, scale);
-                        avatar.setImageBitmap(new_bitmap);
+                        avatar.setImageBitmap(bitmap);
                     }
                 }catch (JSONException e) {
                     // TODO Auto-generated catch block
