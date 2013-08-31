@@ -341,7 +341,7 @@ public class CommentPage extends Activity{
 						ArrayList<HashMap<String, Object>> replies = commentStruct.replies;
 						commentStruct.reply_sequence = master;
 						replies.add(0,map);
-						Log.i(TAG,"加上了replies之后的commentAdapter.commentList: "+commentAdapter.commentList.get(0).replies.toString());
+						Log.i(TAG,"加上了reply之后的commentAdapter.commentList对应comment的replies: "+commentAdapter.commentList.get(0).replies.toString());
 					}
 					else
 					{
@@ -371,13 +371,16 @@ public class CommentPage extends Activity{
 	 */
 	private int findComment(int comment_id)
 	{
+		Log.i(TAG, "查找的comment_id: "+comment_id);
 		int size = commentList.size();
 		for(int i=0;i<size;i++)
 		{
 			CommentStruct temp = commentList.get(i);
-			
-			if(Integer.parseInt(temp.comment.get("comment_id").toString()) == comment_id)
+			int temp_id = Integer.parseInt(temp.comment.get("comment_id").toString());
+			Log.i(TAG, "commentList位置"+i+"对应的comment_id为"+temp_id);
+			if(temp_id == comment_id)
 			{
+				Log.i(TAG, "找到指定comment_id在链表中的位置index: "+ i);
 				return i;
 			}
 		}

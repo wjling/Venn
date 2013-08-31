@@ -122,9 +122,9 @@ public class AdapterForComment extends BaseAdapter{
 			commentViewHolder.comment_moreReplies = (TextView)arg1.findViewById(R.id.comment_item_moreReply);
 			
 			
-			commentViewHolder.comment_zan.setTag(arg0);
+//			commentViewHolder.comment_zan.setTag(arg0);
 			commentViewHolder.comment_zan.setOnClickListener(myOnClickListener);
-			commentViewHolder.comment_reply.setTag(arg0);
+//			commentViewHolder.comment_reply.setTag(arg0);
 			commentViewHolder.comment_reply.setOnClickListener(myOnClickListener);
 			
 //			HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -193,6 +193,9 @@ public class AdapterForComment extends BaseAdapter{
 		map.put("index_comment", arg0);
 		map.put("reply_sequence",comment.reply_sequence);
 		commentViewHolder.comment_moreReplies.setTag(map);
+		
+		commentViewHolder.comment_zan.setTag(arg0);
+		commentViewHolder.comment_reply.setTag(arg0);
 //		int size = commentViewHolder.replyViews.size();
 //		Log.i(TAG,"number of replies: "+size);
 //		Log.i(TAG,"2. view count: "+commentViewHolder.comment_replyList.getChildCount());
@@ -354,9 +357,10 @@ public class AdapterForComment extends BaseAdapter{
 	protected void clickAddCommentReply(View v) {
 		// TODO Auto-generated method stub
 		int index_comment = (Integer) v.getTag();
+		Log.i(TAG, "从tag中得到comment在commentList中的index: "+ index_comment);
 		final HashMap<String, Object> comment = commentList.get(index_comment).comment;
 		final EditText edtext = new EditText(context);
-		String author_name = comment.get("author").toString();
+//		String author_name = comment.get("author").toString();
 //		edtext.setText("回复@" + author_name + ": ");
 //		edtext.setSelection(edtext.getText().length());
 		
@@ -378,6 +382,7 @@ public class AdapterForComment extends BaseAdapter{
 					params.put("content", edtext.getText().toString());
 					HttpSender httpSender = new HttpSender();
 					httpSender.Httppost(OperationCode.ADD_COMMENT, params, cpHandler);
+					Log.i(TAG, "发送的comment_id为："+Integer.parseInt(comment.get("comment_id").toString()));
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -450,6 +455,7 @@ public class AdapterForComment extends BaseAdapter{
 		
 		JSONObject params = new JSONObject();
 		try {
+			Log.i(TAG, "发送的comment_id: "+ Integer.parseInt(reply.get("comment_id").toString()));
 			params.put("id", userId);
 			params.put("event_id",eventId);
 			params.put("comment_id", Integer.parseInt(reply.get("comment_id").toString()));
