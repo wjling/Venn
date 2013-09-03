@@ -51,9 +51,11 @@ GestureDetector.OnGestureListener
 	private int menu_width = 0;
 	private int mScrollX;		//Scroll过程中X轴方向的位移
 	private boolean isScrolling = false;	//是否滚动
+	private boolean hasScrolled = false;	//是否滚动过
 	private boolean isFinish = true;		//是否后台回滚完毕
 	private boolean isMenuOpen = false;		//是否显示了菜单栏
 	private boolean hasMeasured = false;
+	
 	
 	private myHandler uiHandler = new myHandler();
 	
@@ -318,6 +320,21 @@ GestureDetector.OnGestureListener
 	public boolean onTouch(View v, MotionEvent event) {
 		// TODO Auto-generated method stub
 //		Log.i("myUI","UI onTouch: "+event.getAction());
+		int action = event.getAction();
+		if(action == MotionEvent.ACTION_UP) //为了解决滑动的时候又点入活动主要信息
+		{
+			if(hasScrolled)
+			{
+				
+				UIGestureDetector.onTouchEvent(event);
+				hasScrolled = false;
+				return true;
+			}
+			else
+			{
+				return UIGestureDetector.onTouchEvent(event);
+			}
+		}
 		return UIGestureDetector.onTouchEvent(event);
 	}
 
@@ -373,7 +390,8 @@ GestureDetector.OnGestureListener
 			doCloseScroll(false);
 		}
 		
-		return false;
+		
+		return true;   //为了解决滑动时候进入活动主要信息，改成了true试一下
 	}
 
 	private void doCloseScroll(boolean speedEnough) {
@@ -429,6 +447,7 @@ GestureDetector.OnGestureListener
 	private void doScrolling(float distanceX) {
 		// TODO Auto-generated method stub
 		isScrolling = true;
+		hasScrolled = true;
 		mScrollX += distanceX;// distanceX: negative for right, positive for left
 		RelativeLayout.LayoutParams layoutParams_UI = (RelativeLayout.LayoutParams)UILayout.getLayoutParams();
 		layoutParams_UI.leftMargin -= mScrollX;
