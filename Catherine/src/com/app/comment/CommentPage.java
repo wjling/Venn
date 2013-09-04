@@ -130,18 +130,26 @@ public class CommentPage extends Activity{
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				JSONObject params = new JSONObject();
-				try {
-					// Something may worng
-					params.put("id", userId);
-					params.put("event_id", eventId);
-					params.put("master", 0);
-					params.put("content", edtext.getText().toString());
-//					params.put("sequence", comment_sequence);
-					HttpSender httpSender = new HttpSender();
-					httpSender.Httppost(OperationCode.ADD_COMMENT, params, cpHandler);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				String text = edtext.getText().toString();
+				if(!"".equals(text.trim().toString()))
+				{
+					try {
+						// Something may worng
+						params.put("id", userId);
+						params.put("event_id", eventId);
+						params.put("master", 0);
+						params.put("content", text);
+	//					params.put("sequence", comment_sequence);
+						HttpSender httpSender = new HttpSender();
+						httpSender.Httppost(OperationCode.ADD_COMMENT, params, cpHandler);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				else
+				{
+					Toast.makeText(CommentPage.this, "新评论不能为空", Toast.LENGTH_SHORT).show();
 				}
 			}
 		})

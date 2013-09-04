@@ -23,8 +23,11 @@ import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.addActivityPack.AddActivity;
@@ -210,7 +213,7 @@ GestureDetector.OnGestureListener
 		int width = getWindowManager().getDefaultDisplay().getWidth();
 		UI_myEvents = new MyEvents(this, UI_Menu.getMyEventsView(), uiHandler, width, userId);
 		UI_myEvents.init();
-		UI_myEvents.myEventsListView.setOnTouchListener(this);	//非常重要的一步~聪明人秒懂
+		UI_myEvents.myEventsListView.setOnTouchListener(this);	//非常重要的一步~
 		UI_myEvents.loadData();
 	}
 	
@@ -218,6 +221,15 @@ GestureDetector.OnGestureListener
 	{
 		UI_friendCenter = new FriendCenter(this, UI_Menu.getFriendsCenterView(), uiHandler, userId);
 		UI_friendCenter.init();
+		View friendCenterView = UI_Menu.getFriendsCenterView();
+		EditText searchEdText = (EditText) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriend);
+		TextView searchButton = (TextView) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriendBtn);
+		ListView friendList = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_friendlist);
+//		searchEdText.setOnTouchListener(this);
+//		searchButton.setOnTouchListener(this);
+//		friendList.setOnTouchListener(this);
+//		LinearLayout menuLayout_root = (LinearLayout)friendCenterView.findViewById(R.id.menu_friend_center_searchLayout);
+//		menuLayout_root.setOnTouchListener(this);
 	}
 	
 	private void initSettings()
