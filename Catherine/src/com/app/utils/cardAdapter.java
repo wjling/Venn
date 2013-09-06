@@ -137,7 +137,7 @@ public class cardAdapter extends BaseAdapter
 			TextView Title = (TextView)view.findViewById( to[i] );
 			Title.setText( (String)list.get(position).get( from[i] ) );
 		}
-		
+//		view.setOnTouchListener(itemOnTouchListener);
 		return view;
 	}
 	

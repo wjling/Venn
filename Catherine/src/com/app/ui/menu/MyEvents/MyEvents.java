@@ -129,6 +129,10 @@ public class MyEvents {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
 				// TODO Auto-generated method stub
+				if(UserInterface.hasScrolled) // 为了解决滑动主界面进入活动详细信息的bug
+				{
+					return;
+				}
 				HashMap<String, Object> EventItem = myEventsList.get(pos);
 				
 				Intent intent = new Intent();

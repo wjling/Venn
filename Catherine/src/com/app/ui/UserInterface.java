@@ -54,7 +54,7 @@ GestureDetector.OnGestureListener
 	private int menu_width = 0;
 	private int mScrollX;		//Scroll过程中X轴方向的位移
 	private boolean isScrolling = false;	//是否滚动
-	private boolean hasScrolled = false;	//是否滚动过
+	public static boolean hasScrolled = false;	//是否滚动过
 	private boolean isFinish = true;		//是否后台回滚完毕
 	private boolean isMenuOpen = false;		//是否显示了菜单栏
 	private boolean hasMeasured = false;
@@ -333,18 +333,23 @@ GestureDetector.OnGestureListener
 		// TODO Auto-generated method stub
 //		Log.i("myUI","UI onTouch: "+event.getAction());
 		int action = event.getAction();
-		if(action == MotionEvent.ACTION_UP) //为了解决滑动的时候又点入活动主要信息
+		if(action == MotionEvent.ACTION_DOWN)
+		{
+			hasScrolled = false;
+		}
+		else if(action == MotionEvent.ACTION_UP) //为了解决滑动的时候又点入活动主要信息
 		{
 			if(hasScrolled)
 			{
 				
 				UIGestureDetector.onTouchEvent(event);
-				hasScrolled = false;
+//				hasScrolled = false;
 				return true;
 			}
 			else
 			{
-				return UIGestureDetector.onTouchEvent(event);
+				UIGestureDetector.onTouchEvent(event);
+				return false;
 			}
 		}
 		return UIGestureDetector.onTouchEvent(event);
@@ -364,6 +369,7 @@ GestureDetector.OnGestureListener
 			float arg3) {
 		// TODO Auto-generated method stub
 //		Log.i("myUI","onFlip: arg2:"+arg2+", arg3: "+arg3);
+		hasScrolled = true;
 		int currentX = (int)arg1.getX();
 		int lastX = (int)arg0.getX();
 		int deltaX = currentX - lastX;
