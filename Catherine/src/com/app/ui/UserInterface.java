@@ -102,35 +102,40 @@ GestureDetector.OnGestureListener
 	}
 	
 	
-	
+	//按下返回键
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 //		super.onBackPressed();
 		
-		Builder dialog = new AlertDialog.Builder(UserInterface.this)
-								.setTitle("提示")
-								.setMessage("确定要退出程序吗？")
-								.setPositiveButton("是", 
-										new DialogInterface.OnClickListener() {
-											
-											@Override
-											public void onClick(DialogInterface dialog, int which) {
-												// TODO Auto-generated method stub
-												//跳回到主页面userinterface
-												finish();
-											}
-										})
-								.setNegativeButton("否", 
-										new DialogInterface.OnClickListener() {
-											
-											@Override
-											public void onClick(DialogInterface dialog, int which) {
-												// TODO Auto-generated method stub
-												//啥都不做
-											}
-										});
-			dialog.show();
+//		Builder dialog = new AlertDialog.Builder(UserInterface.this)
+//								.setTitle("提示")
+//								.setMessage("确定要退出程序吗？")
+//								.setPositiveButton("是", 
+//										new DialogInterface.OnClickListener() {
+//											
+//											@Override
+//											public void onClick(DialogInterface dialog, int which) {
+//												// TODO Auto-generated method stub
+//												//跳回到主页面userinterface
+//												finish();
+//											}
+//										})
+//								.setNegativeButton("否", 
+//										new DialogInterface.OnClickListener() {
+//											
+//											@Override
+//											public void onClick(DialogInterface dialog, int which) {
+//												// TODO Auto-generated method stub
+//												//啥都不做
+//											}
+//										});
+//			dialog.show();
+		
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		startActivity(intent);
 	}
 
 
@@ -204,7 +209,7 @@ GestureDetector.OnGestureListener
 			intent.putExtra("userId", userId);
 			intent.putExtra("email", email);
 			startActivity(intent);
-			finish();  //add 8 . 22
+//			finish();  //add 8 . 22
 		}
 	};
 	
