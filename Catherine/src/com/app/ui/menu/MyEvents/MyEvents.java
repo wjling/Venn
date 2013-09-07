@@ -261,14 +261,14 @@ public class MyEvents {
 		}
 		
 		if( "None".equals(time) ) 
-			time = "0000-00-00 00:00:00";
+			time = "0000-00-00 00:00";
 				
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("title", subject);
 		map.put("day", day+"");
 		map.put("monthAndYear", month + "ÔÂ" +year);
 		map.put("date", time);  //date detail
-		map.put("time", hour+":"+minute+":"+second);
+		map.put("time", hour+":"+minute);
 		map.put("location", location);
 		map.put("launcher", "by " + launcher);
 		map.put("remark", remark);
