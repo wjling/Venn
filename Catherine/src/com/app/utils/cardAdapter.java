@@ -76,11 +76,11 @@ public class cardAdapter extends BaseAdapter
 	private void SetContentWidth(View main, View v)
     {
 		//reference
-		View dateView = main.findViewById(R.id.activityDate);
+		View dateView = main.findViewById(R.id.leftDateBlock);
 		RelativeLayout.LayoutParams paramsdate = (RelativeLayout.LayoutParams)dateView.getLayoutParams();
 		int dateW = paramsdate.width;
 
-		int delPix = 100 * dateW / 55;
+		int delPix = 110 * dateW / 55;
     	int screenWidth = screenW;
     	
 		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)v.getLayoutParams();
@@ -213,8 +213,8 @@ public class cardAdapter extends BaseAdapter
 		
 		View activityInfoAllView = view.findViewById(R.id.activityInfoAll);
 		SetContentWidth(view, activityInfoAllView);
-		View userInfoView = view.findViewById(R.id.userInfo);
-		SetUserInfoWidth(view, userInfoView);
+//		View userInfoView = view.findViewById(R.id.userInfo);
+//		SetUserInfoWidth(view, userInfoView);
 		
 		CircularImage join = (CircularImage)view.findViewById(R.id.joinBtn);
 		
