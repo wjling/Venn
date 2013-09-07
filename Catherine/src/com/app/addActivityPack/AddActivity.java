@@ -113,11 +113,11 @@ public class AddActivity extends Activity
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		
-		Intent intent = new Intent();
-			intent.setClass(AddActivity.this, UserInterface.class);
-			intent.putExtra("userId", userId);
-			intent.putExtra("email", email);
-			startActivity(intent);
+//		Intent intent = new Intent();
+//			intent.setClass(AddActivity.this, UserInterface.class);
+//			intent.putExtra("userId", userId);
+//			intent.putExtra("email", email);
+//			startActivity(intent);
 		finish();
 	}
 
@@ -170,11 +170,11 @@ public class AddActivity extends Activity
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
 							//跳回到主页面userinterface
-							Intent intent = new Intent();
-								intent.setClass(AddActivity.this, UserInterface.class);
-								intent.putExtra("userId", userId);
-								intent.putExtra("email", email);
-								startActivity(intent);
+//							Intent intent = new Intent();
+//								intent.setClass(AddActivity.this, UserInterface.class);
+//								intent.putExtra("userId", userId);
+//								intent.putExtra("email", email);
+//								startActivity(intent);
 							finish();
 						}
 					})
@@ -398,11 +398,11 @@ public class AddActivity extends Activity
 								//跳转到用户自己的活动页面
 								Log.i("AddActivity", "成功发起活动,evenId:"+evenID);
 								//跳转到UserInterface.java
-								Intent intent = new Intent();
-								intent.setClass(AddActivity.this, UserInterface.class);
-								intent.putExtra("userId", userId);
-								intent.putExtra("email", email);
-								startActivity(intent);
+//								Intent intent = new Intent();
+//								intent.setClass(AddActivity.this, UserInterface.class);
+//								intent.putExtra("userId", userId);
+//								intent.putExtra("email", email);
+//								startActivity(intent);
 								finish();
 							}
 							else {

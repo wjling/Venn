@@ -222,7 +222,7 @@ public class login extends Activity
 			switch(msg.what)
 			{									 
 				case OperationCode.GET_SALT_VALUE:
-					progressDialog.dismiss();
+					
 					try {
 						String responseGetSalt = null;
 						JSONObject responseGetSaltJson;
@@ -242,10 +242,10 @@ public class login extends Activity
 									if( null != responseSalt )
 									{
 //										loginTry();	
-										progressDialog = new ProgressDialog(login.this);
-										progressDialog.setMessage("登录中...请确保你已经联网");
-										progressDialog.setTitle("请稍候");
-										progressDialog.show();
+//										progressDialog = new ProgressDialog(login.this);
+//										progressDialog.setMessage("登录中...请确保你已经联网");
+//										progressDialog.setTitle("请稍候");
+//										progressDialog.show();
 										new Thread()
 										{
 											public void run() {
@@ -254,24 +254,39 @@ public class login extends Activity
 										}.start();
 									}
 								}
-								else if( ReturnCode.USER_NOT_FOUND==cmdGetSalt)  //用户不存在的话，只是提示，不跳转														
-									Toast.makeText(login.this, "用户不存在,请先注册", Toast.LENGTH_SHORT).show();							
+								else if( ReturnCode.USER_NOT_FOUND==cmdGetSalt)  //用户不存在的话，只是提示，不跳转		
+								{
+									Toast.makeText(login.this, "用户不存在,请先注册", Toast.LENGTH_SHORT).show();	
+									progressDialog.dismiss();
+								}
 								else if(cmdGetSalt == ReturnCode.SERVER_FAIL)		    //连接失败	
+								{
 									Toast.makeText(login.this, "连接失败", Toast.LENGTH_SHORT).show();	
+									progressDialog.dismiss();
+								}
 								else if(cmdGetSalt == ReturnCode.USER_ALREADY_ONLINE)
+								{
 									Toast.makeText(login.this, "已经在其他手机登陆了,不能重复登陆", Toast.LENGTH_SHORT).show();
+									progressDialog.dismiss();
+								}
 								else							                                                    //ELSE
-									Toast.makeText(login.this, "你已经穿越...", Toast.LENGTH_SHORT).show();							
+								{
+									Toast.makeText(login.this, "你已经穿越...", Toast.LENGTH_SHORT).show();	
+									progressDialog.dismiss();
+								}
 						}
 						else		//	网络异常 return DEFAULT
-							Toast.makeText(login.this, "网络异常", Toast.LENGTH_SHORT).show();					
+						{
+							Toast.makeText(login.this, "网络异常", Toast.LENGTH_SHORT).show();
+							progressDialog.dismiss();
+						}
 					} catch (JSONException e){
 						e.printStackTrace();
 					}
 					break;
 					
 				case OperationCode.LOGIN:
-					progressDialog.dismiss();
+//					progressDialog.dismiss();
 					try {
 						String responseLogin;
 						JSONObject respLoginJson;
@@ -302,10 +317,14 @@ public class login extends Activity
 							IntentFilter intentFilter = new IntentFilter();
 							intentFilter.addAction("connected");
 							broadcastReceiver = new MyBroadcastReceiver();
-							login.this.registerReceiver( broadcastReceiver, intentFilter);					
+							login.this.registerReceiver( broadcastReceiver, intentFilter);			
+							progressDialog.dismiss();
 						}
 						else if (ReturnCode.PASSWD_NOT_CORRECT==cmdLogin)								
-							Toast.makeText(login.this, "密码错误，请重新输入", Toast.LENGTH_SHORT).show();								
+						{
+							Toast.makeText(login.this, "密码错误，请重新输入", Toast.LENGTH_SHORT).show();					
+							progressDialog.dismiss();
+						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}				
