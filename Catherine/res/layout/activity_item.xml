@@ -168,99 +168,28 @@
 						    android:lineSpacingExtra="3dip"
 			    	        android:text="出来混，最紧要系要有义气！混口饭吃嗟使唔使甘样纸啊？肚子饿，就吃饭呗，实在是没有对白了，就唱歌咯"	    	        
 			    	        />
-			    	</LinearLayout>	
+			    </LinearLayout>	
 			    	
-	    	    <RelativeLayout 
-		    	    android:id="@+id/userAvatar"
-		    	  	android:layout_alignParentBottom="true"
-		    	  	android:layout_marginBottom="8dip"
-		    	    android:layout_width="match_parent"
-		    	    android:layout_height="wrap_content">
-			  
-			    	<RelativeLayout 
-			    	    android:id="@+id/user1Block"
+	    	     <RelativeLayout 
+	    	         android:layout_width="match_parent"
+	    	         android:layout_height="wrap_content"
+	    	         android:layout_alignParentBottom="true"
+	    	         android:layout_marginBottom="8dip"
+	    	         >
+	    	         <LinearLayout 
+			    	    android:id="@+id/userAvatar"
 			    	    android:layout_width="wrap_content"
 			    	    android:layout_height="wrap_content"
-			    	    android:padding="2dip">
-			    	    <ImageView
-        					android:layout_width="30.0dip"
-        					android:layout_height="30.0dip"
-        					android:layout_centerInParent="true"
-        					android:contentDescription="@null"
-        					android:src="@drawable/head_bg" />
-
-    					<com.app.addActivityPack.CircularImage
-        					android:id="@+id/user1"
-					        android:layout_width="30.0dip"
-					        android:layout_height="30.0dip"
-					        android:layout_centerInParent="true" />
-			    	</RelativeLayout>
-			    	
-			    	<RelativeLayout 
-			    	    android:id="@+id/user2Block"			    	    
-			    	    android:layout_width="wrap_content"
-			    	    android:layout_height="wrap_content"
-			    	    android:layout_toRightOf="@+id/user1Block"
-			    	    android:padding="2dip">
-			    	    <ImageView
-        					android:layout_width="30.0dip"
-        					android:layout_height="30.0dip"
-        					android:layout_centerInParent="true"
-        					android:contentDescription="@null"
-        					android:src="@drawable/head_bg" />
-
-    					<com.app.addActivityPack.CircularImage
-        					android:id="@+id/user2"
-					        android:layout_width="30.0dip"
-					        android:layout_height="30.0dip"
-					        android:layout_centerInParent="true" />
-			    	</RelativeLayout>
+			    	    android:orientation="horizontal">
 			    	    
-			        <RelativeLayout 
-			    	    android:id="@+id/user3Block"			    	    
-			    	    android:layout_width="wrap_content"
-			    	    android:layout_height="wrap_content"
-			    	    android:layout_toRightOf="@+id/user2Block"
-			    	    android:padding="2dip">
-			    	    <ImageView
-        					android:layout_width="30.0dip"
-        					android:layout_height="30.0dip"
-        					android:layout_centerInParent="true"
-        					android:contentDescription="@null"
-        					android:src="@drawable/head_bg" />
-
-    					<com.app.addActivityPack.CircularImage
-        					android:id="@+id/user3"
-					        android:layout_width="30.0dip"
-					        android:layout_height="30.0dip"
-					        android:layout_centerInParent="true" />
-			    	</RelativeLayout>
-			    	
-			        <RelativeLayout 
-			    	    android:id="@+id/user4Block"			    	    
-			    	    android:layout_width="wrap_content"
-			    	    android:layout_height="wrap_content"
-			    	    android:layout_toRightOf="@+id/user3Block"
-			    	    android:padding="2dip">
-			    	    <ImageView
-        					android:layout_width="30.0dip"
-        					android:layout_height="30.0dip"
-        					android:layout_centerInParent="true"
-        					android:contentDescription="@null"
-        					android:src="@drawable/head_bg" />
-
-    					<com.app.addActivityPack.CircularImage
-        					android:id="@+id/user4"
-					        android:layout_width="30.0dip"
-					        android:layout_height="30.0dip"
-					        android:layout_centerInParent="true" />
-			    	</RelativeLayout>				    				          
-			    	
-			        <RelativeLayout 
+			    	</LinearLayout>
+				  
+			    	<LinearLayout 
+			    	    android:layout_alignParentRight="true"
 			            android:layout_marginTop="10dip"
-			            android:layout_alignParentRight="true"
 			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content">
+			            android:layout_height="wrap_content"
+			            android:orientation="horizontal">
 			            
 			            <TextView
 			                android:id="@+id/participantsNum"
@@ -271,7 +200,6 @@
 			                android:text="15 " 
 			                />
 			            <TextView
-			                android:layout_toRightOf="@+id/participantsNum"
 			                 android:layout_width="wrap_content"
 			                android:layout_height="wrap_content"
 			                android:paddingRight="12dip"
@@ -279,9 +207,11 @@
 						    android:textColor="#999999"
 			                android:text="人参加 >" 
 			                />
+			        </LinearLayout>				        
 
-			        </RelativeLayout>	
-		    	</RelativeLayout>   		    
+	    	     </RelativeLayout>
+	    	       	
+		    		    
     		</RelativeLayout>
     		
 

@@ -12,6 +12,7 @@ import com.app.catherine.R;
 import com.app.comment.CommentPage;
 import com.app.localDataBase.NotificationTableAdapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -29,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +46,6 @@ public class cardAdapter extends BaseAdapter
 	private String from[];
 	private int to[];	
 	private int screenW;
-	private int toAvatar[];
 	private imageUtil forImageUtil  = imageUtil.getInstance();
 	private boolean inActivity;
 	
@@ -58,7 +59,7 @@ public class cardAdapter extends BaseAdapter
 	}
 	
 	public cardAdapter(Context context, ArrayList<HashMap<String, Object>> list, int resource,
-			String []from, int []to, int screenW, int []toAvatar, boolean inActivity, int userId) {
+			String []from, int []to, int screenW, boolean inActivity, int userId) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
@@ -68,7 +69,6 @@ public class cardAdapter extends BaseAdapter
 		this.to = to;
 		this.screenW = screenW;
 		this.inActivity = inActivity;
-		this.toAvatar = toAvatar;
 		this.userId = userId;
 		Log.e("cardAdapter",   "in cardadapter constructor");
 	}
@@ -132,7 +132,7 @@ public class cardAdapter extends BaseAdapter
 		
 		//set text or set something else about the view
 		init(view, position);
-		for (int i = 0; i < from.length; i++) 
+		for (int i = 0; i < to.length; i++) 
 		{
 			TextView Title = (TextView)view.findViewById( to[i] );
 			Title.setText( (String)list.get(position).get( from[i] ) );
@@ -163,49 +163,47 @@ public class cardAdapter extends BaseAdapter
 		}
 	};
 	
+	private void addAParticipant( View v, int id )
+	{
+		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
+		RelativeLayout child = (RelativeLayout)((Activity) context).getLayoutInflater().inflate(R.layout.addcircleimage, null);
+		CircularImage user = (CircularImage)child.findViewById(R.id.user);
+		if( imageUtil.fileExist(id) ) 
+		{
+			Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
+			user.setImageBitmap(bitmap);
+		}
+		else		
+			user.setImageResource(R.drawable.defaultavatar);
+		
+		userInfoBlockSecondBlock.addView( child);
+	}
+	
+	private void clearAvatar(View v)
+	{
+		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
+		int count = userInfoBlockSecondBlock.getChildCount();
+
+		userInfoBlockSecondBlock.removeAllViews();
+	}
+	
 	private void init(View view, final int pos)
 	{
 		HashMap<String, Object> item = list.get(pos);
 		JSONArray avatarJsonArray = (JSONArray) item.get("photolistJsonArray");
 		
 		int length = avatarJsonArray.length();
-		Log.e("cardAdapter", length + " = length");
-		Log.e("cardAdapter", "toAvatar length: "+ toAvatar.length);
+		Log.e(TAG, "pos " + pos + "; length " + length );
 		try {
 			int i=0;
-			for ( ; i < length && i<4; i++) 
+			clearAvatar(view);
+			for ( ; i < length; i++) 
 			{
 				int id = avatarJsonArray.getInt(i);
-//				if( imageUtil.fileExist(id) )       //本地有头像就用本地头像
-//				{
-//					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-//					Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
-//					photo.setImageBitmap(bitmap);
-//				}
-//				if( forImageUtil.fileExistInMap(id))
-//				{
-//					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-//					Bitmap bitmap = forImageUtil.getBitmapInMap(id);
-//					photo.setImageBitmap(bitmap);
-//				}
-				if( forImageUtil.imageExistInCache(id) )
-				{
-					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-					Bitmap bitmap = forImageUtil.getBitmapFromMemCache(id);
-					photo.setImageBitmap(bitmap);
-				}
-				else  									//没头像，用默认头像
-				{
-					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-					photo.setImageResource(R.drawable.defaultavatar);
-				}
+				
+				addAParticipant( view, id );
 			}
-			//其他没头像的成员也设为默认头像
-			for( ; i<4; i++)
-			{
-				CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-				photo.setImageResource(R.drawable.defaultavatar);
-			}
+
 		} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -4,16 +4,16 @@
     android:layout_height="wrap_content"
     android:padding="2dip">
     	    <ImageView
- 					android:layout_width="20.0dip"
- 					android:layout_height="20.0dip"
+ 					android:layout_width="30.0dip"
+ 					android:layout_height="30.0dip"
  					android:layout_centerInParent="true"
  					android:contentDescription="@null"
  					android:src="@drawable/head_bg" />
 
 			<com.app.addActivityPack.CircularImage
 				    android:id="@+id/user"
-			        android:layout_width="20.0dip"
-			        android:layout_height="20.0dip"
+			        android:layout_width="30.0dip"
+			        android:layout_height="30.0dip"
 			        android:layout_centerInParent="true" />
 
 </RelativeLayout>
