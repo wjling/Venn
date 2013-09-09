@@ -217,7 +217,7 @@
                     android:layout_marginLeft="5dip"
                     android:layout_marginRight="5dip"
                     android:layout_marginBottom="5dip"
-                    android:textSize="12sp" 
+                    android:textSize="14sp" 
 				    android:textColor="#b2b2b2"
                     android:text="lalallallalaalllalallal!中文会怎样呢，你觉得~"/>
             </LinearLayout>

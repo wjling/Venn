@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -72,7 +73,8 @@ public class RelativeEvents
 				new int[]{R.id.activityTitle, R.id.day, R.id.monthAndYear, R.id.time, R.id.location, R.id.launcher, R.id.remark, R.id.participantsNum},
 				screenWidth,
 				false,
-				userId
+				userId,
+				new cardHandler( Looper.myLooper())
 		);
 		
 		relativeActivityLV.setAdapter(relativeEventsAdapter);
@@ -182,8 +184,28 @@ public class RelativeEvents
 			map.put("event_id", event_id);
 			map.put("launcher_id", launcher_id);
 			map.put("item_id", itemID);
+			map.put("open", false);
 		addActivityRequests.add(map);		
 	}
 	
+	class cardHandler extends Handler
+	{
+		public cardHandler(Looper looper)
+		{
+			super(looper);
+		}
+		
+		public void handleMessage(Message msg)
+		{
+			switch (msg.what) {
+			case 555:
+				relativeEventsAdapter.notifyDataSetChanged();
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
 	
 }

@@ -213,7 +213,8 @@ public class MyEvents {
 				new int[]{R.id.activityTitle, R.id.day, R.id.monthAndYear, R.id.time, R.id.location, R.id.launcher, R.id.remark, R.id.participantsNum},
 				screenWidth,
 				true,
-				userId
+				userId,
+				new cardHandler( Looper.myLooper())
 		);
 		
 		myEventsListView.setAdapter(myEventsAdapter);
@@ -277,6 +278,7 @@ public class MyEvents {
 		map.put("event_id", event_id);
 		map.put("launcher_id", launcher_id);
 		map.put("item_id", -1);
+		map.put("open", false);
 		myEventsList.add(map);		
 	}
 	
@@ -371,6 +373,26 @@ public class MyEvents {
 	private boolean hasMoreEvent()
 	{
 		return requestIndex < allEventIDList.size();
+	}
+	
+	class cardHandler extends Handler
+	{
+		public cardHandler(Looper looper)
+		{
+			super(looper);
+		}
+		
+		public void handleMessage(Message msg)
+		{
+			switch (msg.what) {
+			case 555:
+				myEventsAdapter.notifyDataSetChanged();
+				break;
+
+			default:
+				break;
+			}
+		}
 	}
 	
 	class MsgHandler extends Handler

@@ -4,9 +4,124 @@
 	   	 	android:layout_height="wrap_content"
 	   	 	android:layout_marginTop="5dip"
 	   	 	android:layout_marginLeft="5dip"
-    		android:layout_marginRight="5dip"
-    		android:background="#ffffff">
+    		android:layout_marginRight="5dip">
     		
+        <RelativeLayout 
+        android:id="@+id/secondLayerCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:visibility="gone">
+    	    <RelativeLayout 
+    	        android:id="@+id/secondLayer_LeftBlock"
+    	        android:layout_width="40dip"
+    	        android:layout_height="200dip">
+	    	    
+    	        <ImageView 
+    	            android:id="@+id/second_comment_btn"
+    	            android:layout_width="wrap_content"
+    	            android:layout_height="wrap_content"
+    	            android:layout_alignParentTop="true"
+    	            android:layout_marginTop="10dip"
+    	            android:padding="3dip"
+    	            android:src="@drawable/activity_right_comment"/>
+    	        
+    	        <ImageView
+    	            android:id= "@+id/second_slideBtn"
+    	            android:layout_centerInParent="true"
+    	            android:layout_width="wrap_content"
+    	            android:layout_height="wrap_content"
+    	            android:src="@drawable/activity_right_slideright"/>
+    	        
+    	        <ImageView 
+    	            android:id="@+id/second_takephoto_btn"
+    	            android:layout_alignParentBottom="true"
+    	            android:layout_width="wrap_content"
+    	            android:layout_height="wrap_content"
+    	            android:layout_marginBottom="10dip"
+    	            android:padding="3dip"
+    	            android:src="@drawable/activity_right_photo"/>
+    	        
+    	    </RelativeLayout>	
+    	    
+    	    <ImageView 
+    	        android:id="@+id/second_leftDivider"
+   		    	android:layout_toRightOf="@+id/secondLayer_LeftBlock"
+    	        android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:src="@drawable/activity_right_divider"/>
+    		
+    	    <RelativeLayout 
+    	        android:id="@+id/second_imageFlow"
+    	        android:layout_toRightOf="@+id/second_leftDivider"
+    	        android:layout_width="135dip"
+    	        android:layout_height="200dip"
+    	        android:background="#ffffff">
+    	        
+    	    </RelativeLayout>
+    	    
+    	    <ImageView 
+    	        android:id="@+id/second_rightDivider"
+   		    	android:layout_toRightOf="@+id/second_imageFlow"
+    	        android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:src="@drawable/activity_right_divider"/>
+    	    
+    	    <LinearLayout 
+    	        android:id="@+id/second_commentsBlock"
+   		    	android:layout_toRightOf="@+id/second_rightDivider"
+    	        android:layout_width="135dip"
+    	        android:layout_height="200dip"
+    	        android:background="#efefef"
+    	        android:orientation="vertical">
+    	        
+    	        <TextView 
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+    	            android:layout_marginTop="10dip"
+    	            android:layout_marginBottom="10dip"
+    	            android:textColor="#636363"
+    	            android:text="萝莉陷阱! ! !"/>
+    	        
+    	        <ImageView 
+	    	        android:layout_width="match_parent"
+	    	        android:layout_height="wrap_content"
+	    	        android:src="@drawable/settings_sep"/>
+    	        
+    	        <TextView 
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+    	            android:layout_marginTop="10dip"
+    	            android:layout_marginBottom="10dip"
+    	            android:textColor="#636363"
+    	            android:text="->_->楼上想太多了吧？"
+    	            />
+    	        
+    	        <ImageView 
+	    	        android:layout_width="match_parent"
+	    	        android:layout_height="wrap_content"
+	    	        android:src="@drawable/settings_sep"/>
+    	        
+    	         <TextView 
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+    	            android:layout_marginTop="10dip"
+    	            android:layout_marginBottom="10dip"
+    	            android:textColor="#636363"
+    	            android:text="这萝莉好萌萌~"
+    	            />
+    	        
+    	    </LinearLayout>
+     </RelativeLayout>
+     
+    	<!-- ==================================================================================================== -->
+    	
+    <RelativeLayout 
+        android:id="@+id/firstLayerCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+        
     		<LinearLayout 
     		    android:id="@+id/leftColorBlock"
     		    android:layout_width="wrap_content"
@@ -32,7 +147,7 @@
     		    <LinearLayout 
 		    	    android:id="@+id/activityDate"
 		    	    android:layout_width="match_parent"
-		    	    android:layout_height="55dip"
+		    	    android:layout_height="wrap_content"
 		    	    android:orientation="vertical"
 		    	    >
 		    	    <TextView
@@ -49,7 +164,7 @@
 		    	        android:layout_width="match_parent"
 		    	        android:layout_height="wrap_content"	
 		    	        android:gravity="center_horizontal"	
-		    	        android:textSize="11sp" 
+		    	        android:textSize="9sp" 
 		    	        android:textColor="#3ecc9d"
 		    	        android:text="7月 2013" />
 		    	</LinearLayout>
@@ -161,11 +276,11 @@
 			    	        android:layout_width="match_parent"
 			    	        android:layout_height="55dip"
 			    	        android:maxLines="3"
-			    	        android:textSize="11sp" 
+			    	        android:textSize="10sp" 
 						    android:textColor="#555555"						    
 						    android:paddingLeft="8dip"
 						    android:paddingRight="3dip"
-						    android:lineSpacingExtra="3dip"
+						    android:lineSpacingExtra="2dip"
 			    	        android:text="出来混，最紧要系要有义气！混口饭吃嗟使唔使甘样纸啊？肚子饿，就吃饭呗，实在是没有对白了，就唱歌咯"	    	        
 			    	        />
 			    </LinearLayout>	
@@ -253,7 +368,6 @@
     	            android:src="@drawable/activity_right_photo"/>
     	        
     	    </RelativeLayout>
+	</RelativeLayout>
 
-    		
-    
 </RelativeLayout>
