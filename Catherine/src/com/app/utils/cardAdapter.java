@@ -47,10 +47,12 @@ public class cardAdapter extends BaseAdapter
 	private int resource;
 	private String from[];
 	private int to[];	
+	private int toAvatar[];
 	private int screenW;
 	private boolean inActivity;
 	private int userId = -1;
 	private Handler ncHandler;
+	private imageUtil forImageUtil  = imageUtil.getInstance();
 	
 	public cardAdapter() {
 		// TODO Auto-generated constructor stub
@@ -58,7 +60,7 @@ public class cardAdapter extends BaseAdapter
 	}
 	
 	public cardAdapter(Context context, ArrayList<HashMap<String, Object>> list, int resource,
-			String []from, int []to, int screenW, boolean inActivity, int userId, Handler handler) {
+			String []from, int []to, int []toAvatar, int screenW, boolean inActivity, int userId, Handler handler) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
@@ -70,6 +72,7 @@ public class cardAdapter extends BaseAdapter
 		this.inActivity = inActivity;
 		this.userId = userId;
 		this.ncHandler = handler;
+		this.toAvatar = toAvatar;
 	}
 	
 	private void SetContentWidth(View main, View v)
@@ -108,7 +111,8 @@ public class cardAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View view, ViewGroup parent) 
 	{
-
+		long beforeTime = System.currentTimeMillis();
+		
 		// TODO Auto-generated method stub
 		if (view==null) {
 			view = mInflater.inflate(resource, null);
@@ -116,6 +120,9 @@ public class cardAdapter extends BaseAdapter
 		
 		//set text or set something else about the view
 		init(view, position);
+		
+		long afterTime = System.currentTimeMillis();
+		Log.e(TAG, "pos : " + position + "  ----  total : " + (afterTime-beforeTime) );
 		
 		return view;
 	}
@@ -168,23 +175,46 @@ public class cardAdapter extends BaseAdapter
 	private void initFirstLayer(final HashMap<String, Object> item, final View view, final int pos)
 	{
 		JSONArray avatarJsonArray = (JSONArray) item.get("photolistJsonArray");
+		int toAvatarBlock[] = {  R.id.user1Block, R.id.user2Block, R.id.user3Block, R.id.user4Block };
 		
 		int length = avatarJsonArray.length();
-		Log.e(TAG, "pos " + pos + "; length " + length );
+		long beforeTime = System.currentTimeMillis();
+		
 		try {
 			int i=0;
-			clearAvatar(view);
-			for ( ; i < length; i++) 
+
+			for ( ; i<length && i<4; i++)           //本地有头像，用本地的头像
 			{
+				view.findViewById( toAvatarBlock[i]).setVisibility(View.VISIBLE);
+				
 				int id = avatarJsonArray.getInt(i);
 				
-				addAParticipant( view, id );
+				if( forImageUtil.imageExistInCache(id) )
+				{
+					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
+					Bitmap bitmap = forImageUtil.getBitmapFromMemCache(id);
+					photo.setImageBitmap(bitmap);
+				}
+				else  									//没头像，用默认头像
+				{
+					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
+					photo.setImageResource(R.drawable.defaultavatar);
+				}
+
+			}
+			
+			for( ; i<4; i++)
+			{
+				view.findViewById( toAvatarBlock[i]).setVisibility(View.GONE);
 			}
 
 		} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+		long afterTime = System.currentTimeMillis();
+		Log.e(TAG, "pos : " + pos + "  =====   loadImageTime  " + (afterTime-beforeTime));
 		
 		View activityInfoAllView = view.findViewById(R.id.activityInfoAll);
 		SetContentWidth(view, activityInfoAllView);

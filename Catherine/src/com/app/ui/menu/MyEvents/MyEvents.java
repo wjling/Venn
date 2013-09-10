@@ -211,6 +211,7 @@ public class MyEvents {
 				R.layout.activity_item, 
 				new String[]{"title", "day", "monthAndYear","time", "location", "launcher", "remark", "participantsNum"}, 
 				new int[]{R.id.activityTitle, R.id.day, R.id.monthAndYear, R.id.time, R.id.location, R.id.launcher, R.id.remark, R.id.participantsNum},
+				new int[]{R.id.user1, R.id.user2, R.id.user3, R.id.user4},
 				screenWidth,
 				true,
 				userId,

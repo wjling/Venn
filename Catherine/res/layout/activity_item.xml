@@ -296,7 +296,81 @@
 			    	    android:layout_width="wrap_content"
 			    	    android:layout_height="wrap_content"
 			    	    android:orientation="horizontal">
-			    	    
+			    	    <RelativeLayout 
+				    	    android:id="@+id/user1Block"
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"
+				    	    android:padding="2dip">
+				    	    <ImageView
+	        					android:layout_width="30.0dip"
+	        					android:layout_height="30.0dip"
+	        					android:layout_centerInParent="true"
+	        					android:contentDescription="@null"
+	        					android:src="@drawable/head_bg" />
+	
+	    					<com.app.addActivityPack.CircularImage
+	        					android:id="@+id/user1"
+						        android:layout_width="30.0dip"
+						        android:layout_height="30.0dip"
+						        android:layout_centerInParent="true" />
+				    	</RelativeLayout>
+				    	
+				    	<RelativeLayout 
+				    	    android:id="@+id/user2Block"			    	    
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"
+				    	    android:padding="2dip">
+				    	    <ImageView
+	        					android:layout_width="30.0dip"
+	        					android:layout_height="30.0dip"
+	        					android:layout_centerInParent="true"
+	        					android:contentDescription="@null"
+	        					android:src="@drawable/head_bg" />
+	
+	    					<com.app.addActivityPack.CircularImage
+	        					android:id="@+id/user2"
+						        android:layout_width="30.0dip"
+						        android:layout_height="30.0dip"
+						        android:layout_centerInParent="true" />
+				    	</RelativeLayout>
+				    	    
+				        <RelativeLayout 
+				    	    android:id="@+id/user3Block"			    	    
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"
+				    	    android:padding="2dip">
+				    	    <ImageView
+	        					android:layout_width="30.0dip"
+	        					android:layout_height="30.0dip"
+	        					android:layout_centerInParent="true"
+	        					android:contentDescription="@null"
+	        					android:src="@drawable/head_bg" />
+	
+	    					<com.app.addActivityPack.CircularImage
+	        					android:id="@+id/user3"
+						        android:layout_width="30.0dip"
+						        android:layout_height="30.0dip"
+						        android:layout_centerInParent="true" />
+				    	</RelativeLayout>
+				    	
+				        <RelativeLayout 
+				    	    android:id="@+id/user4Block"			    	    
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"
+				    	    android:padding="2dip">
+				    	    <ImageView
+	        					android:layout_width="30.0dip"
+	        					android:layout_height="30.0dip"
+	        					android:layout_centerInParent="true"
+	        					android:contentDescription="@null"
+	        					android:src="@drawable/head_bg" />
+	
+	    					<com.app.addActivityPack.CircularImage
+	        					android:id="@+id/user4"
+						        android:layout_width="30.0dip"
+						        android:layout_height="30.0dip"
+						        android:layout_centerInParent="true" />
+				    	</RelativeLayout>	
 			    	</LinearLayout>
 				  
 			    	<LinearLayout 
