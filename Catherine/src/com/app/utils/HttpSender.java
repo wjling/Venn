@@ -131,6 +131,15 @@ public class HttpSender {
         case OperationCode.CHANGE_PW:
             httpUrl += "change_pw";
             break;
+        case OperationCode.ADD_PCOMMENT:
+            httpUrl += "add_pcomment";
+            break;
+        case OperationCode.GET_PCOMMENTS:
+            httpUrl += "get_pcomments";
+            break;
+        case OperationCode.DELETE_PCOMMENT:
+            httpUrl += "delete_pcomment";
+            break;
         default:
             httpUrl += "json";
             break;
