@@ -55,7 +55,7 @@
                 android:textColor="@color/white"/>
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/photo_main_page_masterAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/separator" />
