@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.app.PhotoMainPage.PhotoMainPage;
 import com.app.addActivityPack.CircularImage;
 import com.app.catherine.R;
 import com.app.comment.CommentPage;
@@ -366,6 +367,11 @@ public class cardAdapter extends BaseAdapter
 					break;
 				case R.id.takephoto_btn:
 				case R.id.second_takephoto_btn:
+					intent = new Intent();
+					intent.putExtra("userId", userId);
+					intent.putExtra("photo_id", 11);
+					intent.setClass(context, PhotoMainPage.class);
+					context.startActivity(intent);
 					Toast.makeText(context, "take photo", Toast.LENGTH_SHORT).show();
 					break;
 				default:

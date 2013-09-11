@@ -122,35 +122,11 @@ public class AdapterForComment extends BaseAdapter{
 			commentViewHolder.comment_content = (TextView)arg1.findViewById(R.id.comment_item_commentContent);
 			commentViewHolder.comment_moreReplies = (TextView)arg1.findViewById(R.id.comment_item_moreReply);
 			
-			
-//			commentViewHolder.comment_zan.setTag(arg0);
 			commentViewHolder.comment_zan.setOnClickListener(myOnClickListener);
-//			commentViewHolder.comment_reply.setTag(arg0);
 			commentViewHolder.comment_reply.setOnClickListener(myOnClickListener);
-			
-//			HashMap<String, Integer> map = new HashMap<String, Integer>();
-//			map.put("index_comment", arg0);
-//			map.put("reply_sequence",comment.reply_sequence);
-//			commentViewHolder.comment_moreReplies.setTag(map);
 			commentViewHolder.comment_moreReplies.setOnClickListener(myOnClickListener);
 			
 			commentViewHolder.replyViews = new ArrayList<AdapterForComment.ReplyViewHolder>();
-//			commentViewHolder.comment_replyList.setOrientation(LinearLayout.VERTICAL);
-			
-//			Log.i(TAG,"1. view count: "+commentViewHolder.comment_replyList.getChildCount());
-//			int len = comment.replies.size();
-//			
-//			for(int i=0;i<len;i++)
-//			{
-//				ReplyViewHolder replyViewHolder = new ReplyViewHolder();
-//				replyViewHolder.replyItem = LayoutInflater.from(context).inflate(R.layout.reply_item, null);
-//				replyViewHolder.reply_content = (TextView)replyViewHolder.replyItem.findViewById(R.id.reply_item_replyContent);
-//				replyViewHolder.reply_zanImage = (ImageView)replyViewHolder.replyItem.findViewById(R.id.reply_item_zanImage);
-//				replyViewHolder.reply_zanSum = (TextView)replyViewHolder.replyItem.findViewById(R.id.reply_item_zanSum);
-//				
-//				commentViewHolder.replyViews.add(replyViewHolder);
-//				commentViewHolder.comment_replyList.addView(replyViewHolder.replyItem);
-//			}
 			
 			arg1.setTag(commentViewHolder);
 		}
@@ -197,22 +173,6 @@ public class AdapterForComment extends BaseAdapter{
 		
 		commentViewHolder.comment_zan.setTag(arg0);
 		commentViewHolder.comment_reply.setTag(arg0);
-//		int size = commentViewHolder.replyViews.size();
-//		Log.i(TAG,"number of replies: "+size);
-//		Log.i(TAG,"2. view count: "+commentViewHolder.comment_replyList.getChildCount());
-//		for(int i=0;i<size;i++)
-//		{
-//			
-//			ReplyViewHolder replyVH = commentViewHolder.replyViews.get(i);
-//			HashMap<String, Object> reply = comment.replies.get(i);
-//			String reply_author = reply.get("author").toString();
-//			String reply_content = reply.get("content").toString();
-//			replyVH.reply_content.setText(reply_author+": "+reply_content);
-////			replyVH.reply_zanImage.setImageDrawable(resources.getDrawable(R.drawable.like));
-////			replyVH.reply_zanSum.setText("("+reply.get("good").toString()+")");
-//			Log.i(TAG,"a reply: "+reply_author+": "+reply_content);
-//		}
-//		commentViewHolder.comment_replyList.invalidate();
 		
 		int len = comment.replies.size();
 		
@@ -254,9 +214,6 @@ public class AdapterForComment extends BaseAdapter{
 			
 			commentViewHolder.comment_replyList.addView(replyViewHolder.replyItem);
 		}
-		
-		
-		
 		return arg1;
 	}
 	

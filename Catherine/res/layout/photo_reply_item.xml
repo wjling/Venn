@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#dddddd"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -58,7 +57,7 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/photo_reply_item_commentContent"
+                    android:id="@+id/photo_reply_item_replyContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
