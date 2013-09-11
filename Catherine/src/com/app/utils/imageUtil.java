@@ -114,7 +114,7 @@ public class imageUtil
         if( !imageFileFolder.exists() )
         {
             imageFileFolder.mkdir();
-            Log.i("myevent", "************创建一个目录" + APP_PATH);
+//            Log.i("myevent", "************创建一个目录" + APP_PATH);
         }
         
         imageFileFolder = new File(IMAGE_PATH);
@@ -122,7 +122,7 @@ public class imageUtil
 		if( !imageFileFolder.exists() )
 		{
 			imageFileFolder.mkdir();
-			Log.i("myevent", "************创建一个目录" + IMAGE_PATH);
+//			Log.i("myevent", "************创建一个目录" + IMAGE_PATH);
 		}
 		
 		FileOutputStream out = null;
@@ -134,7 +134,7 @@ public class imageUtil
 			out.flush();
 			out.close();
 			out = null;
-			Log.i("myevent", "************保存了一张图片" + uid);
+//			Log.i("myevent", "************保存了一张图片" + uid);
 		}
 		catch( Exception e )
 		{
@@ -199,7 +199,7 @@ public class imageUtil
 		if( mMemoryCache.get(uid)==null )
 		{
 			mMemoryCache.put(uid, bitmap);
-			Log.e("imageUtil", "put an image: " + uid);
+//			Log.e("imageUtil", "put an image: " + uid);
 		}
 	}
 
@@ -211,14 +211,14 @@ public class imageUtil
 	 */
 	public Bitmap getBitmapFromMemCache(int uid) 
 	{	
-		Log.e("imageUtil", "get an image: " + uid);
+//		Log.e("imageUtil", "get an image: " + uid);
 		return mMemoryCache.get(uid);
 	}
 	
 	//image in cache or not
 	public boolean imageExistInCache( int uid )
 	{
-		Log.e("imageUtil", "want to get image: " + uid);
+//		Log.e("imageUtil", "want to get image: " + uid);
 		if( mMemoryCache.get(uid)==null ) 
 		{
 			if( fileExist(uid)  )
