@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.app.Photos.PhotosWall;
 import com.app.PhotoMainPage.PhotoMainPage;
 import com.app.addActivityPack.CircularImage;
 import com.app.catherine.R;
@@ -150,28 +151,28 @@ public class cardAdapter extends BaseAdapter
 		}
 	}
 	
-	private void addAParticipant( View v, int id )
-	{
-		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
-		RelativeLayout child = (RelativeLayout)((Activity) context).getLayoutInflater().inflate(R.layout.addcircleimage, null);
-		CircularImage user = (CircularImage)child.findViewById(R.id.user);
-		if( imageUtil.fileExist(id) ) 
-		{
-			Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
-			user.setImageBitmap(bitmap);
-		}
-		else		
-			user.setImageResource(R.drawable.defaultavatar);
-		
-		userInfoBlockSecondBlock.addView( child);
-	}
-	
-	private void clearAvatar(View v)
-	{
-		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
-
-		userInfoBlockSecondBlock.removeAllViews();
-	}
+//	private void addAParticipant( View v, int id )
+//	{
+//		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
+//		RelativeLayout child = (RelativeLayout)((Activity) context).getLayoutInflater().inflate(R.layout.addcircleimage, null);
+//		CircularImage user = (CircularImage)child.findViewById(R.id.user);
+//		if( imageUtil.fileExist(id) ) 
+//		{
+//			Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
+//			user.setImageBitmap(bitmap);
+//		}
+//		else		
+//			user.setImageResource(R.drawable.defaultavatar);
+//		
+//		userInfoBlockSecondBlock.addView( child);
+//	}
+//	
+//	private void clearAvatar(View v)
+//	{
+//		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
+//
+//		userInfoBlockSecondBlock.removeAllViews();
+//	}
 	
 	private void initFirstLayer(final HashMap<String, Object> item, final View view, final int pos)
 	{
@@ -241,6 +242,7 @@ public class cardAdapter extends BaseAdapter
 		
 		comment_btn.setTag(pos);
 		comment_btn.setOnClickListener(buttonsOnClickListener);
+		takephoto_btn.setTag(pos);
 		takephoto_btn.setOnClickListener(buttonsOnClickListener);
 		slideBtn.setOnClickListener( new OnClickListener() {
 			
@@ -294,6 +296,7 @@ public class cardAdapter extends BaseAdapter
 		
 		comment_btn.setTag(pos);
 		comment_btn.setOnClickListener(buttonsOnClickListener);
+		takephoto_btn.setTag(pos);
 		takephoto_btn.setOnClickListener(buttonsOnClickListener);
 		slideBtn.setOnClickListener( new OnClickListener() {
 			
@@ -346,33 +349,33 @@ public class cardAdapter extends BaseAdapter
 	    view.startAnimation(animation);
 	}
 	
-	private OnClickListener buttonsOnClickListener = new OnClickListener() {
-		
+	private OnClickListener buttonsOnClickListener = new OnClickListener() 
+	{
+
 		@Override
 		public void onClick(View v) {
+			
+			int position = (Integer) v.getTag();
+			HashMap<String, Object> an_activity = list.get(position);
+			int event_id = Integer.parseInt(an_activity.get("event_id").toString());
+			
 			// TODO Auto-generated method stub
 			switch ( v.getId() ) {
-
 				case R.id.comment_btn:
 				case R.id.second_comment_btn:
-					Toast.makeText(context, "comment", Toast.LENGTH_SHORT).show();
-					int position = (Integer) v.getTag();
-					HashMap<String, Object> an_activity = list.get(position);
-					int event_id = Integer.parseInt(an_activity.get("event_id").toString());
 					Intent intent = new Intent();
-					intent.putExtra("userId", userId);
-					intent.putExtra("eventId", event_id);
+						intent.putExtra("userId", userId);
+						intent.putExtra("eventId", event_id);
 					intent.setClass(context, CommentPage.class);
 					context.startActivity(intent);
 					break;
 				case R.id.takephoto_btn:
-				case R.id.second_takephoto_btn:
-					intent = new Intent();
-					intent.putExtra("userId", userId);
-					intent.putExtra("photo_id", 11);
-					intent.setClass(context, PhotoMainPage.class);
-					context.startActivity(intent);
-					Toast.makeText(context, "take photo", Toast.LENGTH_SHORT).show();
+				case R.id.second_takephoto_btn:					
+					Intent intent2 = new Intent();
+						intent2.putExtra("userId", userId);
+						intent2.putExtra("eventId", event_id);
+					intent2.setClass(context, PhotosWall.class);
+					context.startActivity(intent2);					
 					break;
 				default:
 					break;
