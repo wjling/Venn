@@ -12,12 +12,14 @@ import com.app.comment.CommentPage;
 import com.app.utils.HttpSender;
 import com.app.utils.OperationCode;
 import com.app.utils.ReturnCode;
+import com.app.utils.imageUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
@@ -115,6 +117,8 @@ public class PhotoMainPage extends Activity{
 		photoZan.setOnClickListener(photoZanOnClickListener);
 		replyImage.setOnClickListener(replyImageOnClickListener);
 		getMoreCommentsBtn.setOnClickListener(getMoreCommentsonOnClickListener);
+		
+//		imageUtil.getInstance().registerHandler(PMPHandler, "PhotoMainPage");
 	}
 	
 	private void getCommentsFromServer(int sequence)
@@ -453,6 +457,8 @@ public class PhotoMainPage extends Activity{
 	private void displayMainInfo()
 	{
 //		masterAvatar
+		Bitmap avatar = imageUtil.getInstance().getAvatar(author_id);
+		masterAvatar.setImageBitmap(avatar);
 		if(isZan)
 		{
 			photoZanImage.setImageResource(R.drawable.liked);
@@ -461,6 +467,10 @@ public class PhotoMainPage extends Activity{
 		{
 			photoZanImage.setImageResource(R.drawable.like);
 		}
+		//testing
+		Drawable test = masterAvatar.getDrawable();
+		photo.setImageDrawable(test);
+		
 		photoZanSum.setText("("+ good + ")");
 		masterName.setText(author);
 		masterTime.setText("ÉÏ´«ÓÚ " + time);
@@ -487,8 +497,11 @@ public class PhotoMainPage extends Activity{
 		TextView replyTime = (TextView)v.findViewById(R.id.photo_reply_item_time);
 		TextView replyContent = (TextView)v.findViewById(R.id.photo_reply_item_replyContent);
 		String author = map.get("author").toString();
+		int author_id = Integer.parseInt(map.get("author_id").toString());
 		String time = map.get("time").toString();
 		String content = map.get("content").toString();
+		Bitmap avatar = imageUtil.getInstance().getAvatar(author_id);
+		authorAvatar.setImageBitmap(avatar);
 		authorName.setText(author);
 		replyTime.setText(time);
 		replyContent.setText(content);
