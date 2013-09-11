@@ -123,7 +123,7 @@ public class cardAdapter extends BaseAdapter
 		init(view, position);
 		
 		long afterTime = System.currentTimeMillis();
-		Log.e(TAG, "pos : " + position + "  ----  total : " + (afterTime-beforeTime) );
+//		Log.e(TAG, "pos : " + position + "  ----  total : " + (afterTime-beforeTime) );
 		
 		return view;
 	}
@@ -215,7 +215,7 @@ public class cardAdapter extends BaseAdapter
 			}
 		
 		long afterTime = System.currentTimeMillis();
-		Log.e(TAG, "pos : " + pos + "  =====   loadImageTime  " + (afterTime-beforeTime));
+//		Log.e(TAG, "pos : " + pos + "  =====   loadImageTime  " + (afterTime-beforeTime));
 		
 		View activityInfoAllView = view.findViewById(R.id.activityInfoAll);
 		SetContentWidth(view, activityInfoAllView);
