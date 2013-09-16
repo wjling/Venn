@@ -243,6 +243,14 @@ GestureDetector.OnGestureListener
 	private void initSettings()
     {
         UI_settings = new Settings(this, UI_Menu.getSettingsView(), userId);
+        View settingsView = UI_Menu.getSettingsView();
+        LinearLayout mainLinearLayout = (LinearLayout) settingsView.findViewById(R.id.menu_settings_mainLinearLayout);
+        RelativeLayout info1 = (RelativeLayout) settingsView.findViewById(R.id.menu_setttings_info1);
+        LinearLayout info2 = (LinearLayout) settingsView.findViewById(R.id.menu_settings_info2);
+        info1.setOnTouchListener(this);
+        info2.setOnTouchListener(this);
+        
+//        mainLinearLayout.setOnTouchListener(this);
     }
 	
 	//add by luo

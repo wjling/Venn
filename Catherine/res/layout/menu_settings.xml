@@ -7,10 +7,12 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
     
-<LinearLayout 
+<LinearLayout
+    android:id="@+id/menu_settings_mainLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >"
+    android:orientation="vertical" >
+"
 
     <RelativeLayout 
         android:layout_width="match_parent"
@@ -43,12 +45,13 @@
         android:src="@drawable/settings_sep" 
         android:paddingTop="10dp"/>
     
-    <RelativeLayout 
+    <RelativeLayout
+        android:id="@+id/menu_setttings_info1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:paddingTop="10dp" >
         
          <ImageView android:id="@+id/avatar"
         android:layout_width="70dp"
@@ -102,13 +105,14 @@
     
     </RelativeLayout>
          
-    <LinearLayout 
+    <LinearLayout
+        android:id="@+id/menu_settings_info2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
+        android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:orientation="vertical">
+        android:paddingTop="20dp" >
         
         <TextView 
             android:layout_width="wrap_content"
