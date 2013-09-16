@@ -35,4 +35,5 @@ public class OperationCode {
     public static final int DELETE_PCOMMENT = 30; // 删除图片评论
     public static final int UPLOAD_PHOTO = 31; // 上传图片
     public static final int DOWNLOAD_PHOTO = 32; // 下载图片
+    public static final int GET_PHOTO_LIST = 33; // 拉取图片id列表
 }

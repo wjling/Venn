@@ -24,7 +24,7 @@ public class HttpHelperPlus
 	private final String TAG = "PhotosWall";
 	private static HttpHelperPlus instance = null;
 	String URL = "http://222.200.182.183:20000/";
-	String result = null;
+	Object result = null;
 	
 	private HttpHelperPlus() 
 	{
@@ -54,21 +54,27 @@ public class HttpHelperPlus
 
 	public void sendRequest( final SimpleKeyValue[] kvs , final KeyFile[] kfs, final int operationCode, final Handler mHandler) 
 	{
+		result = "DEFAULT";
+		
 		new Thread()
 		{
 			public void run()
 			{
+				String urlToSend = URL;
 				switch (operationCode) {
 					case OperationCode.UPLOAD_PHOTO:
-						URL += "uploadphoto";
+						urlToSend += "uploadphoto";
+						break;
+					case OperationCode.DOWNLOAD_PHOTO:
+						urlToSend += "uploadphoto";
 						break;
 					default:
 						break;
 				}
 				
 				try {
-					HttpPost httpPost = new HttpPost(URL);		
-					Log.e(TAG, URL);
+					HttpPost httpPost = new HttpPost(urlToSend);		
+					Log.e(TAG, urlToSend);
 					MultipartEntity entity = new MultipartEntity();
 					
 					if(kvs != null) 
@@ -91,8 +97,12 @@ public class HttpHelperPlus
 					HttpClient httpclient = new DefaultHttpClient();
 					httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 					
-					HttpResponse response = httpclient.execute(httpPost);										
-					result = EntityUtils.toString(response.getEntity());					
+					HttpResponse response = httpclient.execute(httpPost);	
+					if( operationCode==OperationCode.UPLOAD_PHOTO)
+						result = EntityUtils.toString(response.getEntity());
+					else
+						result = EntityUtils.toByteArray( response.getEntity() );
+					Log.e(TAG, "result: " + result);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

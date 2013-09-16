@@ -372,15 +372,15 @@ public class cardAdapter extends BaseAdapter
 				case R.id.takephoto_btn:
 				case R.id.second_takephoto_btn:					
 					Intent intent2 = new Intent();
-//						intent2.putExtra("userId", userId);
-//						intent2.putExtra("eventId", event_id);
-//					intent2.setClass(context, PhotosWall.class);
-//					context.startActivity(intent2);	
+						intent2.putExtra("userId", userId);
+						intent2.putExtra("eventId", event_id);
+					intent2.setClass(context, PhotosWall.class);
+					context.startActivity(intent2);	
 					
-					intent2.putExtra("userId", userId);
-					intent2.putExtra("photo_id", 11);
-					intent2.setClass(context, PhotoMainPage.class);
-					context.startActivity(intent2);
+//					intent2.putExtra("userId", userId);
+//					intent2.putExtra("photo_id", 11);
+//					intent2.setClass(context, PhotoMainPage.class);
+//					context.startActivity(intent2);
 					break;
 				default:
 					break;

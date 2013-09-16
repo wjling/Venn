@@ -1,14 +1,23 @@
 package com.app.Photos;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.app.catherine.R;
 import com.app.photoUtils.HttpHelperPlus;
 import com.app.photoUtils.KeyFile;
 import com.app.photoUtils.SimpleKeyValue;
+import com.app.utils.HttpSender;
 import com.app.utils.OperationCode;
+import com.app.utils.ReturnCode;
 import com.app.utils.imageUtil;
 import com.app.widget.AvatarDialog;
 import android.app.Activity;
@@ -40,6 +49,7 @@ public class PhotosWall extends Activity
 	private LinearLayout leftView, rightView;
 	private int userId = -1;
 	private int event_Id = -1;
+	private int sequence = 0;   //每次返回photoIdList的时候，会附带一个sequence，用于拉取下一组list
 	private AvatarDialog pictureDialog;
     public final int CASE_PHOTO = 0;
     public final int CASE_CAMERA = 1;
@@ -49,6 +59,9 @@ public class PhotosWall extends Activity
     private int setWidth;
     private MsgHandler mhandler;
 	private ProgressDialog progressDialog;
+	private JSONArray photoIdList = null;
+	private HttpSender sender;
+	private int photoIdListIndex = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +73,7 @@ public class PhotosWall extends Activity
 		userId = intent.getIntExtra("userId", -1);
 		event_Id = intent.getIntExtra("eventId", -1);
 		mhandler = new MsgHandler( Looper.myLooper());
+		sender = new HttpSender();
 		
 		init();
 	}
@@ -69,9 +83,30 @@ public class PhotosWall extends Activity
 		addPhoto = (ImageView)findViewById( R.id.addPhoto);
 		leftView = (LinearLayout)findViewById(R.id.leftView);
 		rightView = (LinearLayout)findViewById(R.id.rightView);
-		setWidth();
 		
+		setWidth();
 		addPhoto.setOnClickListener( clickListener );
+		
+		getPhotoIdList();
+	}
+	
+	private void getPhotoIdList()
+	{
+		JSONObject params = new JSONObject();
+		
+		if( sequence!=-1)
+		{
+			try {
+				params.put("id", userId);
+				params.put("event_id", event_Id);
+				params.put("sequence", sequence);
+				sender.Httppost(OperationCode.GET_PHOTO_LIST, params, mhandler);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
+			
 	}
 	
 	private void setWidth()
@@ -159,7 +194,6 @@ public class PhotosWall extends Activity
         uri = data.getData();                 
         getPath(uri);
         bm = BitmapFactory.decodeFile(path);
-        addAPhoto(bm, "相册的");
         
 		SimpleKeyValue []kvs = 
 			{ 
@@ -205,9 +239,27 @@ public class PhotosWall extends Activity
         }
         
         bm = BitmapFactory.decodeFile(saveFilePath);
-        addAPhoto(bm, "相册的");
+
         //upload file
-        //...
+        SimpleKeyValue []kvs = 
+			{ 
+				new SimpleKeyValue("id", userId),
+				new SimpleKeyValue("event_id", event_Id),
+				new SimpleKeyValue("cmd", "upload")
+			};
+		Log.e(TAG, "id="+userId + " event id = " + event_Id);
+		
+		KeyFile []kfs =
+			{
+				new KeyFile("photos", new File(saveFilePath) )
+			};
+		
+		progressDialog = new ProgressDialog(PhotosWall.this);
+			progressDialog.setMessage("图片上传中...");
+			progressDialog.setTitle("请稍候");
+			progressDialog.show();
+		//upload image
+		HttpHelperPlus.getInstance().sendRequest(kvs, kfs, OperationCode.UPLOAD_PHOTO, mhandler);
     }
 	
     /* 轮流在左右两侧添加显示图片*/
@@ -268,14 +320,114 @@ public class PhotosWall extends Activity
 		
 		public void handleMessage(Message msg)
 		{
-			switch ( msg.what) {
-			case OperationCode.UPLOAD_PHOTO:     //处理HttpHelperPlus发送请求之后，得到的结果
-				progressDialog.dismiss();
-				Log.e(TAG, msg.toString());
-				break;
+			String returnStr;
+			JSONObject respJson;
+			int cmd;
+			
+			returnStr = msg.obj.toString();		
+			if( !"DEFAULT".equals(returnStr))
+			{
+				switch ( msg.what) {
+				case OperationCode.UPLOAD_PHOTO:     //处理HttpHelperPlus发送请求之后，得到的结果
+							progressDialog.dismiss();			
+					try {											
+							respJson  = new JSONObject(returnStr);
+							cmd = respJson.getInt("cmd");
+							Log.e(TAG, "cmd="+cmd);
+							
+							if(ReturnCode.NORMAL_REPLY == cmd )
+							{
+								addAPhoto(bm, "相册的");
+								Toast.makeText(PhotosWall.this, "图片上传成功", Toast.LENGTH_SHORT).show();
+							}
+							else
+							{
+								Toast.makeText(PhotosWall.this, "上传失败，请重试", Toast.LENGTH_SHORT).show();
+							}											
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+					break;
+					
+				case OperationCode.GET_PHOTO_LIST:
+					try {											
+						respJson  = new JSONObject(returnStr);
+						cmd = respJson.getInt("cmd");
+						
+						if(ReturnCode.NORMAL_REPLY == cmd )
+						{
+							sequence = respJson.getInt("sequence");
+							photoIdList = respJson.getJSONArray("photo_list");
+							if( photoIdList==null ) break;
+							
+							int length = photoIdList.length();
+							if( length>0 )
+							{
+								//down first image 
+								photoIdListIndex = 0;                             //index initialize
+						        SimpleKeyValue []kvs = 
+									{ 
+										new SimpleKeyValue("photo_id", photoIdList.getInt(photoIdListIndex)),
+										new SimpleKeyValue("cmd", "download")
+									};
+								HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+							}
+							else
+							{
+								Toast.makeText(PhotosWall.this, "没有更多图片了", Toast.LENGTH_SHORT).show();
+							}
+						}
+						else
+						{
+							Toast.makeText(PhotosWall.this, "拉取图片id列表返回值异常", Toast.LENGTH_SHORT).show();
+						}		
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}		
+					break;
+					
+				case OperationCode.DOWNLOAD_PHOTO:
 
-			default:
-				break;
+					byte is[] = (byte[])msg.obj;
+					if( is.length>0)
+					{
+						Bitmap bm = BitmapFactory.decodeByteArray(is, 0, is.length);
+						addAPhoto(bm, "下载的");
+					}
+										
+					try {
+						photoIdListIndex++;   
+						
+						//download the next image from the server if there are more images
+						if( photoIdListIndex < photoIdList.length())
+						{
+							SimpleKeyValue []kvs = 
+								{ 
+									new SimpleKeyValue("photo_id", photoIdList.getInt(photoIdListIndex)),
+									new SimpleKeyValue("cmd", "download")
+								};
+							HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+						}
+						//
+						else
+						{
+							getPhotoIdList();
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+					break;
+	
+				default:
+					break;
+				}
+			}
+			else
+			{
+				Toast.makeText(PhotosWall.this, "网络异常", Toast.LENGTH_SHORT).show();
 			}
 		}
 		
