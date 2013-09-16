@@ -230,9 +230,12 @@ GestureDetector.OnGestureListener
 		EditText searchEdText = (EditText) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriend);
 		TextView searchButton = (TextView) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriendBtn);
 		ListView friendList = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_friendlist);
+		ListView friendFunction = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_functions);
+		
 //		searchEdText.setOnTouchListener(this);
 //		searchButton.setOnTouchListener(this);
-//		friendList.setOnTouchListener(this);
+		friendList.setOnTouchListener(this);
+		friendFunction.setOnTouchListener(this);
 //		LinearLayout menuLayout_root = (LinearLayout)friendCenterView.findViewById(R.id.menu_friend_center_searchLayout);
 //		menuLayout_root.setOnTouchListener(this);
 	}
