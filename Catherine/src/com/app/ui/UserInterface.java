@@ -2,6 +2,7 @@ package com.app.ui;
 
 import java.util.List;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -20,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.Button;
@@ -236,6 +238,7 @@ GestureDetector.OnGestureListener
 //		searchButton.setOnTouchListener(this);
 		friendList.setOnTouchListener(this);
 		friendFunction.setOnTouchListener(this);
+		
 //		LinearLayout menuLayout_root = (LinearLayout)friendCenterView.findViewById(R.id.menu_friend_center_searchLayout);
 //		menuLayout_root.setOnTouchListener(this);
 	}
@@ -360,11 +363,13 @@ GestureDetector.OnGestureListener
 				
 				UIGestureDetector.onTouchEvent(event);
 //				hasScrolled = false;
+//				doCloseScroll(true);
 				return true;
 			}
 			else
 			{
 				UIGestureDetector.onTouchEvent(event);
+//				doCloseScroll(true);
 				return false;
 			}
 		}
