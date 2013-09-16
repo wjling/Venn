@@ -25,8 +25,8 @@ import android.widget.Toast;
 // Singleton pattern
 public class HttpSender {
     
-    private String URL = "http://172.18.186.175:10087/";
-//    private String URL = "http://222.200.182.183:10087/";
+//    private String URL = "http://172.18.186.175:10087/";
+    private String URL = "http://222.200.182.183:10087/";
     private String httpUrl = "";
     private String returnContent = "DEFAULT";
     private String TAG = "HttpSender";
@@ -140,6 +140,9 @@ public class HttpSender {
         case OperationCode.DELETE_PCOMMENT:
             httpUrl += "delete_pcomment";
             break;
+        case OperationCode.GET_PHOTO_LIST:
+			httpUrl += "get_photo_list";
+			break;
         default:
             httpUrl += "json";
             break;

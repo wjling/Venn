@@ -31,8 +31,8 @@ public class WebSocketUtil
 		this.uid = uid;
 		this.handler = handler;
 
-		client = new WebSocketClient(URI.create("ws://172.18.186.175:10088/"), socketListener, null);
-//		client = new WebSocketClient(URI.create("ws://222.200.182.183:10088/"), socketListener, null);
+//		client = new WebSocketClient(URI.create("ws://172.18.186.175:10088/"), socketListener, null);
+		client = new WebSocketClient(URI.create("ws://222.200.182.183:10088/"), socketListener, null);
 	}
 	
 	public void connectToServer()
