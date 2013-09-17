@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.app.Photos.PhotosWall;
 import com.app.catherine.R;
 import com.app.comment.CommentPage;
 import com.app.utils.HttpSender;
@@ -468,8 +469,8 @@ public class PhotoMainPage extends Activity{
 			photoZanImage.setImageResource(R.drawable.like);
 		}
 		//testing
-		Drawable test = masterAvatar.getDrawable();
-		photo.setImageDrawable(test);
+		Drawable photoDrawable = PhotosWall.clickedPhoto;
+		photo.setImageDrawable(photoDrawable);
 		
 		photoZanSum.setText("("+ good + ")");
 		masterName.setText(author);
