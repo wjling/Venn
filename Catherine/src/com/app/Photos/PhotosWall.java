@@ -391,7 +391,8 @@ public class PhotosWall extends Activity
 							if(ReturnCode.NORMAL_REPLY == cmd )
 							{
 								//addAPhoto(bm, "本地上传的");
-								addAPhoto(bm, "相册的", photoIdList.getInt(photoIdListIndex));
+								int photoId = respJson.optInt("photo_id");
+								addAPhoto(bm, "本地的", photoId);
 								Toast.makeText(PhotosWall.this, "图片上传成功", Toast.LENGTH_SHORT).show();
 							}
 							else
