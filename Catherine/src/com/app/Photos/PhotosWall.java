@@ -22,7 +22,10 @@ import com.app.utils.ReturnCode;
 import com.app.utils.imageUtil;
 import com.app.widget.AvatarDialog;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -135,11 +138,19 @@ public class PhotosWall extends Activity
 			switch (v.getId()) {
 			case R.id.addPhoto:
 //				addAPhoto(userId, "nice");
-				 pictureDialog = new AvatarDialog(PhotosWall.this, R.style.avatar_dialog);
-				 pictureDialog.setCanceledOnTouchOutside(true);//设置点击Dialog外部任意区域关闭Dialog         
-	             pictureDialog.show();
-	             pictureDialog.setAlbumButtonListener(uploadByPhotosListener);
-	             pictureDialog.setCameraButtonListener(uploadByCameraListener);
+//				 pictureDialog = new AvatarDialog(PhotosWall.this, R.style.avatar_dialog);
+//				 pictureDialog.setCanceledOnTouchOutside(true);//设置点击Dialog外部任意区域关闭Dialog         
+//	             pictureDialog.show();
+//	             pictureDialog.setAlbumButtonListener(uploadByPhotosListener);
+//	             pictureDialog.setCameraButtonListener(uploadByCameraListener);
+				
+				Dialog dialog = new AlertDialog.Builder(PhotosWall.this)
+					.setTitle("请选择")
+					.setPositiveButton("相册", uploadByPhotosListener)
+					.setNeutralButton("拍照", uploadByCameraListener)
+					.setNegativeButton("取消", null).create();
+				dialog.show();
+					
 				break;
 
 			default:
@@ -148,29 +159,53 @@ public class PhotosWall extends Activity
 		}
 	};
 	
-	private OnClickListener uploadByPhotosListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            pictureDialog.dismiss();
-            Intent intent = new Intent();
-            	intent.setType("image/*");
-            	intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(intent, CASE_PHOTO); 
-        }
-    };
+	private android.content.DialogInterface.OnClickListener uploadByPhotosListener = 
+			new android.content.DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+			Intent intent = new Intent();
+	        	intent.setType("image/*");
+	        	intent.setAction(Intent.ACTION_GET_CONTENT);
+	        startActivityForResult(intent, CASE_PHOTO); 
+		}
+	};
+	
+	private android.content.DialogInterface.OnClickListener uploadByCameraListener = 
+			new android.content.DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+			Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intentCam, CASE_CAMERA);
+		}
+	};
+	
+//	private OnClickListener uploadByPhotosListener = new OnClickListener() {
+//        
+//        @Override
+//        public void onClick(View v) {
+//            // TODO Auto-generated method stub
+//            pictureDialog.dismiss();
+//            Intent intent = new Intent();
+//            	intent.setType("image/*");
+//            	intent.setAction(Intent.ACTION_GET_CONTENT);
+//            startActivityForResult(intent, CASE_PHOTO); 
+//        }
+//    };
     
-    private OnClickListener uploadByCameraListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View arg0) {
-            // TODO Auto-generated method stub
-            pictureDialog.dismiss();
-            Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intentCam, CASE_CAMERA);
-        }
-    };
+//    private OnClickListener uploadByCameraListener = new OnClickListener() {
+//        
+//        @Override
+//        public void onClick(View arg0) {
+//            // TODO Auto-generated method stub
+//            pictureDialog.dismiss();
+//            Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(intentCam, CASE_CAMERA);
+//        }
+//    };
 	    
     /*通过uri获取图片路径*/
     public void getPath( Uri uri)
