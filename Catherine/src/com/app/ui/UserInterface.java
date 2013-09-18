@@ -2,6 +2,7 @@ package com.app.ui;
 
 import java.util.List;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -20,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.widget.Button;
@@ -226,16 +228,20 @@ GestureDetector.OnGestureListener
 	{
 		UI_friendCenter = new FriendCenter(this, UI_Menu.getFriendsCenterView(), uiHandler, userId);
 		UI_friendCenter.init();
-		View friendCenterView = UI_Menu.getFriendsCenterView();
-		EditText searchEdText = (EditText) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriend);
-		TextView searchButton = (TextView) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriendBtn);
-		ListView friendList = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_friendlist);
-		ListView friendFunction = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_functions);
+//		View friendCenterView = UI_Menu.getFriendsCenterView();
+//		EditText searchEdText = (EditText) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriend);
+//		TextView searchButton = (TextView) friendCenterView.findViewById(R.id.menu_friend_center_searchmyfriendBtn);
+//		ListView friendList = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_friendlist);
+//		ListView friendFunction = (ListView) friendCenterView.findViewById(R.id.menu_friend_center_functions);
 		
 //		searchEdText.setOnTouchListener(this);
 //		searchButton.setOnTouchListener(this);
-		friendList.setOnTouchListener(this);
-		friendFunction.setOnTouchListener(this);
+//		friendList.setOnTouchListener(this);
+//		friendFunction.setOnTouchListener(this);
+		Log.e("myUI","wrong here1");
+		UI_friendCenter.friendListView.setOnTouchListener(this);
+		Log.e("myUI","wrong here2");
+		UI_friendCenter.functionsListView.setOnTouchListener(this);
 //		LinearLayout menuLayout_root = (LinearLayout)friendCenterView.findViewById(R.id.menu_friend_center_searchLayout);
 //		menuLayout_root.setOnTouchListener(this);
 	}
@@ -360,11 +366,13 @@ GestureDetector.OnGestureListener
 				
 				UIGestureDetector.onTouchEvent(event);
 //				hasScrolled = false;
+//				doCloseScroll(true);
 				return true;
 			}
 			else
 			{
 				UIGestureDetector.onTouchEvent(event);
+//				doCloseScroll(true);
 				return false;
 			}
 		}
@@ -421,6 +429,7 @@ GestureDetector.OnGestureListener
 		else
 		{
 			UI_myEvents.myEventsListView.onTouchEvent(arg1);
+			UI_friendCenter.friendListView.onTouchEvent(arg1);
 			doCloseScroll(false);
 		}
 		
@@ -474,6 +483,7 @@ GestureDetector.OnGestureListener
 		else
 		{
 			UI_myEvents.myEventsListView.onTouchEvent(arg1);
+			UI_friendCenter.friendListView.onTouchEvent(arg1);
 		}
 		return true;
 	}
@@ -497,6 +507,7 @@ GestureDetector.OnGestureListener
 			layoutParams_UI.leftMargin = 0;
 		}
 		UILayout.setLayoutParams(layoutParams_UI);
+		
 	}
 
 	@Override

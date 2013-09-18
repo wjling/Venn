@@ -3,6 +3,7 @@ package com.app.Photos;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
@@ -10,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.app.PhotoMainPage.PhotoMainPage;
 import com.app.catherine.R;
 import com.app.photoUtils.HttpHelperPlus;
 import com.app.photoUtils.KeyFile;
@@ -25,6 +27,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -61,6 +64,7 @@ public class PhotosWall extends Activity
 	private JSONArray photoIdList = null;
 	private HttpSender sender;
 	private int photoIdListIndex = 0;
+	public static Drawable clickedPhoto;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -285,7 +289,7 @@ public class PhotosWall extends Activity
     }
 	
     /* 轮流在左右两侧添加显示图片*/
-	private void addAPhoto(Bitmap bm, String photoTextStr)
+	private void addAPhoto(Bitmap bm, String photoTextStr, final int photoId)
 	{
 		LinearLayout child = (LinearLayout)this.getLayoutInflater().inflate(R.layout.images_page_item, null);
 		ImageView photo = (ImageView) child.findViewById(R.id.photo);
@@ -300,6 +304,21 @@ public class PhotosWall extends Activity
         }
 		
 		photo.setImageBitmap(bm);
+		photo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				clickedPhoto = ((ImageView) v).getDrawable();
+				Intent intent = new Intent();
+				intent.putExtra("userId", userId);
+				intent.putExtra("photo_id", photoId);
+				intent.setClass(PhotosWall.this, PhotoMainPage.class);
+				PhotosWall.this.startActivity(intent);
+			}
+		});
+		
+		
 		photoText.setText( photoTextStr );
 		
 		int leftHeight = leftView.getMeasuredHeight();
@@ -371,7 +390,8 @@ public class PhotosWall extends Activity
 							
 							if(ReturnCode.NORMAL_REPLY == cmd )
 							{
-								addAPhoto(bm, "本地上传的");
+								//addAPhoto(bm, "本地上传的");
+								addAPhoto(bm, "相册的", photoIdList.getInt(photoIdListIndex));
 								Toast.makeText(PhotosWall.this, "图片上传成功", Toast.LENGTH_SHORT).show();
 							}
 							else
@@ -425,13 +445,17 @@ public class PhotosWall extends Activity
 				case OperationCode.DOWNLOAD_PHOTO:
 
 					byte is[] = (byte[])msg.obj;
+					int photoID;
+					
+					try{
+					photoID = photoIdList.getInt(photoIdListIndex);
+					
 					if( is.length>0)
 					{
 						Bitmap bm = BitmapFactory.decodeByteArray(is, 0, is.length);
-						addAPhoto(bm, "下载的");
+						addAPhoto(bm, "下载的", photoID);
 					}
 										
-					try {
 						photoIdListIndex++;   
 						
 						//download the next image from the server if there are more images

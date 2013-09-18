@@ -64,8 +64,8 @@ public class FriendCenter {
 //	private Button recommendedFriendsBtn;
 //	private Button notificationBtn;
 	private EditText searchEditText;
-	private ListView functionsListView;
-	private ListView friendListView;
+	public ListView functionsListView;
+	public ListView friendListView;
 	private LetterSidebar sidebar;
 	
 	private int userId = -1;
@@ -100,15 +100,15 @@ public class FriendCenter {
 	
 	public void init() {
 		// TODO Auto-generated method stub
-	    new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
+//	    new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                // TODO Auto-generated method stub
                 setLayout();
                 askServerForFriendList();
-            }        
-        }).start();
+//            }        
+//        }).start();
 	}
 	
 	public void setLayout()
