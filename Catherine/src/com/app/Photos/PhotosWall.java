@@ -1,9 +1,8 @@
 package com.app.Photos;
 
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
@@ -193,7 +192,27 @@ public class PhotosWall extends Activity
     {
         uri = data.getData();                 
         getPath(uri);
-        bm = BitmapFactory.decodeFile(path);
+      //for function "addAPhoto"
+        bm = imageUtil.getInstance().getSmallBitmap(path);     //获取小尺寸图片
+        bm = imageUtil.getInstance().compressImage(bm);      //质量压缩
+        
+        //再进行质量压缩
+        String saveFilePath = "";
+        
+        try {
+            File sdCardDir = Environment.getExternalStorageDirectory();
+            File filePath = new File(sdCardDir.getAbsolutePath() + "/Catherine" );
+            if(!filePath.exists())
+                filePath.mkdirs();
+          
+            saveFilePath = filePath + "/" + filename() + ".png";
+            FileOutputStream baos= new FileOutputStream(saveFilePath);    		
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            baos.flush();
+            baos.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
         
 		SimpleKeyValue []kvs = 
 			{ 
@@ -205,13 +224,13 @@ public class PhotosWall extends Activity
 		
 		KeyFile []kfs =
 			{
-				new KeyFile("photos", new File(path) )
+				new KeyFile("photos", new File(saveFilePath) )
 			};
 		
-		progressDialog = new ProgressDialog(PhotosWall.this);
-			progressDialog.setMessage("图片上传中...");
-			progressDialog.setTitle("请稍候");
-			progressDialog.show();
+//		progressDialog = new ProgressDialog(PhotosWall.this);
+//			progressDialog.setMessage("图片上传中...");
+//			progressDialog.setTitle("请稍候");
+//			progressDialog.show();
 		//upload image
 		HttpHelperPlus.getInstance().sendRequest(kvs, kfs, OperationCode.UPLOAD_PHOTO, mhandler);
     }	  
@@ -220,7 +239,8 @@ public class PhotosWall extends Activity
     public void onpicturesetFromCamera(Intent data)
     {
         Bundle extras = data.getExtras();
-        Bitmap camera_bitmap = (Bitmap) extras.get("data");
+        Bitmap camera_bitmap = (Bitmap) extras.get("data");     
+        
         String saveFilePath = "";
       
         try {
@@ -230,14 +250,16 @@ public class PhotosWall extends Activity
                 filePath.mkdirs();
           
             saveFilePath = filePath + "/" + filename() + ".png";
-            FileOutputStream baos= new FileOutputStream(saveFilePath);
-            camera_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            FileOutputStream baos= new FileOutputStream(saveFilePath);    		
+            camera_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);         
+            
             baos.flush();
             baos.close();
         } catch (Exception e) {
           e.printStackTrace();
         }
         
+        //for function "addAPhoto"
         bm = BitmapFactory.decodeFile(saveFilePath);
 
         //upload file
@@ -297,7 +319,19 @@ public class PhotosWall extends Activity
 	      // TODO Auto-generated method stub
 	      if (requestCode == CASE_PHOTO && resultCode == RESULT_OK && null != data)
 	      {	          
-                  onpicturesetFromPhoto(data);	      //选择回调函数  
+	    	  progressDialog = new ProgressDialog(PhotosWall.this);
+				progressDialog.setMessage("图片处理中...");
+				progressDialog.setTitle("请稍候");
+				progressDialog.show();
+				
+	    	  new Thread()
+	    	  {
+	    		  public void run()
+	    		  {
+	    			  onpicturesetFromPhoto(data);	      //选择回调函数  
+	    		  }
+	    	  }.start();
+                  
 	      }
 	      else if (requestCode == CASE_CAMERA && resultCode == RESULT_OK && null != data)
 	      {
@@ -337,7 +371,7 @@ public class PhotosWall extends Activity
 							
 							if(ReturnCode.NORMAL_REPLY == cmd )
 							{
-								addAPhoto(bm, "相册的");
+								addAPhoto(bm, "本地上传的");
 								Toast.makeText(PhotosWall.this, "图片上传成功", Toast.LENGTH_SHORT).show();
 							}
 							else

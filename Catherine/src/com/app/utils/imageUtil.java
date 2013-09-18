@@ -1,7 +1,12 @@
 package com.app.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -347,6 +352,57 @@ public class imageUtil
 	        mMemoryCache.put(uid, getLocalBitmapBy(uid));
 	    }
 	}
+	
+	//-----------------------------------------------------------------------
+	//计算图片的缩放值
+	public int calculateInSampleSize(BitmapFactory.Options options,int reqWidth, int reqHeight) 
+	{
+	    final int height = options.outHeight;
+	    final int width = options.outWidth;
+	    int inSampleSize = 1;
+
+	    if (height > reqHeight || width > reqWidth) {
+	             final int heightRatio = Math.round((float) height/ (float) reqHeight);
+	             final int widthRatio = Math.round((float) width / (float) reqWidth);
+	             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+	    }
+	    
+	    Log.e("imageUitl", "insample size = " + inSampleSize);
+	    return inSampleSize;
+	}
+	
+	// 根据路径获得图片并获取小尺寸图片，返回bitmap用于显示（还没进行质量压缩）
+	public Bitmap getSmallBitmap(String filePath) 
+	{
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+	        // Calculate inSampleSize
+	    options.inSampleSize = calculateInSampleSize(options, 480, 800);
+
+	        // Decode bitmap with inSampleSize set
+	    options.inJustDecodeBounds = false;
+
+	    return BitmapFactory.decodeFile(filePath, options);
+	}
+	
+	//质量压缩
+	public Bitmap compressImage(Bitmap image) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while ( baos.toByteArray().length / 1024>100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩        
+            baos.reset();//重置baos即清空baos
+            options -= 10;//每次都减少10
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中          
+        }
+        
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        return bitmap;
+    }
 	
     public class myHandler extends Handler
     {
