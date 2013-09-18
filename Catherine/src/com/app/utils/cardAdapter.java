@@ -113,6 +113,7 @@ public class cardAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View view, ViewGroup parent) 
 	{
+		Log.i(TAG, "------"+position+"--------");
 		long beforeTime = System.currentTimeMillis();
 		
 		// TODO Auto-generated method stub

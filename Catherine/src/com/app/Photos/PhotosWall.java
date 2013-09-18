@@ -426,7 +426,12 @@ public class PhotosWall extends Activity
 							if(ReturnCode.NORMAL_REPLY == cmd )
 							{
 								//addAPhoto(bm, "本地上传的");
-								int photoId = respJson.optInt("photo_id");
+//								int photoId = (int)respJson.optLong("photo_id");
+								String photoIdStr = respJson.optString("photo_id");
+								
+								int photoId = Integer.parseInt( photoIdStr.substring(0, photoIdStr.length()-1));
+//								int photoId = respJ/son.optLong("photo_id");
+								Log.i(TAG, "photoId: "+photoId);								
 								addAPhoto(bm, "本地的", photoId);
 								Toast.makeText(PhotosWall.this, "图片上传成功", Toast.LENGTH_SHORT).show();
 							}

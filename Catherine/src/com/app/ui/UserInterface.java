@@ -534,12 +534,12 @@ GestureDetector.OnGestureListener
 			for(int i=0; i<times; i++)
 			{
 				publishProgress(params[0]);
-				try {
-					Thread.sleep(Math.abs(params[0]));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(Math.abs(params[0]));
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 			return null;
 		}
