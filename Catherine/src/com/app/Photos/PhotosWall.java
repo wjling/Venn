@@ -3,6 +3,7 @@ package com.app.Photos;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -68,6 +69,8 @@ public class PhotosWall extends Activity
 	private HttpSender sender;
 	private int photoIdListIndex = 0;
 	public static Drawable clickedPhoto;
+	private Bitmap takephotoBM=null;
+	private File takephotoFile;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,10 +181,59 @@ public class PhotosWall extends Activity
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			// TODO Auto-generated method stub
-			Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intentCam, CASE_CAMERA);
+//			Intent intentCam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//			startActivityForResult(intentCam, CASE_CAMERA);
+			
+			destoryImage();
+			String state = Environment.getExternalStorageState();
+			if( state.equals(Environment.MEDIA_MOUNTED))
+			{
+				try {
+		            File sdCardDir = Environment.getExternalStorageDirectory();
+		            File filePath = new File(sdCardDir.getAbsolutePath() + "/Catherine" );
+		            if(!filePath.exists())
+		                filePath.mkdirs();
+		          
+		            String saveFilePath = filePath + "/" + filename() + ".png";
+		            takephotoFile = new File(saveFilePath);
+		            takephotoFile.delete();
+		            if( !takephotoFile.exists() )
+		            {
+		            	try
+		            	{
+		            		takephotoFile.createNewFile();
+		            	}
+		            	catch(IOException e)
+		            	{
+		            		e.printStackTrace();
+		            		Toast.makeText(PhotosWall.this, "照片创建失败!", Toast.LENGTH_SHORT).show();
+		            		return;
+		            	}
+		            }
+		            
+		            Intent intentCam = new Intent("android.media.action.IMAGE_CAPTURE");
+		            intentCam.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(takephotoFile));
+		            startActivityForResult(intentCam, CASE_CAMERA);
+		            
+		        } catch (Exception e) {
+		        	e.printStackTrace();
+		        }
+			}
+			else
+			{
+				Toast.makeText(PhotosWall.this, "sdcard没有插入", Toast.LENGTH_SHORT).show();
+			}
 		}
 	};
+	
+	private void destoryImage()
+	{
+		if( takephotoBM!=null)
+		{
+			takephotoBM.recycle();
+			takephotoBM = null;
+		}
+	}
 	
 //	private OnClickListener uploadByPhotosListener = new OnClickListener() {
 //        
@@ -277,29 +329,25 @@ public class PhotosWall extends Activity
     /*拍照获取图片之后，回调函数*/
     public void onpicturesetFromCamera(Intent data)
     {
-        Bundle extras = data.getExtras();
-        Bitmap camera_bitmap = (Bitmap) extras.get("data");     
+//        Bundle extras = data.getExtras();
+//        Bitmap camera_bitmap = (Bitmap) extras.get("data");     
         
-        String saveFilePath = "";
-      
-        try {
-            File sdCardDir = Environment.getExternalStorageDirectory();
-            File filePath = new File(sdCardDir.getAbsolutePath() + "/Catherine" );
-            if(!filePath.exists())
-                filePath.mkdirs();
-          
-            saveFilePath = filePath + "/" + filename() + ".png";
-            FileOutputStream baos= new FileOutputStream(saveFilePath);    		
-            camera_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);         
+    	if( takephotoFile!=null && takephotoFile.exists() )
+    	{
+    		String saveFilePath = takephotoFile.getPath();
+    		
+    		//for function "addAPhoto"
+    		bm = imageUtil.getInstance().getSmallBitmap(saveFilePath);     //获取小尺寸图片
+            bm = imageUtil.getInstance().compressImage(bm);      //质量压缩   	
             
-            baos.flush();
-            baos.close();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-        //for function "addAPhoto"
-        bm = BitmapFactory.decodeFile(saveFilePath);
+            try {
+                FileOutputStream baos= new FileOutputStream(saveFilePath);    		
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                baos.flush();
+                baos.close();
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
 
         //upload file
         SimpleKeyValue []kvs = 
@@ -321,6 +369,8 @@ public class PhotosWall extends Activity
 			progressDialog.show();
 		//upload image
 		HttpHelperPlus.getInstance().sendRequest(kvs, kfs, OperationCode.UPLOAD_PHOTO, mhandler);
+    
+    	}
     }
 	
     /* 轮流在左右两侧添加显示图片*/
@@ -330,13 +380,14 @@ public class PhotosWall extends Activity
 		ImageView photo = (ImageView) child.findViewById(R.id.photo);
 		TextView photoText = (TextView) child.findViewById(R.id.photoText);
 		
-		int width = bm.getWidth();       
-        if( setWidth<width )
-        {
+		int width = bm.getWidth();     
+		//把图片拉伸到适应width
+//        if( setWidth<width )
+//        {
         	 int height = bm.getHeight();
              int setHeight = setWidth*height/width;     
         	bm = imageUtil.scaleBitmap(bm, setWidth, setHeight);
-        }
+//        }
 		
 		photo.setImageBitmap(bm);
 		photo.setOnClickListener(new OnClickListener() {
@@ -387,7 +438,7 @@ public class PhotosWall extends Activity
 	    	  }.start();
                   
 	      }
-	      else if (requestCode == CASE_CAMERA && resultCode == RESULT_OK && null != data)
+	      else if (requestCode == CASE_CAMERA && resultCode == RESULT_OK )
 	      {
                   onpicturesetFromCamera(data);		//选择回调函数
 	      }
