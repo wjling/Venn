@@ -21,8 +21,10 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +33,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -72,6 +77,10 @@ public class PhotoMainPage extends Activity{
 	private ArrayList<HashMap<String, Object>> photoComments = new ArrayList<HashMap<String,Object>>();
 	private myHandler PMPHandler = new myHandler();
 	private HttpSender httpSender;
+	
+	//add by luo
+	private AnimationSet mAnimationSet;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -472,12 +481,42 @@ public class PhotoMainPage extends Activity{
 		Drawable photoDrawable = PhotosWall.clickedPhoto;
 		photo.setImageDrawable(photoDrawable);
 		
+		//add by luo
+		photo.setOnClickListener( photoClickListener);
+		
 		photoZanSum.setText("("+ good + ")");
 		masterName.setText(author);
 		masterTime.setText("ÉÏ´«ÓÚ " + time);
 		photoDescription.setText(description);
 		
 	}
+	
+	private OnClickListener photoClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			AnimationSet animationSet = new AnimationSet(true);
+			if( mAnimationSet!=null && mAnimationSet!=animationSet )
+			{
+				ScaleAnimation scaleAnimation = new ScaleAnimation(2, 0.5f, 2, 0.5f,
+						Animation.RELATIVE_TO_PARENT, 0.5f,
+						Animation.RELATIVE_TO_PARENT, 0.5f);
+				scaleAnimation.setDuration(1000);
+				mAnimationSet.addAnimation(scaleAnimation);
+				mAnimationSet.setFillAfter(false);
+				v.startAnimation(mAnimationSet);
+			}
+			ScaleAnimation scaleAnimation = new ScaleAnimation(1, 2f, 1, 2f,
+					Animation.RELATIVE_TO_SELF, 0.5f,
+					Animation.RELATIVE_TO_SELF, 0.5f);
+			scaleAnimation.setDuration(3000);
+			animationSet.addAnimation(scaleAnimation);
+			animationSet.setFillAfter(true);
+			v.startAnimation(animationSet);
+			mAnimationSet = animationSet;
+		}
+	};
 	
 	private void displayReplies()
 	{
