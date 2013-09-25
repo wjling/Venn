@@ -338,7 +338,7 @@ public class PhotosWall extends Activity
     		
     		//for function "addAPhoto"
     		bm = imageUtil.getInstance().getSmallBitmap(saveFilePath);     //获取小尺寸图片
-            bm = imageUtil.getInstance().compressImage(bm);      //质量压缩   	
+            bm = imageUtil.getInstance().compressImage(bm);      //质量压缩              
             
             try {
                 FileOutputStream baos= new FileOutputStream(saveFilePath);    		
@@ -405,7 +405,7 @@ public class PhotosWall extends Activity
 		});
 		
 		
-		photoText.setText( photoTextStr );
+//		photoText.setText( photoTextStr );
 		
 		int leftHeight = leftView.getMeasuredHeight();
 		int rightHeight = rightView.getMeasuredHeight();

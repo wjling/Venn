@@ -14,10 +14,8 @@
     <TextView 
         android:id="@+id/photoText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="10dip"
-        android:text="nice picture"/>
+        android:layout_height="30dip"
+        android:gravity="center"/>
     
     <View 
         android:layout_width="match_parent"

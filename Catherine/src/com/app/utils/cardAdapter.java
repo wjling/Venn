@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class cardAdapter extends BaseAdapter
 	private int userId = -1;
 	private Handler ncHandler;
 	private imageUtil forImageUtil  = imageUtil.getInstance();
+	private int toAvatarBlock[] = {  R.id.user1Block, R.id.user2Block, R.id.user3Block, R.id.user4Block };
 	
 	public cardAdapter() {
 		// TODO Auto-generated constructor stub
@@ -84,7 +86,7 @@ public class cardAdapter extends BaseAdapter
 		RelativeLayout.LayoutParams paramsdate = (RelativeLayout.LayoutParams)dateView.getLayoutParams();
 		int dateW = paramsdate.width;
 
-		int delPix = 110 * dateW / 55;
+		int delPix = 115 * dateW / 60;
     	int screenWidth = screenW;
     	
 		RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)v.getLayoutParams();
@@ -111,104 +113,103 @@ public class cardAdapter extends BaseAdapter
 	}
 
 	@Override
-	public View getView(int position, View view, ViewGroup parent) 
+	public View getView(int position, View convertView, ViewGroup parent) 
 	{
-		Log.i(TAG, "------"+position+"--------");
-		long beforeTime = System.currentTimeMillis();
+		ViewHolder holder;
+		int avatarNum = 4;
+		int infoViewNum = to.length;
 		
-		// TODO Auto-generated method stub
-		if (view==null) {
-			view = mInflater.inflate(resource, null);
+		// Only the first time will get the widgets
+		if (convertView==null) 
+		{
+			convertView = mInflater.inflate(resource, parent, false);
+			
+			holder = new ViewHolder(avatarNum, infoViewNum);
+			holder.firstLayer = convertView.findViewById(R.id.firstLayerCard);
+			holder.secondLayer = convertView.findViewById(R.id.secondLayerCard);
+			
+			holder.activityInfoAllView = convertView.findViewById(R.id.activityInfoAll);
+			holder.join = (CircularImage)convertView.findViewById(R.id.joinBtn);
+			holder.comment_btn = convertView.findViewById(R.id.comment_btn);
+			holder.takephoto_btn = convertView.findViewById(R.id.takephoto_btn);
+			holder.slideBtn = convertView.findViewById(R.id.slideBtn);
+			
+			for( int i=0; i<toAvatarBlock.length; i++)
+			{
+				holder.avatarViews[i] = convertView.findViewById( toAvatarBlock[i]);
+				holder.avatarCImages[i] = (CircularImage)convertView.findViewById( toAvatar[i] );
+			}
+			for( int k=0; k<infoViewNum; k++)
+				holder.infoViews[k] = (TextView)convertView.findViewById( to[k] );
+			
+			convertView.setTag(holder);
+		}
+		else
+		{
+			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		//set text or set something else about the view
-		init(view, position);
+		//set text or set something else about the view		
+		init(holder, position, convertView);
+		SetContentWidth(convertView, holder.activityInfoAllView);
 		
-		long afterTime = System.currentTimeMillis();
-//		Log.e(TAG, "pos : " + position + "  ----  total : " + (afterTime-beforeTime) );
-		
-		return view;
+		return convertView;
 	}
 	
-	private void init(View view, int pos)
+	private void init(ViewHolder holder, int pos, View view)
 	{
 		HashMap<String, Object> item = list.get(pos);
 		Boolean open = (Boolean)item.get("open");
 		
-		View firstLayer = view.findViewById(R.id.firstLayerCard);
-		View secondLayer = view.findViewById(R.id.secondLayerCard);
-		
 		if( open.equals(false))
 		{
-			secondLayer.setVisibility(View.GONE);
-			firstLayer.setVisibility(View.VISIBLE);
-			initFirstLayer( item, view, pos);
+			holder.secondLayer.setVisibility(View.GONE);
+			holder.firstLayer.setVisibility(View.VISIBLE);
+			initFirstLayer( item, holder, pos);
 		}
 		else
 		{
-			firstLayer.setVisibility(View.GONE);
-			secondLayer.setVisibility(View.VISIBLE);
+			holder.firstLayer.setVisibility(View.GONE);
+			holder.secondLayer.setVisibility(View.VISIBLE);
 			initSecondLayer(item, view, pos);
 		}
 	}
 	
-//	private void addAParticipant( View v, int id )
-//	{
-//		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
-//		RelativeLayout child = (RelativeLayout)((Activity) context).getLayoutInflater().inflate(R.layout.addcircleimage, null);
-//		CircularImage user = (CircularImage)child.findViewById(R.id.user);
-//		if( imageUtil.fileExist(id) ) 
-//		{
-//			Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
-//			user.setImageBitmap(bitmap);
-//		}
-//		else		
-//			user.setImageResource(R.drawable.defaultavatar);
-//		
-//		userInfoBlockSecondBlock.addView( child);
-//	}
-//	
-//	private void clearAvatar(View v)
-//	{
-//		LinearLayout userInfoBlockSecondBlock = (LinearLayout)v.findViewById(R.id.userAvatar);
-//
-//		userInfoBlockSecondBlock.removeAllViews();
-//	}
-	
-	private void initFirstLayer(final HashMap<String, Object> item, final View view, final int pos)
+	private void initFirstLayer(final HashMap<String, Object> item, final ViewHolder holder, final int pos)
 	{
 		JSONArray avatarJsonArray = (JSONArray) item.get("photolistJsonArray");
-		int toAvatarBlock[] = {  R.id.user1Block, R.id.user2Block, R.id.user3Block, R.id.user4Block };
-		
 		int length = avatarJsonArray.length();
-		long beforeTime = System.currentTimeMillis();
 		
 		try {
 			int i=0;
 
 			for ( ; i<length && i<4; i++)           //本地有头像，用本地的头像
 			{
-				view.findViewById( toAvatarBlock[i]).setVisibility(View.VISIBLE);
+				holder.avatarViews[i].setVisibility(View.VISIBLE);
 				
-				int id = avatarJsonArray.getInt(i);
-				
-				if( forImageUtil.imageExistInCache(id) )
+				final int id = avatarJsonArray.getInt(i);				
+				Bitmap bitmap = forImageUtil.getBitmapFromMemCache(id);
+
+				if( bitmap!=null )
+					holder.avatarCImages[i].setImageBitmap(bitmap);				
+				else
 				{
-					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-					Bitmap bitmap = forImageUtil.getBitmapFromMemCache(id);
-					photo.setImageBitmap(bitmap);
-				}
-				else  									//没头像，用默认头像
-				{
-					CircularImage photo = (CircularImage)view.findViewById( toAvatar[i] );
-					photo.setImageResource(R.drawable.defaultavatar);
+					holder.avatarCImages[i].setImageResource(R.drawable.defaultavatar);
+					new Thread()
+					{
+						public void run()
+						{
+							forImageUtil.imageExistInCache(id);
+							notifyDataSetChanged();
+						}
+					}.start();
 				}
 
 			}
 			
 			for( ; i<4; i++)
 			{
-				view.findViewById( toAvatarBlock[i]).setVisibility(View.GONE);
+				holder.avatarViews[i].setVisibility(View.GONE);
 			}
 
 		} catch (JSONException e) {
@@ -216,18 +217,10 @@ public class cardAdapter extends BaseAdapter
 				e.printStackTrace();
 			}
 		
-		long afterTime = System.currentTimeMillis();
-//		Log.e(TAG, "pos : " + pos + "  =====   loadImageTime  " + (afterTime-beforeTime));
-		
-		View activityInfoAllView = view.findViewById(R.id.activityInfoAll);
-		SetContentWidth(view, activityInfoAllView);
-		
-		CircularImage join = (CircularImage)view.findViewById(R.id.joinBtn);
-		
 		if( inActivity==false )
 		{
-			join.setImageResource(R.drawable.join);	
-			join.setOnClickListener(	new OnClickListener(){
+			holder.join.setImageResource(R.drawable.join);	
+			holder.join.setOnClickListener(	new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
@@ -237,32 +230,25 @@ public class cardAdapter extends BaseAdapter
 			});
 		}
 		
-		View comment_btn = view.findViewById(R.id.comment_btn);
-		View takephoto_btn = view.findViewById(R.id.takephoto_btn);
-		View slideBtn = view.findViewById(R.id.slideBtn);
-		
-		comment_btn.setTag(pos);
-		comment_btn.setOnClickListener(buttonsOnClickListener);
-		takephoto_btn.setTag(pos);
-		takephoto_btn.setOnClickListener(buttonsOnClickListener);
-		slideBtn.setOnClickListener( new OnClickListener() {
+		holder.comment_btn.setTag(pos);
+		holder.comment_btn.setOnClickListener(buttonsOnClickListener);
+		holder.takephoto_btn.setTag(pos);
+		holder.takephoto_btn.setOnClickListener(buttonsOnClickListener);
+		holder.slideBtn.setOnClickListener( new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				View secondView = view.findViewById(R.id.secondLayerCard);
-				SetSecondWidth(secondView);
-				secondView.setVisibility(View.VISIBLE);
-				slideview(view.findViewById(R.id.firstLayerCard), 0, -(screenW));	
-				
+				SetSecondWidth(holder.secondLayer);
+				holder.secondLayer.setVisibility(View.VISIBLE);
+				slideview(holder.firstLayer, 0, -(screenW));					
 				item.put("open", true);
 			}
 		});
 		
 		for (int i = 0; i < to.length; i++) 
 		{
-			TextView Title = (TextView)view.findViewById( to[i] );
-			Title.setText( (String)list.get(pos).get( from[i] ) );
+			holder.infoViews[i].setText( (String)list.get(pos).get( from[i] ) );
 		}
 	}
 	
@@ -457,6 +443,26 @@ public class cardAdapter extends BaseAdapter
 		builder.show();
 	}
 	
-
+	class ViewHolder
+	{
+		View firstLayer;
+		View secondLayer;
+		View []avatarViews;
+		View activityInfoAllView;
+		CircularImage join;
+		View comment_btn;
+		View takephoto_btn;
+		View slideBtn;
+		TextView []infoViews;
+		CircularImage []avatarCImages;
+		
+		public ViewHolder(){}
+		public ViewHolder(int avatarNum, int infoViewsNum)
+		{
+			avatarViews = new View[avatarNum];
+			avatarCImages = new CircularImage[avatarNum];
+			infoViews = new TextView[infoViewsNum];			
+		}
+	}
 
 }
