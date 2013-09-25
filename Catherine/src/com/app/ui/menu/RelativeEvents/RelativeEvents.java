@@ -199,7 +199,7 @@ public class RelativeEvents
 		public void handleMessage(Message msg)
 		{
 			switch (msg.what) {
-			case 555:
+			case cardAdapter.CARD_INFO_CHANGE:
 				relativeEventsAdapter.notifyDataSetChanged();
 				break;
 

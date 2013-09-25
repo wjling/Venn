@@ -188,7 +188,7 @@ public class MyEvents {
 							Message msgLoadMore = uiHandler.obtainMessage(MSG_WHAT_GET_MORE_DONE);
 							msgLoadMore.obj = "After more " + System.currentTimeMillis();
 							msgLoadMore.sendToTarget();
-							Log.e("myevents", "*************no more events*********");
+//							Log.e("myevents", "*************no more events*********");
 						}
 
 					}
@@ -325,7 +325,7 @@ public class MyEvents {
 				break;
 			case OperationCode.GET_EVENTS:
 				params.put("sequence", new JSONArray( requestEventIDList ) );
-				Log.e("test", params.toString());
+//				Log.e("test", params.toString());
 				sender.Httppost(OperationCode.GET_EVENTS, params, handler);
 				break;
 			case OperationCode.GET_AVATAR:
@@ -333,7 +333,7 @@ public class MyEvents {
 				params.put("operation", 0);
 //				sender.Httppost(OperationCode.GET_AVATAR, params, handler);
 				new HttpSender().Httppost(OperationCode.GET_AVATAR, params, handler);
-				Log.e("myevent", "request£º " + params);
+//				Log.e("myevent", "request£º " + params);
 				break;
 			default:
 				break;
@@ -386,7 +386,7 @@ public class MyEvents {
 		public void handleMessage(Message msg)
 		{
 			switch (msg.what) {
-			case 555:
+			case cardAdapter.CARD_INFO_CHANGE:
 				myEventsAdapter.notifyDataSetChanged();
 				break;
 
@@ -431,7 +431,7 @@ public class MyEvents {
 									int length = seqJsonArray.length();
 									if( length>0 )
 									{
-										Log.i("my events", "seq length: " + length);
+//										Log.i("my events", "seq length: " + length);
 										allEventIDList.clear();
 										for( int i=0; i<length; i++)									
 											allEventIDList.add( seqJsonArray.getInt(i) );
@@ -474,7 +474,7 @@ public class MyEvents {
 										Message msg2 = uiHandler.obtainMessage(MSG_WHAT_LOAD_DATA_DONE);
 										msg2.sendToTarget();
 										firstLoad = false;
-										Log.i("myevent", "load done");
+//										Log.i("myevent", "load done");
 									}
 									else if( refreshing==true )
 									{
@@ -483,7 +483,7 @@ public class MyEvents {
 										msgRefresh.obj = "After refresh " + System.currentTimeMillis();
 										msgRefresh.sendToTarget();
 										refreshing=false;
-										Log.i("myevent", "refresh done");
+//										Log.i("myevent", "refresh done");
 									}
 									else   //load more
 									{
@@ -526,7 +526,7 @@ public class MyEvents {
 //										                forImageUtil.putBitmapInMap(avatarForUserId, bitmap);
 										                imageUtil.getInstance().addBitmapToMemoryCache(avatarForUserId, bitmap);
 //										                myEventsAdapter.notifyDataSetChanged();
-										                Log.e("myevents", "image arrive : " + avatarForUserId);
+//										                Log.e("myevents", "image arrive : " + avatarForUserId);
 										            }
 										        } catch (Exception e) {
 										            // TODO Auto-generated catch block
@@ -539,7 +539,7 @@ public class MyEvents {
 								}
 								else if ( returnCMD==ReturnCode.REQUEST_FAIL ) 
 								{
-									Log.e("myevent", "ÇëÇóÍ·ÏñÊ§°Ü");
+//									Log.e("myevent", "ÇëÇóÍ·ÏñÊ§°Ü");
 								}
 								break;
 								

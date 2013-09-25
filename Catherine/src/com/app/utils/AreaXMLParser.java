@@ -60,7 +60,7 @@ public class AreaXMLParser {
                             parser.nextTag();
                             ctInfo = new City();
                             ctInfo.setName(parser.nextText());
-                            Log.d("XML Demo City Name", ctInfo.getName());
+//                            Log.d("XML Demo City Name", ctInfo.getName());
                             parser.nextTag();
                             parser.nextText();
                             parser.nextTag();
@@ -79,7 +79,7 @@ public class AreaXMLParser {
                             }
                             if (cityList != null){
                                 cityList.add(ctInfo);
-                                Log.d("XML Demo City Name", "Add to city list!");
+//                                Log.d("XML Demo City Name", "Add to city list!");
                             }
                             ctInfo.setAreaList(areaList);
                             parsingArea = false;
@@ -90,7 +90,7 @@ public class AreaXMLParser {
                             stInfo.setName(parser.nextText());
                             stInfo.setAreaList(cityList);
                             stateList.add(stInfo);
-                            Log.d("XML Demo StateName", stInfo.getName());
+//                            Log.d("XML Demo StateName", stInfo.getName());
                         } else if (keyText.equals("latitude") && parsingArea){
                             arInfo = new Area();
                             parser.nextTag();
@@ -109,7 +109,7 @@ public class AreaXMLParser {
                             parser.nextText();
                             parser.nextTag();
                             arInfo.setName(parser.nextText());
-                            Log.d("XML Demo Area Name", arInfo.getName());
+//                            Log.d("XML Demo Area Name", arInfo.getName());
                             areaList.add(arInfo);
                         }
 

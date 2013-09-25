@@ -70,19 +70,19 @@ public class MyScrollListView extends ListView{
 			int totalItemCount = getAdapter().getCount() - listBottomPosition;
 			int deltaY = motionCurrentY - motionLastY;
 			int firstVisiblePosition = getFirstVisiblePosition();
-			Log.i("MyScrollListView", "dy = "+deltaY);
+//			Log.i("MyScrollListView", "dy = "+deltaY);
 			myScrollListViewListner.onMotionMove(ev, deltaY);
 			
 			if(firstVisiblePosition <= listTopPosition && firstItemTop >= listBegin && deltaY > 0)
 			{
-				Log.i("MyScrollListView", "---------------Pull Down");
+//				Log.i("MyScrollListView", "---------------Pull Down");
 				myScrollListViewListner.onListViewTopAndPullDown(deltaY);
 				motionLastY = motionCurrentY;
 			}
 			
 			if(firstVisiblePosition + childCount >= totalItemCount && lastItemBottom <= listEnd && deltaY < 0)
 			{
-				Log.i("MyScrollListView", "---------------Pull Up");
+//				Log.i("MyScrollListView", "---------------Pull Up");
 				myScrollListViewListner.onListViewBottomAndPullUp(deltaY);
 				motionLastY = motionCurrentY;
 			}

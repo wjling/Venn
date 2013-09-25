@@ -57,6 +57,7 @@ public class cardAdapter extends BaseAdapter
 	private Handler ncHandler;
 	private imageUtil forImageUtil  = imageUtil.getInstance();
 	private int toAvatarBlock[] = {  R.id.user1Block, R.id.user2Block, R.id.user3Block, R.id.user4Block };
+	public static final int CARD_INFO_CHANGE = 555;
 	
 	public cardAdapter() {
 		// TODO Auto-generated constructor stub
@@ -199,8 +200,21 @@ public class cardAdapter extends BaseAdapter
 					{
 						public void run()
 						{
-							forImageUtil.imageExistInCache(id);
-							notifyDataSetChanged();
+//							boolean inFile = forImageUtil.imageExistInCache(id);
+//							notifyDataSetChanged();
+							boolean inFile = imageUtil.fileExist(id);
+							if( inFile!=false)
+							{
+								Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
+								if( bitmap!=null )
+								{
+									forImageUtil.addBitmapToMemoryCache(id, bitmap);
+									
+									Message msg = new Message();
+									msg.what = CARD_INFO_CHANGE;
+									ncHandler.sendMessage(msg);
+								}
+							}
 						}
 					}.start();
 				}
@@ -328,7 +342,7 @@ public class cardAdapter extends BaseAdapter
 	            view.layout(left, top, left+width, top+height);
 				
 				Message msg = new Message();
-				msg.what = 555;
+				msg.what = CARD_INFO_CHANGE;
 				ncHandler.sendMessage(msg);
 	        }
 	    });
