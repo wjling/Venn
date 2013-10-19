@@ -79,7 +79,7 @@ public class PhotoMainPage extends Activity{
 	private HttpSender httpSender;
 	
 	//add by luo
-	private AnimationSet mAnimationSet;
+	private boolean scaleOrNot = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -491,30 +491,57 @@ public class PhotoMainPage extends Activity{
 		
 	}
 	
+	//add by luo
 	private OnClickListener photoClickListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			AnimationSet animationSet = new AnimationSet(true);
-			if( mAnimationSet!=null && mAnimationSet!=animationSet )
+//			AnimationSet animationSet = new AnimationSet(true);
+//			if( mAnimationSet!=null && mAnimationSet!=animationSet )
+//			{
+//				ScaleAnimation scaleAnimation = new ScaleAnimation(2, 0.5f, 2, 0.5f,
+//						Animation.RELATIVE_TO_PARENT, 0.5f,
+//						Animation.RELATIVE_TO_PARENT, 0.5f);
+//				scaleAnimation.setDuration(1000);
+//				mAnimationSet.addAnimation(scaleAnimation);
+//				mAnimationSet.setFillAfter(false);
+//				v.startAnimation(mAnimationSet);
+//			}
+//			ScaleAnimation scaleAnimation = new ScaleAnimation(1, 2f, 1, 2f,
+//					Animation.RELATIVE_TO_SELF, 0.5f,
+//					Animation.RELATIVE_TO_SELF, 0.5f);
+//			scaleAnimation.setDuration(3000);
+//			animationSet.addAnimation(scaleAnimation);
+//			animationSet.setFillAfter(true);
+//			
+//			v.startAnimation(animationSet);
+//			mAnimationSet = animationSet;
+			
+			AnimationSet animationSet = new AnimationSet(true);			
+			if( scaleOrNot==false )
 			{
-				ScaleAnimation scaleAnimation = new ScaleAnimation(2, 0.5f, 2, 0.5f,
-						Animation.RELATIVE_TO_PARENT, 0.5f,
-						Animation.RELATIVE_TO_PARENT, 0.5f);
-				scaleAnimation.setDuration(1000);
-				mAnimationSet.addAnimation(scaleAnimation);
-				mAnimationSet.setFillAfter(false);
-				v.startAnimation(mAnimationSet);
+				ScaleAnimation scaleAnimation = new ScaleAnimation(1, 2f, 1, 2f,
+						Animation.RELATIVE_TO_SELF, 0.5f,
+						Animation.RELATIVE_TO_SELF, 0.5f);
+				scaleAnimation.setDuration(3000);
+				animationSet.addAnimation(scaleAnimation);
+				animationSet.setFillAfter(true);			
+				v.startAnimation(animationSet);
+				scaleOrNot = !scaleOrNot;
 			}
-			ScaleAnimation scaleAnimation = new ScaleAnimation(1, 2f, 1, 2f,
-					Animation.RELATIVE_TO_SELF, 0.5f,
-					Animation.RELATIVE_TO_SELF, 0.5f);
-			scaleAnimation.setDuration(3000);
-			animationSet.addAnimation(scaleAnimation);
-			animationSet.setFillAfter(true);
-			v.startAnimation(animationSet);
-			mAnimationSet = animationSet;
+			else
+			{
+				ScaleAnimation scaleAnimation = new ScaleAnimation(2, 1f, 2, 1f,
+						Animation.RELATIVE_TO_SELF, 0.5f,
+						Animation.RELATIVE_TO_SELF, 0.5f);
+				scaleAnimation.setDuration(3000);
+				animationSet.addAnimation(scaleAnimation);
+				animationSet.setFillAfter(true);			
+				v.startAnimation(animationSet);
+				scaleOrNot = !scaleOrNot;
+			}
+			
 		}
 	};
 	
