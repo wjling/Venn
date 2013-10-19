@@ -34,12 +34,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +82,7 @@ public class PhotoMainPage extends Activity{
 	
 	//add by luo
 	private boolean scaleOrNot = false;
+	private int photoHeight;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,14 @@ public class PhotoMainPage extends Activity{
 		downloadImage = (ImageView) contentView.findViewById(R.id.photo_main_page_download);
 		getMoreCommentsBtn = (TextView) contentView.findViewById(R.id.photo_main_page_getMoreComments);
 		photoCommentListRootView = (LinearLayout) contentView.findViewById(R.id.photo_main_page_commentList);
+		
+		//modified by luo
+		Drawable photoDrawable = PhotosWall.clickedPhoto;
+		photo.setImageDrawable(photoDrawable);
+		photoHeight = photoDrawable.getBounds().height();	
+		//add by luo
+		View photoBlock = contentView.findViewById(R.id.photo_main_page_photo_block); 
+		photoBlock.setOnClickListener( photoClickListener);
 		
 		backBtn.setOnClickListener(backBtnOnClickListener);
 		photoDeleteBtn.setOnClickListener(photoDeleteonOnClickListener);
@@ -478,11 +489,14 @@ public class PhotoMainPage extends Activity{
 			photoZanImage.setImageResource(R.drawable.like);
 		}
 		//testing
-		Drawable photoDrawable = PhotosWall.clickedPhoto;
-		photo.setImageDrawable(photoDrawable);
+//		Drawable photoDrawable = PhotosWall.clickedPhoto;
+//		photo.setImageDrawable(photoDrawable);
+//		photoHeight = photoDrawable.getBounds().height();
 		
 		//add by luo
-		photo.setOnClickListener( photoClickListener);
+		//photo.setOnClickListener( photoClickListener);
+//		View photoBlock = contentView.findViewById(R.id.photo_main_page_photo_block); 
+//		photoBlock.setOnClickListener( photoClickListener);
 		
 		photoZanSum.setText("("+ good + ")");
 		masterName.setText(author);
@@ -522,28 +536,66 @@ public class PhotoMainPage extends Activity{
 			if( scaleOrNot==false )
 			{
 				ScaleAnimation scaleAnimation = new ScaleAnimation(1, 2f, 1, 2f,
-						Animation.RELATIVE_TO_SELF, 0.5f,
-						Animation.RELATIVE_TO_SELF, 0.5f);
-				scaleAnimation.setDuration(3000);
+						Animation.RELATIVE_TO_PARENT, 0.5f,
+						Animation.RELATIVE_TO_PARENT, 0f);
+				scaleAnimation.setDuration(2000);
+				scaleAnimation.setAnimationListener( animationListener );
 				animationSet.addAnimation(scaleAnimation);
 				animationSet.setFillAfter(true);			
-				v.startAnimation(animationSet);
-				scaleOrNot = !scaleOrNot;
+				v.startAnimation(animationSet);				
 			}
 			else
 			{
 				ScaleAnimation scaleAnimation = new ScaleAnimation(2, 1f, 2, 1f,
-						Animation.RELATIVE_TO_SELF, 0.5f,
-						Animation.RELATIVE_TO_SELF, 0.5f);
-				scaleAnimation.setDuration(3000);
+						Animation.RELATIVE_TO_PARENT, 0.5f,
+						Animation.RELATIVE_TO_PARENT, 0f);
+				scaleAnimation.setDuration(500);
+				scaleAnimation.setAnimationListener( animationListener );
 				animationSet.addAnimation(scaleAnimation);
 				animationSet.setFillAfter(true);			
-				v.startAnimation(animationSet);
-				scaleOrNot = !scaleOrNot;
+				v.startAnimation(animationSet);												
 			}
 			
 		}
 	};
+	
+	private AnimationListener animationListener = new AnimationListener() {
+		
+		@Override
+		public void onAnimationStart(Animation animation) {
+			// TODO Auto-generated method stub
+			if( scaleOrNot==false )
+			{
+				View view = contentView.findViewById(R.id.photo_main_page_photo_block); 
+				SetPhotoBlockHeight(view, 2);
+			}
+		}
+		
+		@Override
+		public void onAnimationRepeat(Animation animation) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onAnimationEnd(Animation animation) {
+			// TODO Auto-generated method stub
+			if( scaleOrNot==true )
+			{
+				View view = contentView.findViewById(R.id.photo_main_page_photo_block); 
+				SetPhotoBlockHeight(view, 1);
+			}
+			
+			scaleOrNot = !scaleOrNot;			
+		}
+	};
+	
+	private void SetPhotoBlockHeight(View v, double rate)
+    {
+		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)v.getLayoutParams();
+		params.height = (int) (photoHeight * rate);
+		v.setLayoutParams(params);
+	}
 	
 	private void displayReplies()
 	{
