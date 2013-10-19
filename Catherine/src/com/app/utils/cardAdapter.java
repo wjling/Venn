@@ -2,19 +2,18 @@ package com.app.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.app.Photos.PhotosWall;
-import com.app.PhotoMainPage.PhotoMainPage;
 import com.app.addActivityPack.CircularImage;
 import com.app.catherine.R;
 import com.app.comment.CommentPage;
 import com.app.localDataBase.NotificationTableAdapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -58,6 +57,9 @@ public class cardAdapter extends BaseAdapter
 	private imageUtil forImageUtil  = imageUtil.getInstance();
 	private int toAvatarBlock[] = {  R.id.user1Block, R.id.user2Block, R.id.user3Block, R.id.user4Block };
 	public static final int CARD_INFO_CHANGE = 555;
+	
+	//add 2013-10-20
+	private static Vector<Integer> notInCacheAvatarIdList = new Vector<Integer>();
 	
 	public cardAdapter() {
 		// TODO Auto-generated constructor stub
@@ -143,6 +145,7 @@ public class cardAdapter extends BaseAdapter
 			for( int k=0; k<infoViewNum; k++)
 				holder.infoViews[k] = (TextView)convertView.findViewById( to[k] );
 			
+			SetContentWidth(convertView, holder.activityInfoAllView);
 			convertView.setTag(holder);
 		}
 		else
@@ -152,7 +155,7 @@ public class cardAdapter extends BaseAdapter
 		
 		//set text or set something else about the view		
 		init(holder, position, convertView);
-		SetContentWidth(convertView, holder.activityInfoAllView);
+		//SetContentWidth(convertView, holder.activityInfoAllView);  //move to first get widgets
 		
 		return convertView;
 	}
@@ -196,27 +199,32 @@ public class cardAdapter extends BaseAdapter
 				else
 				{
 					holder.avatarCImages[i].setImageResource(R.drawable.defaultavatar);
-					new Thread()
+					
+					boolean haveAcquire = notInCacheAvatarIdList.contains( id );
+					if( false==haveAcquire )
 					{
-						public void run()
+						notInCacheAvatarIdList.add( id );
+						
+						new Thread()
 						{
-//							boolean inFile = forImageUtil.imageExistInCache(id);
-//							notifyDataSetChanged();
-							boolean inFile = imageUtil.fileExist(id);
-							if( inFile!=false)
-							{
-								Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
-								if( bitmap!=null )
-								{
-									forImageUtil.addBitmapToMemoryCache(id, bitmap);
-									
-									Message msg = new Message();
-									msg.what = CARD_INFO_CHANGE;
-									ncHandler.sendMessage(msg);
-								}
-							}
-						}
-					}.start();
+							public void run()
+							{						
+									boolean inFile = imageUtil.fileExist(id);
+									if( inFile!=false)
+									{
+										Bitmap bitmap = imageUtil.getLocalBitmapBy(id);
+										if( bitmap!=null )
+										{
+											forImageUtil.addBitmapToMemoryCache(id, bitmap);
+											
+											Message msg = new Message();
+											msg.what = CARD_INFO_CHANGE;
+											ncHandler.sendMessage(msg);
+										}
+									}								
+								}					
+						}.start();
+					}
 				}
 
 			}
