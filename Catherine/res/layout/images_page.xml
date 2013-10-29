@@ -7,7 +7,7 @@
         <LinearLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:background="#ffffff"
+	        android:background="#3ecc9d"
 	        android:gravity="right">
 
 	        <ImageView 
@@ -15,8 +15,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:padding="5dip"
-	            android:src="@drawable/activity_right_photo"
-	            
+	            android:src="@drawable/activity_right_photo_white"	            
 	            />
 	    </LinearLayout>
 

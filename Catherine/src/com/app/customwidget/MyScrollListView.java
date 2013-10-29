@@ -36,7 +36,7 @@ public class MyScrollListView extends ListView{
 		setVerticalScrollBarEnabled(false);
 		
 		setDivider( new ColorDrawable( 0xffe0f0f0 ) );
-		setDividerHeight(10);
+		setDividerHeight(15);
 	}
 	
 	/* (non-Javadoc)
