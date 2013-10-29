@@ -538,7 +538,7 @@ public class PhotoMainPage extends Activity{
 				ScaleAnimation scaleAnimation = new ScaleAnimation(1, 2f, 1, 2f,
 						Animation.RELATIVE_TO_PARENT, 0.5f,
 						Animation.RELATIVE_TO_PARENT, 0f);
-				scaleAnimation.setDuration(2000);
+				scaleAnimation.setDuration(500);
 				scaleAnimation.setAnimationListener( animationListener );
 				animationSet.addAnimation(scaleAnimation);
 				animationSet.setFillAfter(true);			
@@ -549,7 +549,7 @@ public class PhotoMainPage extends Activity{
 				ScaleAnimation scaleAnimation = new ScaleAnimation(2, 1f, 2, 1f,
 						Animation.RELATIVE_TO_PARENT, 0.5f,
 						Animation.RELATIVE_TO_PARENT, 0f);
-				scaleAnimation.setDuration(500);
+				scaleAnimation.setDuration(300);
 				scaleAnimation.setAnimationListener( animationListener );
 				animationSet.addAnimation(scaleAnimation);
 				animationSet.setFillAfter(true);			

@@ -99,7 +99,7 @@
 			<RelativeLayout
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
-			    android:background="@drawable/tittle_friend_list"
+			    android:background="#3ecc9d"
 			    android:paddingRight="5dp" >
 
 			    <LinearLayout 

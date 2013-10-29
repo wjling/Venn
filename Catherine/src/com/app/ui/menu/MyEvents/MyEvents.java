@@ -69,6 +69,7 @@ public class MyEvents {
 	private int userId;
 	private HttpSender sender;
 	private MsgHandler handler;
+	private cardHandler msgCard = new cardHandler( Looper.myLooper());
 	
 	private Set<Integer> photoIdSet = new HashSet<Integer>();
 	private int curRequestAvatarId;
@@ -84,24 +85,6 @@ public class MyEvents {
 	private static final int MSG_WHAT_LOAD_DATA_DONE = -5;
 	private static final int MSG_WHAT_REFRESH_DONE = -6;
 	private static final int MSG_WHAT_GET_MORE_DONE = -7;
-//	
-//	private OnClickListener buttonsOnClickListener = new OnClickListener() {
-//		
-//		@Override
-//		public void onClick(View v) {
-//			// TODO Auto-generated method stub
-//			switch(v.getId())
-//			{
-//			case R.id.menu_my_events_notificationBtn:
-//				Intent intent = new Intent();
-//				intent.putExtra("userId", userId);
-//				intent.setClass(context, MyEventsNotification.class);
-//				context.startActivity(intent);
-//				break;
-//				default: break;
-//			}
-//		}
-//	};
 	
 	public MyEvents(Context context, View myEventsView, Handler uiHandler, int screenWidth, int userId) {
 		// TODO Auto-generated constructor stub
@@ -163,24 +146,13 @@ public class MyEvents {
 						requestIndex = 0;
 						refreshing = true;		
 						
-				new Thread(new Runnable() {				
-					@Override
-					public void run() {
 						//重新请求活动
-						sendRequest(OperationCode.GET_MY_EVENTS);									
-					}
-				}).start();
-				
+						sendRequest(OperationCode.GET_MY_EVENTS);												
 			}
 			
 			@Override
 			public void GetMore() {
 				// TODO Auto-generated method stub
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						
 						if( hasMoreEvent() )
 							sendRequest(OperationCode.GET_MY_EVENTS);	
 						else
@@ -190,9 +162,6 @@ public class MyEvents {
 							msgLoadMore.sendToTarget();
 //							Log.e("myevents", "*************no more events*********");
 						}
-
-					}
-				}).start();
 			}
 		};
 		
@@ -215,11 +184,10 @@ public class MyEvents {
 				screenWidth,
 				true,
 				userId,
-				new cardHandler( Looper.myLooper())
+				msgCard
 		);
 		
 		myEventsListView.setAdapter(myEventsAdapter);
-
 	}
 	
 	//add by luo
@@ -298,66 +266,72 @@ public class MyEvents {
 		}
 	}
 	
-	public void loadData(){
-		
+	public void loadData()
+	{
 	    myEventsList.clear();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				Message msg1 = uiHandler.obtainMessage(MSG_WHAT_ON_LOAD_DATA);
-				msg1.sendToTarget();
-				
-				//get data from server, send a request~   by luo
-				sendRequest(OperationCode.GET_MY_EVENTS);
-			}
-		}).start();
+	    
+		Message msg1 = uiHandler.obtainMessage(MSG_WHAT_ON_LOAD_DATA);
+		msg1.sendToTarget();
+		
+		//get data from server, send a request~   by luo
+		sendRequest(OperationCode.GET_MY_EVENTS);
 	}
 	
-	private void sendRequest(int opCode)
+	private void sendRequest(final int opCode)
 	{
-		JSONObject params = new JSONObject();
-		try{
-			switch (opCode) {
-			case OperationCode.GET_MY_EVENTS:
-				params.put("id", userId);
-				sender.Httppost(OperationCode.GET_MY_EVENTS, params, handler);
-				break;
-			case OperationCode.GET_EVENTS:
-				params.put("sequence", new JSONArray( requestEventIDList ) );
-//				Log.e("test", params.toString());
-				sender.Httppost(OperationCode.GET_EVENTS, params, handler);
-				break;
-			case OperationCode.GET_AVATAR:
-				params.put("id", curRequestAvatarId);
-				params.put("operation", 0);
-//				sender.Httppost(OperationCode.GET_AVATAR, params, handler);
-				new HttpSender().Httppost(OperationCode.GET_AVATAR, params, handler);
-//				Log.e("myevent", "request： " + params);
-				break;
-			default:
-				break;
-			}
-			
-		}
-		catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+		final int curRequestAvatarIdTemp = curRequestAvatarId;
+		new Thread()
+		{
+				public void run()
+				{
+					JSONObject params = new JSONObject();
+					try
+					{
+						switch (opCode) {
+						case OperationCode.GET_MY_EVENTS:
+							params.put("id", userId);
+							sender.Httppost(OperationCode.GET_MY_EVENTS, params, handler);
+							break;
+						case OperationCode.GET_EVENTS:
+							params.put("sequence", new JSONArray( requestEventIDList ) );
+							sender.Httppost(OperationCode.GET_EVENTS, params, handler);
+							break;
+						case OperationCode.GET_AVATAR:
+							params.put("id", curRequestAvatarIdTemp);
+							params.put("operation", 0);
+							new HttpSender().Httppost(OperationCode.GET_AVATAR, params, handler);
+							break;
+						default:
+							break;
+						}						
+					}
+					catch (JSONException e) {
+			            // TODO Auto-generated catch block
+			            e.printStackTrace();
+			        }
+				}
+		}.start();
 	}
 	
 	//向服务器发送请求头像
 	private void getAllavatars()
 	{
-		for (int id : photoIdSet) {
-			//当local不存有头像的时候，才去拉取头像，否则不拉取
-			//或者：第一次取活动要拉取头像，后面就不再拉取头像了=============
-			if( !imageUtil.fileExist(id) )
-			{
-				curRequestAvatarId = id;
-				sendRequest( OperationCode.GET_AVATAR );
-			}
-		}
+		new Thread()
+		{
+				public void run()
+				{
+					for (int id : photoIdSet) {
+						//当local不存有头像的时候，才去拉取头像，否则不拉取
+						//或者：第一次取活动要拉取头像，后面就不再拉取头像了=============
+						if( !imageUtil.fileExist(id) )
+						{
+							curRequestAvatarId = id;
+							sendRequest( OperationCode.GET_AVATAR );
+						}
+					}
+				}
+		}.start();
+		
 	}
 	
 	private void initRequestEventList()
@@ -409,9 +383,7 @@ public class MyEvents {
 			JSONObject returnJson = null;
 			
 			JSONArray eventJsonArray = null;
-			int returnCMD;
-			
-			
+			int returnCMD;			
 			
 			if( returnStr!="DEFAULT")
 			{
@@ -431,14 +403,13 @@ public class MyEvents {
 									int length = seqJsonArray.length();
 									if( length>0 )
 									{
-//										Log.i("my events", "seq length: " + length);
 										allEventIDList.clear();
 										for( int i=0; i<length; i++)									
 											allEventIDList.add( seqJsonArray.getInt(i) );
 
 										initRequestEventList();
-										//使用events sequence请求活动内容
-										sendRequest(OperationCode.GET_EVENTS);
+//										//使用events sequence请求活动内容
+										sendRequest(OperationCode.GET_EVENTS);										
 									}
 									else										
 									{
@@ -491,14 +462,8 @@ public class MyEvents {
 										msgLoadMore.obj = "After more " + System.currentTimeMillis();
 										msgLoadMore.sendToTarget();
 									}
-
-									
-									new Thread()
-									{
-											public void run() {
-												getAllavatars();
-											}
-									}.start();
+								
+									getAllavatars();
 								}
 								else
 									Toast.makeText(context, "get events返回其他值了"+returnCMD, Toast.LENGTH_SHORT).show();	
@@ -520,13 +485,16 @@ public class MyEvents {
 											 try {
 										            if(temp!=null)
 										            {
-										                Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);		
-										                //记得要在子线程中写文件
-										                imageUtil.savePhoto(avatarForUserId, bitmap);
-//										                forImageUtil.putBitmapInMap(avatarForUserId, bitmap);
+										                Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);												                										                
 										                imageUtil.getInstance().addBitmapToMemoryCache(avatarForUserId, bitmap);
-//										                myEventsAdapter.notifyDataSetChanged();
-//										                Log.e("myevents", "image arrive : " + avatarForUserId);
+
+										                //notify card adapter
+										                Message msg = new Message();
+														msg.what = cardAdapter.CARD_INFO_CHANGE;
+														msgCard.sendMessage(msg);
+														
+														//记得要在子线程中写文件
+														imageUtil.savePhoto(avatarForUserId, bitmap);
 										            }
 										        } catch (Exception e) {
 										            // TODO Auto-generated catch block
@@ -535,7 +503,7 @@ public class MyEvents {
 										}
 									}.start();
 																		
-									myEventsAdapter.notifyDataSetChanged();
+//									myEventsAdapter.notifyDataSetChanged();
 								}
 								else if ( returnCMD==ReturnCode.REQUEST_FAIL ) 
 								{

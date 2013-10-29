@@ -22,8 +22,8 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_alignParentRight="true"
-	            android:padding="5dip"
-	            android:src="@drawable/activity_right_photo"	        
+	            android:padding="5dip"	        
+	            android:src="@drawable/activity_right_photo_white"	            
 	            />
 	    </RelativeLayout>
 
