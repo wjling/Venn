@@ -195,7 +195,10 @@ public class cardAdapter extends BaseAdapter
 				Bitmap bitmap = forImageUtil.getBitmapFromMemCache(id);
 
 				if( bitmap!=null )
-					holder.avatarCImages[i].setImageBitmap(bitmap);				
+				{
+					holder.avatarCImages[i].setImageBitmap(bitmap);		
+					//Log.e("TAG", "avatar in cache " + id);
+				}
 				else
 				{
 					holder.avatarCImages[i].setImageResource(R.drawable.defaultavatar);

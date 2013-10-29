@@ -71,6 +71,10 @@ public class PhotosWall extends Activity
 	public static Drawable clickedPhoto;
 	private Bitmap takephotoBM=null;
 	private File takephotoFile;
+	private int leftViewHeight=0, rightViewHeight=0;
+	private TextView hintTV;
+	private String saveFilePath = "";
+	private imageUtil forImageUtil  = imageUtil.getInstance();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +96,12 @@ public class PhotosWall extends Activity
 		addPhoto = (ImageView)findViewById( R.id.addPhoto);
 		leftView = (LinearLayout)findViewById(R.id.leftView);
 		rightView = (LinearLayout)findViewById(R.id.rightView);
+		hintTV = (TextView)findViewById(R.id.hintTV);
 		
 		setWidth();
 		addPhoto.setOnClickListener( clickListener );
 		
+		setHintTv( "正在加载图片列表...");
 		getPhotoIdList();
 	}
 	
@@ -284,11 +290,11 @@ public class PhotosWall extends Activity
         uri = data.getData();                 
         getPath(uri);
       //for function "addAPhoto"
-        bm = imageUtil.getInstance().getSmallBitmap(path);     //获取小尺寸图片
-        bm = imageUtil.getInstance().compressImage(bm);      //质量压缩
+        bm = forImageUtil.getSmallBitmap(path);     //获取小尺寸图片
+        bm = forImageUtil.compressImage(bm);      //质量压缩
         
         //再进行质量压缩
-        String saveFilePath = "";
+//        String saveFilePath = "";
         
         try {
             File sdCardDir = Environment.getExternalStorageDirectory();
@@ -311,7 +317,7 @@ public class PhotosWall extends Activity
 				new SimpleKeyValue("event_id", event_Id),
 				new SimpleKeyValue("cmd", "upload")
 			};
-		Log.e(TAG, "id="+userId + " event id = " + event_Id);
+//		Log.e(TAG, "id="+userId + " event id = " + event_Id);
 		
 		KeyFile []kfs =
 			{
@@ -334,11 +340,11 @@ public class PhotosWall extends Activity
         
     	if( takephotoFile!=null && takephotoFile.exists() )
     	{
-    		String saveFilePath = takephotoFile.getPath();
+    		saveFilePath = takephotoFile.getPath();
     		
     		//for function "addAPhoto"
-    		bm = imageUtil.getInstance().getSmallBitmap(saveFilePath);     //获取小尺寸图片
-            bm = imageUtil.getInstance().compressImage(bm);      //质量压缩              
+    		bm = forImageUtil.getSmallBitmap(saveFilePath);     //获取小尺寸图片
+            bm = forImageUtil.compressImage(bm);      //质量压缩              
             
             try {
                 FileOutputStream baos= new FileOutputStream(saveFilePath);    		
@@ -356,7 +362,7 @@ public class PhotosWall extends Activity
 				new SimpleKeyValue("event_id", event_Id),
 				new SimpleKeyValue("cmd", "upload")
 			};
-		Log.e(TAG, "id="+userId + " event id = " + event_Id);
+//		Log.e(TAG, "id="+userId + " event id = " + event_Id);
 		
 		KeyFile []kfs =
 			{
@@ -390,6 +396,8 @@ public class PhotosWall extends Activity
 //        }
 		
 		photo.setImageBitmap(bm);
+		photoText.setText( photoTextStr);
+		
 		photo.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -407,13 +415,24 @@ public class PhotosWall extends Activity
 		
 //		photoText.setText( photoTextStr );
 		
-		int leftHeight = leftView.getMeasuredHeight();
-		int rightHeight = rightView.getMeasuredHeight();
+//		int leftHeight = leftView.getMeasuredHeight();
+//		int rightHeight = rightView.getMeasuredHeight();
+//		
+//		if( rightHeight>=leftHeight )
+//			leftView.addView( child);
+//		else
+//			rightView.addView(child);
 		
-		if( rightHeight>=leftHeight )
+		if( rightViewHeight>=leftViewHeight)
+		{
 			leftView.addView( child);
+			leftViewHeight+=setHeight;
+		}
 		else
+		{
 			rightView.addView(child);
+			rightViewHeight+=setHeight;
+		}
 	}
 	
 	/**从相册或者相机获取到图片之后，就会调用这个函数
@@ -450,6 +469,11 @@ public class PhotosWall extends Activity
 	      super.onActivityResult(requestCode, resultCode, data);
 	 }
 	
+	private void setHintTv( String hint)
+	{
+		hintTV.setText( hint );
+	}
+	
 	class MsgHandler extends Handler
 	{
 		public MsgHandler(Looper looper)
@@ -482,8 +506,11 @@ public class PhotosWall extends Activity
 								
 								int photoId = Integer.parseInt( photoIdStr.substring(0, photoIdStr.length()-1));
 //								int photoId = respJ/son.optLong("photo_id");
-								Log.i(TAG, "photoId: "+photoId);								
+//								Log.i(TAG, "photoId: "+photoId);								
 								addAPhoto(bm, "本地的", photoId);
+								forImageUtil.photoWallsavePhoto(photoId, bm);
+								forImageUtil.photoWallDeleteImg(saveFilePath);
+								
 								Toast.makeText(PhotosWall.this, "图片上传成功", Toast.LENGTH_SHORT).show();
 							}
 							else
@@ -512,16 +539,42 @@ public class PhotosWall extends Activity
 							{
 								//down first image 
 								photoIdListIndex = 0;                             //index initialize
-						        SimpleKeyValue []kvs = 
-									{ 
-										new SimpleKeyValue("photo_id", photoIdList.getInt(photoIdListIndex)),
-										new SimpleKeyValue("cmd", "download")
-									};
-								HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+								
+								//get images in file
+								int photoID;
+								while( photoIdListIndex<length )
+								{
+									photoID = photoIdList.getInt(photoIdListIndex);								
+									Bitmap bm = forImageUtil.photoWallGetImage( photoID );
+									if( null!=bm)
+									{
+										addAPhoto(bm, "本地缓存的", photoID);
+										photoIdListIndex++;
+									}
+									else 
+									{
+										setHintTv( "正在下载图片" + photoID + "...");
+										SimpleKeyValue []kvs = 
+											{ 
+												new SimpleKeyValue("photo_id", photoID),
+												new SimpleKeyValue("cmd", "download")
+											};
+										HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+										
+										break;   //记住跳出循环体
+									}
+								}
+								
+								if( photoIdListIndex>=length)
+								{
+									getPhotoIdList();
+									setHintTv( "正在获取图片列表...");
+								}
 							}
 							else
 							{
-								Toast.makeText(PhotosWall.this, "没有更多图片了", Toast.LENGTH_SHORT).show();
+								setHintTv( "没有更多图片了. 去上传吧=>");
+								//Toast.makeText(PhotosWall.this, "没有更多图片了", Toast.LENGTH_SHORT).show();
 							}
 						}
 						else
@@ -540,30 +593,59 @@ public class PhotosWall extends Activity
 					int photoID;
 					
 					try{
-					photoID = photoIdList.getInt(photoIdListIndex);
-					
-					if( is.length>0)
-					{
-						Bitmap bm = BitmapFactory.decodeByteArray(is, 0, is.length);
-						addAPhoto(bm, "下载的", photoID);
-					}
+						photoID = photoIdList.getInt(photoIdListIndex);
+						
+						if( is.length>0)
+						{
+							Bitmap bm = BitmapFactory.decodeByteArray(is, 0, is.length);
+							addAPhoto(bm, "下载的", photoID);
+							
+							//add to photoWall cache
+							forImageUtil.photoWallsavePhoto(photoID, bm);
+						}
 										
 						photoIdListIndex++;   
 						
 						//download the next image from the server if there are more images
-						if( photoIdListIndex < photoIdList.length())
+						int length = photoIdList.length();
+						if( photoIdListIndex < length)
 						{
-							SimpleKeyValue []kvs = 
-								{ 
-									new SimpleKeyValue("photo_id", photoIdList.getInt(photoIdListIndex)),
-									new SimpleKeyValue("cmd", "download")
-								};
-							HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+
+							while( photoIdListIndex<length )
+							{
+								photoID = photoIdList.getInt(photoIdListIndex);								
+								Bitmap bm = forImageUtil.photoWallGetImage( photoID );
+								if( null!=bm)
+								{
+									addAPhoto(bm, "本地缓存的", photoID);
+									photoIdListIndex++;
+								}
+								else 
+								{
+									setHintTv( "正在下载图片" + photoID + "...");
+									
+									SimpleKeyValue []kvs = 
+										{ 
+											new SimpleKeyValue("photo_id", photoIdList.getInt(photoIdListIndex)),
+											new SimpleKeyValue("cmd", "download")
+										};
+									HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+									
+									break;   //记住跳出循环体
+								}
+							}			
+							
+							if( photoIdListIndex >= length)
+							{
+								getPhotoIdList();
+								setHintTv( "正在获取图片列表...");
+							}
 						}
 						//
 						else
 						{
 							getPhotoIdList();
+							setHintTv( "正在获取图片列表...");
 						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block

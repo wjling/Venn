@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,10 +34,11 @@ public class imageUtil
 {
     private final static String APP_PATH = Environment.getExternalStorageDirectory() + "/Catherine/";
 	private final static String IMAGE_PATH = Environment.getExternalStorageDirectory() + "/Catherine/Avatar/";
+	public final static String PHOTO_WALL_PATH = Environment.getExternalStorageDirectory() + "/Catherine/PhotosWall/";
 //	private HashMap<Integer, Bitmap> imageMap = new HashMap<Integer, Bitmap>();
 	
 	private volatile static imageUtil uniqueInstance = null;
-	private LruCache<Integer, Bitmap> mMemoryCache;
+	private LruCache<Integer, Bitmap> mMemoryCache, mPhotoWallMemCache;
 	private int maxMemory;
 	private int cacheSize;
 	private myHandler mHandler;
@@ -47,16 +49,28 @@ public class imageUtil
 		//get max available vm memory
 		maxMemory = (int )(Runtime.getRuntime().maxMemory() / 1024);
 		//use 1/8th of the available memory for this memory cache
-		cacheSize = maxMemory / 8;
-		mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize)
-		{
-			@Override
-			protected int sizeOf(Integer key, Bitmap bitmap) {
-				//the cache size will be measured in kilobytes 
-				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
-//				return bitmap.getByteCount() / 1024;
-			}
-		};
+		cacheSize = maxMemory / 16;
+		
+		mPhotoWallMemCache = new LruCache<Integer, Bitmap>(cacheSize);
+//		{
+//			@Override
+//			protected int sizeOf(Integer key, Bitmap bitmap) {
+//				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
+//			}
+//		};
+				
+		mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize);
+//		{
+//			@Override
+//			protected int sizeOf(Integer key, Bitmap bitmap) {
+//				//the cache size will be measured in kilobytes 
+//				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
+////				return bitmap.getByteCount() / 1024;
+//			}
+//		};
+		
+		
+
 		mHandler = new myHandler();
 		fcHandler = null;
 		ncHandler = null;
@@ -403,6 +417,108 @@ public class imageUtil
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
         return bitmap;
     }
+	
+	/**
+	 * photo wall : save photo to file
+	 * directory: PHOTO_WALL_PATH
+	 * @param photoId
+	 * @param bmp
+	 */
+	public void photoWallsavePhoto(final int photoId, final Bitmap bmp)
+	{		
+		new Thread()
+		{
+			public void run() {
+				if( mPhotoWallMemCache.get(photoId) ==null )
+				{
+					mPhotoWallMemCache.put(photoId, bmp);
+//					Log.i("TAG", "save " + photoId + " to cache");
+				}
+				
+				//when you need to save the image inside your own folder in the sd card
+			    File imageFileFolder = new File( APP_PATH );
+		        if( !imageFileFolder.exists() )      
+		            imageFileFolder.mkdir();       
+		        
+		        imageFileFolder = new File(PHOTO_WALL_PATH);
+				if( !imageFileFolder.exists() )
+					imageFileFolder.mkdir();
+
+				FileOutputStream out = null;
+				File imageFileName = new File(imageFileFolder, photoId+".jpg");
+				try
+				{
+					out = new FileOutputStream(imageFileName);
+					bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
+					out.flush();
+					out.close();
+					out = null;
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
+			}
+		}.start();
+		
+	}
+	
+	/**
+	 * photo wall: get image by photo id
+	 * @param photoId
+	 * @return bitmap in cache or in file
+	 */
+	public Bitmap photoWallGetImage( int photoId )
+	{
+		Bitmap bitmap = mPhotoWallMemCache.get( photoId );
+		
+		//if not in cache
+		if( null!=bitmap )
+		{
+//			Log.i("TAG", "in cache---------");
+		}
+		else
+		{
+			//if exist in file
+			File file = new File( PHOTO_WALL_PATH + photoId + ".jpg" );
+			if( file.exists() )
+			{
+//				Log.i("TAG", "in file---------");
+				bitmap = BitmapFactory.decodeFile( PHOTO_WALL_PATH + photoId + ".jpg" );			
+				mPhotoWallMemCache.put(photoId, bitmap);	
+//				Log.i("TAG", "save " + photoId + " to cache" + ". size = " + mPhotoWallMemCache.size());
+			}
+		}
+			
+		return bitmap;
+	}
+	
+	/**
+	 * delete image file
+	 * @author chunk
+	 *
+	 */
+	public void photoWallDeleteImg( final String filePath)
+	{
+		new Thread()
+		{
+			public void run() {
+				File file = new File( filePath );
+				
+				if( file.exists() )
+				{
+					try{
+						new File(filePath ).delete();
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}.start();
+		
+	}
 	
     public class myHandler extends Handler
     {

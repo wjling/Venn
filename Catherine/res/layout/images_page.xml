@@ -4,21 +4,28 @@
     android:layout_height="match_parent"
     android:background="#edebe4"
     android:orientation="vertical">
-        <LinearLayout 
+        <RelativeLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:background="#ffffff"
-	        android:gravity="right">
+	        android:background="#ffffff">
+	        
+            <TextView 
+                android:id="@+id/hintTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:textColor="#804000"
+                android:text="loading images..."/>
 
 	        <ImageView 
 	            android:id="@+id/addPhoto"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
+	            android:layout_alignParentRight="true"
 	            android:padding="5dip"
-	            android:src="@drawable/activity_right_photo"
-	            
+	            android:src="@drawable/activity_right_photo"	        
 	            />
-	    </LinearLayout>
+	    </RelativeLayout>
 
 		<ScrollView 
 		    android:layout_width="match_parent"

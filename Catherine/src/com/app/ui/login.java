@@ -318,7 +318,7 @@ public class login extends Activity
 							intentFilter.addAction("connected");
 							broadcastReceiver = new MyBroadcastReceiver();
 							login.this.registerReceiver( broadcastReceiver, intentFilter);			
-							progressDialog.dismiss();
+//							progressDialog.dismiss();
 						}
 						else if (ReturnCode.PASSWD_NOT_CORRECT==cmdLogin)								
 						{
@@ -355,6 +355,7 @@ public class login extends Activity
 					intent2.putExtra("email", loginEmail);				
 				startActivity(intent2);	
 				unregisterReceiver( broadcastReceiver);
+				progressDialog.dismiss();
 				login.this.finish();
 			}
 		}
