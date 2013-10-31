@@ -62,5 +62,6 @@
     <string name="already_in_event">你已经在该活动中</string>
     <string name="request_event_invitation">邀请你加入活动</string>
     <string name="add_friend_button">加为好友</string>
+    <string name="search_friend_hint">请输入邮箱或用户名搜索</string>
 
 </resources>

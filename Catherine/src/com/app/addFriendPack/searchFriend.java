@@ -2,6 +2,7 @@ package com.app.addFriendPack;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +53,7 @@ public class searchFriend extends Activity{
 		
 		userId = getIntent().getIntExtra("userId", -250);
 		friendEmailET = (EditText)findViewById(R.id.search_friend_content);
+		friendEmailET.setHint(R.string.search_friend_hint);
 		searchFriendBtn = (Button)findViewById(R.id.search_friend_button);
 		searchFriendBtn.setOnClickListener(searchListener);
 		searchResult = (ListView)findViewById(R.id.search_friend_list);
@@ -81,7 +83,7 @@ public class searchFriend extends Activity{
 		    searchString = friendEmailET.getText().toString().trim();
             if( searchString == null || searchString.trim().equals(""))
             {
-                searchHint.setText("请输入用户邮箱...");
+                searchHint.setText("请输入用户邮箱或用户名...");
             }
             else
             {// 向服务器发送请求    
@@ -95,7 +97,13 @@ public class searchFriend extends Activity{
 	{
 	    JSONObject searchParams = new JSONObject();
 		try {
-			searchParams.put("email", searchString);
+		    String emailFormat = "^([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+@([a-zA-Z0-9]*[-_]?[a-zA-Z0-9]+)+[\\.][A-Za-z]{2,3}([\\.][A-Za-z]{2})?$";
+			if (searchString.matches(emailFormat)) {
+			    searchParams.put("email", searchString);
+			}
+			else {
+			    searchParams.put("name", searchString);
+			}
 			searchParams.put("myId", userId);
 			HttpSender http = new HttpSender();
 			http.Httppost(OperationCode.SEARCH_FRIEND, searchParams, handler);
@@ -132,13 +140,19 @@ public class searchFriend extends Activity{
 				try
 				{							
 				    JSONObject jo = new JSONObject(msg.obj.toString());
+				    Log.i("search_friend", jo.toString());
 					int cmdSearch	= jo.getInt("cmd");
 				    if( ReturnCode.USER_EXIST == cmdSearch)
 				    {
-				        FriendStruct fs = new FriendStruct(jo, true);
-				        searchHint.setVisibility(View.GONE);
+				        JSONArray ja = jo.getJSONArray("friend_list");
+				        int len = ja.length();
 				        result_list.clear();
-				        result_list.add(fs);
+				        for (int i = 0; i < len; i++) {
+				            JSONObject each_friend = ja.getJSONObject(i);
+				            FriendStruct fs = new FriendStruct(each_friend, true);   
+				            result_list.add(fs);
+				        }
+				        searchHint.setVisibility(View.GONE);
 				        adapter.notifyDataSetChanged();
 				    }
 				    else if( ReturnCode.USER_NOT_FOUND==cmdSearch)	//用户不存在		
