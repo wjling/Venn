@@ -186,7 +186,7 @@ public class Menu {
 				break;
 			case R.id.ui_menu_exit:
 				buttonBackGroundChange(v,event,7);
-				Toast.makeText(context, "Exit", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "Exit", Toast.LENGTH_SHORT).show();
 				break;
 				default: break;
 			}

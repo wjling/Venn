@@ -108,39 +108,12 @@ GestureDetector.OnGestureListener
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-//		super.onBackPressed();
-		
-//		Builder dialog = new AlertDialog.Builder(UserInterface.this)
-//								.setTitle("提示")
-//								.setMessage("确定要退出程序吗？")
-//								.setPositiveButton("是", 
-//										new DialogInterface.OnClickListener() {
-//											
-//											@Override
-//											public void onClick(DialogInterface dialog, int which) {
-//												// TODO Auto-generated method stub
-//												//跳回到主页面userinterface
-//												finish();
-//											}
-//										})
-//								.setNegativeButton("否", 
-//										new DialogInterface.OnClickListener() {
-//											
-//											@Override
-//											public void onClick(DialogInterface dialog, int which) {
-//												// TODO Auto-generated method stub
-//												//啥都不做
-//											}
-//										});
-//			dialog.show();
-		
+		//放在后台执行
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addCategory(Intent.CATEGORY_HOME);
 		startActivity(intent);
 	}
-
-
 
 	@Override
 	protected void onDestroy() {
@@ -627,7 +600,28 @@ GestureDetector.OnGestureListener
 					UI_settings.initData();
 					break;
 				case R.id.ui_menu_exit:
-					UserInterface.this.finish();
+//					UserInterface.this.finish();
+					Builder dialog = new AlertDialog.Builder(UserInterface.this)
+						.setTitle("提示")
+						.setMessage("确定要退出程序吗？")
+						.setPositiveButton("是", 
+								new DialogInterface.OnClickListener() {			
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										//退出程序
+										finish();
+									}
+								})
+						.setNegativeButton("否", 
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										//啥都不做
+									}
+								});
+						dialog.show();
 					break;
 					default: break;
 				}
