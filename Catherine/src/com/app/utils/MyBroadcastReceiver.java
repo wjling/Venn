@@ -2,10 +2,12 @@ package com.app.utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.UserDataHandler;
 
 import com.app.localDataBase.FriendStruct;
 import com.app.localDataBase.NotificationTableAdapter;
 import com.app.localDataBase.TableFriends;
+import com.app.ui.UserInterface;
 import com.app.ui.menu.FriendCenter.FriendCenter;
 
 import android.content.BroadcastReceiver;
@@ -24,6 +26,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver
 	private int uid;
 	private Handler fcHandler, ncHandler;
 	
+	
 	public MyBroadcastReceiver( Context context, int uid)
 	{
 		this.context = context;
@@ -40,6 +43,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver
 		if ( "postMsg".equals(action) ) {
 			String postStr = intent.getStringExtra("postMsg");
 			insertNotification( postStr );
+			UserInterface.notifyNum++;
 		}
 	}
 	

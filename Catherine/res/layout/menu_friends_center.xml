@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,16 +44,46 @@
     </LinearLayout>
 
 
-    <RelativeLayout
+   <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp" >
 
-     	<ListView 
-        	android:id="@+id/menu_friend_center_functions"
-       		android:layout_width="match_parent"
-       		android:layout_height="wrap_content">
-   		</ListView>
+        <LinearLayout
+            android:id="@+id/menu_friend_center_functions"
+            android:layout_marginTop="10dip"
+            android:layout_marginBottom="10dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+            
+            <LinearLayout 
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:background="#ffffff"
+                android:gravity="top|right"
+                >          
+                <TextView         
+                    android:id="@+id/notifyNumber"            
+                    android:layout_margin="2dip"           
+					android:textSize="10.0dip" 
+					android:textColor="@android:color/white" 
+					android:gravity="center" 
+					android:background="@drawable/tab_unread_bg" 
+					android:layout_width="wrap_content" 
+					android:layout_height="wrap_content" 
+					android:text="99" />
+            </LinearLayout>
+            
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="消息中心" 
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"/>           
+        </LinearLayout>
    		
         <ListView
             android:id="@+id/menu_friend_center_friendlist"
