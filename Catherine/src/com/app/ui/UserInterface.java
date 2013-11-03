@@ -60,6 +60,7 @@ GestureDetector.OnGestureListener
 	private boolean isFinish = true;		//是否后台回滚完毕
 	private boolean isMenuOpen = false;		//是否显示了菜单栏
 	private boolean hasMeasured = false;
+	public static int notifyNum = 0;
 	
 	
 	private myHandler uiHandler = new myHandler();
@@ -238,10 +239,10 @@ GestureDetector.OnGestureListener
 //		searchButton.setOnTouchListener(this);
 //		friendList.setOnTouchListener(this);
 //		friendFunction.setOnTouchListener(this);
-		Log.e("myUI","wrong here1");
+//		Log.e("myUI","wrong here1");
 		UI_friendCenter.friendListView.setOnTouchListener(this);
-		Log.e("myUI","wrong here2");
-		UI_friendCenter.functionsListView.setOnTouchListener(this);
+//		Log.e("myUI","wrong here2");
+//		UI_friendCenter.notifyCenterBlock.setOnTouchListener(this);
 //		LinearLayout menuLayout_root = (LinearLayout)friendCenterView.findViewById(R.id.menu_friend_center_searchLayout);
 //		menuLayout_root.setOnTouchListener(this);
 	}
