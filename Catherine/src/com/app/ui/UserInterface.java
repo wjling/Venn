@@ -123,10 +123,14 @@ GestureDetector.OnGestureListener
 		// TODO Auto-generated method stub
 		if( broadcastReceiver!=null )
 			unregisterReceiver(broadcastReceiver);
+		
 		if( serviceIntent!=null){
 			stopService(serviceIntent);
 			Log.e("test", "ondestroy");
 		}
+		
+		if( UI_myEvents.join_broadcastReceiver!=null )
+			unregisterReceiver(UI_myEvents.join_broadcastReceiver);
 		
 		super.onDestroy();
 	}
@@ -503,7 +507,7 @@ GestureDetector.OnGestureListener
 
 		@Override
 		protected Void doInBackground(Integer... params) {
-			Log.e("luo", "do in background");
+//			Log.e("luo", "do in background");
 			// TODO Auto-generated method stub
 			isFinish = false;
 			int times;
@@ -524,7 +528,7 @@ GestureDetector.OnGestureListener
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
-			Log.e("luo", "do post execute");
+//			Log.e("luo", "do post execute");
 			isFinish = true;
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)UILayout.getLayoutParams();
 			if(layoutParams.leftMargin >= 0)
@@ -541,7 +545,7 @@ GestureDetector.OnGestureListener
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 			// TODO Auto-generated method stub
-			Log.e("luo","on progress update");
+//			Log.e("luo","on progress update");
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)UILayout.getLayoutParams();
 			if(values[0]>0)//сррф
 			{

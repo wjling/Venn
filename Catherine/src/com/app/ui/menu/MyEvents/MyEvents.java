@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import com.app.catherine.R;
 import com.app.customwidget.PullUpDownView;
 import com.app.customwidget.PullUpDownView.onPullListener;
+import com.app.localDataBase.NotificationTableAdapter;
+import com.app.localDataBase.notificationObject;
 import com.app.ui.UserInterface;
 import com.app.utils.HttpSender;
 import com.app.utils.OperationCode;
@@ -31,8 +33,10 @@ import com.app.utils.imageUtil;
 
 
 import android.R.integer;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -79,6 +83,7 @@ public class MyEvents {
 	private Vector<Integer> requestEventIDList = new Vector<Integer>();
 	private int requestIndex = 0;
 	private imageUtil forImageUtil;
+	public BroadcastReceiver join_broadcastReceiver = new JoinBroadcastReceiver();
 	
 	//My Events 
 	private static final int MSG_WHAT_ON_LOAD_DATA = -4;
@@ -96,6 +101,10 @@ public class MyEvents {
 		
 		sender = new HttpSender();
 		handler = new MsgHandler( Looper.myLooper() );
+		
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("JoinMsg");
+		context.registerReceiver(join_broadcastReceiver, intentFilter);
 	}
 	
 
@@ -526,5 +535,87 @@ public class MyEvents {
 				Toast.makeText(context, "服务器请求超时", Toast.LENGTH_SHORT).show();
 			}	
 		}
+	}
+	
+	class JoinBroadcastReceiver extends BroadcastReceiver
+	{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String action = intent.getAction();
+
+			if ( "JoinMsg".equals(action) ) {
+				int item_id = intent.getIntExtra("item_id", 0);
+				
+				NotificationTableAdapter adapter = new NotificationTableAdapter(context);
+				String str = adapter.queryOneMsgData(item_id);
+				joinActivityFrom(str);
+				adapter.deleteData( item_id );
+			}
+		}
+		
+	}
+	
+	private void joinActivityFrom( String str)
+	{
+		JSONObject eventInforJson;
+		String subject="主题", time="", location="未定", launcher="谁发起的?", remark="没有备注哦oo";
+		int member_count = 0;
+		String year="0000", month="00", day="00", hour="00", minute="00", second="00";
+		JSONArray photolistJsonArray = null;
+		int event_id = 0, launcher_id = 0;
+		
+		try{
+			eventInforJson = new JSONObject(str);
+			subject = eventInforJson.optString("subject");
+			time = eventInforJson.optString("time");      //活动开始时间
+			location = eventInforJson.optString("location");
+			launcher = eventInforJson.optString("launcher");
+			remark = eventInforJson.optString("remark");
+			member_count  = eventInforJson.optInt("member_count");
+			photolistJsonArray = eventInforJson.optJSONArray("member");
+			event_id = eventInforJson.optInt("event_id");
+			launcher_id = eventInforJson.optInt("launcher_id");
+			getPhotoId(photolistJsonArray);
+		}
+		catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+		//为空的时候，后台返回字符串None
+		if( !"None".equals(time) && time.length()>0 )
+		{
+			year = time.substring(0, 4);
+			month = time.substring(5, 7);
+			day = time.substring(8, 10);
+			hour = time.substring(11, 13);
+			minute = time.substring(14, 16);
+			second = time.substring(17,19);
+		}
+		
+		if( "None".equals(time) ) 
+			time = "0000-00-00 00:00";
+				
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("title", subject);
+		map.put("day", day+"");
+		map.put("monthAndYear", month + "月" +year);
+		map.put("date", time);  //date detail
+		map.put("time", hour+":"+minute);
+		map.put("location", location);
+		map.put("launcher", "by " + launcher);
+		map.put("remark", remark);
+		map.put("participantsNum", member_count+"");
+		map.put("photolistJsonArray", photolistJsonArray);
+		map.put("id", userId);
+		map.put("event_id", event_id);
+		map.put("launcher_id", launcher_id);
+		map.put("item_id", -1);
+		map.put("open", false);
+		
+//		myEventsList.add(map);	
+		myEventsList.add(0, map);
 	}
 }

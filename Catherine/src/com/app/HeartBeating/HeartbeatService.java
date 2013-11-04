@@ -183,6 +183,7 @@ public class HeartbeatService extends Service implements Runnable {
 												params.put("seq", MsgSeq);
 												postHelper.send( params.toString() );
 												bolt = true;
+												Log.e(TAG, "feed back: " + params.toString());
 											}		
 										}
 									}
@@ -195,7 +196,7 @@ public class HeartbeatService extends Service implements Runnable {
 										Intent intent = new Intent("connected");
 										intent.putExtra("connected", true);
 										sendBroadcast(intent);
-										Log.e(TAG, "broadcast-----------------------------------------------------------<");
+										Log.e(TAG, "connected, seq: " + seqStr);
 									}
 						}
 						//sync + num

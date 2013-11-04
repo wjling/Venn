@@ -426,8 +426,12 @@ public class cardAdapter extends BaseAdapter
 					httpSender.Httppost(OperationCode.PARTICIPATE_EVENT, params, ncHandler);
 					Log.e("cardAdapter", "join: " + params);
 					
-					NotificationTableAdapter adapter = new NotificationTableAdapter(context);
-					adapter.deleteData( item_id );
+					Intent intent = new Intent("JoinMsg");
+					intent.putExtra("item_id", item_id);
+					context.sendBroadcast(intent);
+					
+//					NotificationTableAdapter adapter = new NotificationTableAdapter(context);
+//					adapter.deleteData( item_id );
 					
 					list.remove(pos);
 					cardAdapter.this.notifyDataSetChanged();
