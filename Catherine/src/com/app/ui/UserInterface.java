@@ -60,8 +60,10 @@ GestureDetector.OnGestureListener
 	private boolean isFinish = true;		//是否后台回滚完毕
 	private boolean isMenuOpen = false;		//是否显示了菜单栏
 	private boolean hasMeasured = false;
-	public static int notifyNum = 0;
 	
+	public static int notifyNum = 0;
+	public static int activityNotifyNum = 0;
+	public static int friendNotifyNum = 0;
 	
 	private myHandler uiHandler = new myHandler();
 	
@@ -501,6 +503,7 @@ GestureDetector.OnGestureListener
 
 		@Override
 		protected Void doInBackground(Integer... params) {
+			Log.e("luo", "do in background");
 			// TODO Auto-generated method stub
 			isFinish = false;
 			int times;
@@ -521,6 +524,7 @@ GestureDetector.OnGestureListener
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
+			Log.e("luo", "do post execute");
 			isFinish = true;
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)UILayout.getLayoutParams();
 			if(layoutParams.leftMargin >= 0)
@@ -537,9 +541,12 @@ GestureDetector.OnGestureListener
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 			// TODO Auto-generated method stub
+			Log.e("luo","on progress update");
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)UILayout.getLayoutParams();
 			if(values[0]>0)//右移
 			{
+				UI_Menu.setNotifytoMenu();
+				
 				layoutParams.leftMargin = Math.min(layoutParams.leftMargin + values[0], 0);
 			}
 			else//左移

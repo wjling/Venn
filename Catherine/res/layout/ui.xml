@@ -26,15 +26,31 @@
                 android:text="     我的活动"
                 android:textSize="15sp" 
                 android:textColor="@color/white"/>
-
-            <Button
+            
+            <LinearLayout 
                 android:id="@+id/ui_menu_privateevents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:text="     有关活动"
-                android:textSize="15sp"
-                android:textColor="@color/white" />
+                android:gravity="center|left"
+                >
+                <TextView 
+                    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="        有关活动"
+                	android:textSize="15sp" 
+                	android:textColor="@color/white"
+                    /> 
+               <TextView                
+                   android:id="@+id/activityNotifyNum"   
+                    android:layout_margin="2dip"           
+					android:textSize="10.0dip" 
+					android:textColor="@android:color/white" 
+					android:gravity="center" 
+					android:background="@drawable/tab_unread_bg" 
+					android:layout_width="wrap_content" 
+					android:layout_height="wrap_content" 
+					android:text="" />        
+            </LinearLayout>
 
             <Button
                 android:id="@+id/ui_menu_recommendedevents"
@@ -45,14 +61,30 @@
                 android:textSize="15sp" 
                 android:textColor="@color/white"/>
 
-            <Button
+            <LinearLayout 
                 android:id="@+id/ui_menu_friendscenter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:text="     好友中心"
-                android:textSize="15sp" 
-                android:textColor="@color/white"/>
+                android:gravity="center|left"
+                >
+                <TextView 
+                    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="        好友中心"
+                	android:textSize="15sp" 
+                	android:textColor="@color/white"
+                    /> 
+               <TextView                   
+                   android:id="@+id/friendNotifyNum"   
+                    android:layout_margin="2dip"           
+					android:textSize="10.0dip" 
+					android:textColor="@android:color/white" 
+					android:gravity="center" 
+					android:background="@drawable/tab_unread_bg" 
+					android:layout_width="wrap_content" 
+					android:layout_height="wrap_content" 
+					android:text="" />        
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/photo_main_page_masterAvatar"

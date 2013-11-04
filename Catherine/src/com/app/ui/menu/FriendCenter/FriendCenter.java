@@ -163,6 +163,7 @@ public class FriendCenter {
              
              notifyNum.setVisibility(View.GONE);
              UserInterface.notifyNum = 0;
+             UserInterface.friendNotifyNum = 0;
 		}
 	};
 	
@@ -283,7 +284,6 @@ OnClickListener editTextOnClickListener = new OnClickListener() {
 		else
 		{
 			notifyNum.setVisibility(View.GONE);
-			UserInterface.notifyNum = 0;
 		}
 		
 	    if (!isFirstVisit) {

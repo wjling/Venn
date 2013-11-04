@@ -62,8 +62,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver
 			 				//好友请求通知，写入数据库
 			 				adapter.insertData(1, uid, "ADD_FRIEND_REQUEST", msg);
 			 				Messager.getInstance().notifyChanged(0);
+			 				UserInterface.friendNotifyNum++;
 			 				break;
 			 			case 998:
+			 				UserInterface.friendNotifyNum++;
 			 				//同意或者拒绝添加，写入消息数据库
 			 				adapter.insertData(1, uid,  "ADD_FRIEND_VERIFY", msg);
 			 				//如果同意，写入好友数据库
@@ -83,6 +85,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver
 							}
 			 				break;
 			 			case 997:
+			 				UserInterface.activityNotifyNum++;
 			 				//新活动邀请通知，写入消息数据库
 			 				adapter.insertData(1,  uid, "ADD_ACTIVITY_INVITATION", msg);
 			 				break;
