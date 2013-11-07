@@ -49,15 +49,16 @@ public class imageUtil
 		//get max available vm memory
 		maxMemory = (int )(Runtime.getRuntime().maxMemory() / 1024);
 		//use 1/8th of the available memory for this memory cache
-		cacheSize = maxMemory / 16;
+		cacheSize = maxMemory / 6;
 		
-		mPhotoWallMemCache = new LruCache<Integer, Bitmap>(cacheSize);
-//		{
-//			@Override
-//			protected int sizeOf(Integer key, Bitmap bitmap) {
-//				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
-//			}
-//		};
+		mPhotoWallMemCache = new LruCache<Integer, Bitmap>(cacheSize)
+		{
+			@Override
+			protected int sizeOf(Integer key, Bitmap bitmap) {
+//				Log.e("imageUtil", "key = " + key + " size: " + bitmap.getRowBytes()*bitmap.getHeight()/1024);
+				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
+			}
+		};
 				
 		mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize);
 //		{
@@ -69,7 +70,7 @@ public class imageUtil
 //			}
 //		};
 		
-		
+		Log.e("imageUtil", "cache size = " + cacheSize);
 
 		mHandler = new myHandler();
 		fcHandler = null;
@@ -127,6 +128,15 @@ public class imageUtil
     
 	public static void savePhoto(int uid, Bitmap bmp)
 	{		
+		//check sd card exist
+//		boolean sdCardExist = Environment.getExternalStorageState()
+//				.equals( Environment.MEDIA_MOUNTED);
+//		if( false==sdCardExist)
+//		{
+//			Log.e("imageUtil", "sd card not exist");
+//			return;
+//		}
+		
 		//when you need to save the image inside your own folder in the sd card
 	    File imageFileFolder = new File( APP_PATH );
 
@@ -435,6 +445,14 @@ public class imageUtil
 //					Log.i("TAG", "save " + photoId + " to cache");
 				}
 				
+				//check sd card exist
+				boolean sdCardExist = Environment.getExternalStorageState()
+						.equals( Environment.MEDIA_MOUNTED);
+				if( false==sdCardExist)
+				{
+					Log.e("imageUtil", "sd card not exist");
+					return;
+				}
 				//when you need to save the image inside your own folder in the sd card
 			    File imageFileFolder = new File( APP_PATH );
 		        if( !imageFileFolder.exists() )      

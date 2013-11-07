@@ -556,12 +556,18 @@ public class Settings {
             // TODO: handle exception
         }
          
-        while ( data.length / 1024 > 50) {  
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
-            data = baos.toByteArray();
-        }
+        Bitmap image = BitmapFactory.decodeByteArray(data, 0, data.length);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 30, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while ( baos.toByteArray().length / 1024>100 && options>10) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩        
+            baos.reset();//重置baos即清空baos
+            options -= 10;//每次都减少10
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中  
+        } 
+             
+        data = baos.toByteArray();
+        Log.e("imageUtil","size = " + data.length/1024);
 //        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中   
 //        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片     
 

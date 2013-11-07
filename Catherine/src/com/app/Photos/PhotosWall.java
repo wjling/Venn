@@ -45,6 +45,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,9 @@ public class PhotosWall extends Activity
 	private TextView hintTV;
 	private String saveFilePath = "";
 	private imageUtil forImageUtil  = imageUtil.getInstance();
+	private ScrollView photoWallScrollView;
+	private final String TOVIEWTOP = "TOP";
+	private final String TOVIEWBOTTOM = "BOTTOM";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class PhotosWall extends Activity
 		leftView = (LinearLayout)findViewById(R.id.leftView);
 		rightView = (LinearLayout)findViewById(R.id.rightView);
 		hintTV = (TextView)findViewById(R.id.hintTV);
+		photoWallScrollView = (ScrollView)findViewById(R.id.photoWallScrollView);
 		
 		setWidth();
 		addPhoto.setOnClickListener( clickListener );
@@ -380,7 +385,7 @@ public class PhotosWall extends Activity
     }
 	
     /* 轮流在左右两侧添加显示图片*/
-	private void addAPhoto(Bitmap bm, String photoTextStr, final int photoId)
+	private void addAPhoto(Bitmap bm, String photoTextStr, final int photoId, String toPosition)
 	{
 		LinearLayout child = (LinearLayout)this.getLayoutInflater().inflate(R.layout.images_page_item, null);
 		ImageView photo = (ImageView) child.findViewById(R.id.photo);
@@ -425,13 +430,27 @@ public class PhotosWall extends Activity
 		
 		if( rightViewHeight>=leftViewHeight)
 		{
-			leftView.addView( child);
 			leftViewHeight+=setHeight;
+			
+			if( toPosition==TOVIEWTOP )
+			{
+				leftView.addView( child, 0);
+				photoWallScrollView.scrollTo(0, 0);
+			}
+			else
+				leftView.addView( child );
 		}
 		else
 		{
-			rightView.addView(child);
 			rightViewHeight+=setHeight;
+			
+			if( toPosition==TOVIEWTOP)
+			{
+				rightView.addView(child, 0);
+				photoWallScrollView.scrollTo(0, 0);
+			}
+			else
+				rightView.addView(child);
 		}
 	}
 	
@@ -507,7 +526,7 @@ public class PhotosWall extends Activity
 								int photoId = Integer.parseInt( photoIdStr.substring(0, photoIdStr.length()-1));
 //								int photoId = respJ/son.optLong("photo_id");
 //								Log.i(TAG, "photoId: "+photoId);								
-								addAPhoto(bm, "本地的", photoId);
+								addAPhoto(bm, "本地的", photoId, TOVIEWTOP);
 								forImageUtil.photoWallsavePhoto(photoId, bm);
 								forImageUtil.photoWallDeleteImg(saveFilePath);
 								
@@ -548,7 +567,7 @@ public class PhotosWall extends Activity
 									Bitmap bm = forImageUtil.photoWallGetImage( photoID );
 									if( null!=bm)
 									{
-										addAPhoto(bm, "本地缓存的", photoID);
+										addAPhoto(bm, "本地缓存的", photoID, TOVIEWBOTTOM);
 										photoIdListIndex++;
 									}
 									else 
@@ -598,7 +617,7 @@ public class PhotosWall extends Activity
 						if( is.length>0)
 						{
 							Bitmap bm = BitmapFactory.decodeByteArray(is, 0, is.length);
-							addAPhoto(bm, "下载的", photoID);
+							addAPhoto(bm, "下载的", photoID, TOVIEWBOTTOM);
 							
 							//add to photoWall cache
 							forImageUtil.photoWallsavePhoto(photoID, bm);
@@ -617,7 +636,7 @@ public class PhotosWall extends Activity
 								Bitmap bm = forImageUtil.photoWallGetImage( photoID );
 								if( null!=bm)
 								{
-									addAPhoto(bm, "本地缓存的", photoID);
+									addAPhoto(bm, "本地缓存的", photoID, TOVIEWBOTTOM);
 									photoIdListIndex++;
 								}
 								else 
