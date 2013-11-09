@@ -38,7 +38,7 @@ public class imageUtil
 //	private HashMap<Integer, Bitmap> imageMap = new HashMap<Integer, Bitmap>();
 	
 	private volatile static imageUtil uniqueInstance = null;
-	private LruCache<Integer, Bitmap> mMemoryCache, mPhotoWallMemCache;
+	private LruCache<Integer, Bitmap> mMemoryCache;/*, mPhotoWallMemCache;*/
 	private int maxMemory;
 	private int cacheSize;
 	private myHandler mHandler;
@@ -51,14 +51,14 @@ public class imageUtil
 		//use 1/8th of the available memory for this memory cache
 		cacheSize = maxMemory / 6;
 		
-		mPhotoWallMemCache = new LruCache<Integer, Bitmap>(cacheSize)
-		{
-			@Override
-			protected int sizeOf(Integer key, Bitmap bitmap) {
-//				Log.e("imageUtil", "key = " + key + " size: " + bitmap.getRowBytes()*bitmap.getHeight()/1024);
-				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
-			}
-		};
+//		mPhotoWallMemCache = new LruCache<Integer, Bitmap>(cacheSize)
+//		{
+//			@Override
+//			protected int sizeOf(Integer key, Bitmap bitmap) {
+////				Log.e("imageUtil", "key = " + key + " size: " + bitmap.getRowBytes()*bitmap.getHeight()/1024);
+//				return bitmap.getRowBytes()*bitmap.getHeight() / 1024;
+//			}
+//		};
 				
 		mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize);
 //		{
@@ -70,7 +70,7 @@ public class imageUtil
 //			}
 //		};
 		
-		Log.e("imageUtil", "cache size = " + cacheSize);
+		Log.e("imageUtil", "memory size = " + maxMemory + "cache size = " + cacheSize);
 
 		mHandler = new myHandler();
 		fcHandler = null;
@@ -439,11 +439,11 @@ public class imageUtil
 		new Thread()
 		{
 			public void run() {
-				if( mPhotoWallMemCache.get(photoId) ==null )
-				{
-					mPhotoWallMemCache.put(photoId, bmp);
+//				if( mPhotoWallMemCache.get(photoId) ==null )
+//				{
+//					mPhotoWallMemCache.put(photoId, bmp);
 //					Log.i("TAG", "save " + photoId + " to cache");
-				}
+//				}
 				
 				//check sd card exist
 				boolean sdCardExist = Environment.getExternalStorageState()
@@ -488,26 +488,34 @@ public class imageUtil
 	 */
 	public Bitmap photoWallGetImage( int photoId )
 	{
-		Bitmap bitmap = mPhotoWallMemCache.get( photoId );
+//		Bitmap bitmap = mPhotoWallMemCache.get( photoId );
 		
 		//if not in cache
-		if( null!=bitmap )
-		{
+//		if( null!=bitmap )
+//		{
 //			Log.i("TAG", "in cache---------");
-		}
-		else
-		{
+//		}
+//		else
+//		{
 			//if exist in file
-			File file = new File( PHOTO_WALL_PATH + photoId + ".jpg" );
-			if( file.exists() )
-			{
+//			File file = new File( PHOTO_WALL_PATH + photoId + ".jpg" );
+//			if( file.exists() )
+//			{
 //				Log.i("TAG", "in file---------");
-				bitmap = BitmapFactory.decodeFile( PHOTO_WALL_PATH + photoId + ".jpg" );			
-				mPhotoWallMemCache.put(photoId, bitmap);	
+//				bitmap = BitmapFactory.decodeFile( PHOTO_WALL_PATH + photoId + ".jpg" );			
+//				mPhotoWallMemCache.put(photoId, bitmap);	
 //				Log.i("TAG", "save " + photoId + " to cache" + ". size = " + mPhotoWallMemCache.size());
-			}
-		}
+//			}
+//		}
 			
+//		return bitmap;
+		File file = new File( PHOTO_WALL_PATH + photoId + ".jpg" );
+		Bitmap bitmap = null;
+		if( file.exists() )
+		{
+			bitmap = BitmapFactory.decodeFile( PHOTO_WALL_PATH + photoId + ".jpg" );		
+		}
+		
 		return bitmap;
 	}
 	

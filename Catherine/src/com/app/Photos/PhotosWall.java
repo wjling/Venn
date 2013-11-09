@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.json.JSONArray;
@@ -40,8 +43,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -79,6 +84,12 @@ public class PhotosWall extends Activity
 	private ScrollView photoWallScrollView;
 	private final String TOVIEWTOP = "TOP";
 	private final String TOVIEWBOTTOM = "BOTTOM";
+	private final int IMAGE_IN_FILE = 1;
+	private final int IMAGE_NOT_IN_FILE = 0;
+	private ImageMessageHandler imageHandler;
+	private boolean fillScreen,scrollDown,loadingImage,noMoreImage;
+	private int screenH, scrollViewY;
+	private View buttomHintView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +101,7 @@ public class PhotosWall extends Activity
 		userId = intent.getIntExtra("userId", -1);
 		event_Id = intent.getIntExtra("eventId", -1);
 		mhandler = new MsgHandler( Looper.myLooper());
+		imageHandler = new ImageMessageHandler(Looper.myLooper());
 		sender = new HttpSender();
 		
 		init();
@@ -102,13 +114,51 @@ public class PhotosWall extends Activity
 		rightView = (LinearLayout)findViewById(R.id.rightView);
 		hintTV = (TextView)findViewById(R.id.hintTV);
 		photoWallScrollView = (ScrollView)findViewById(R.id.photoWallScrollView);
+		photoWallScrollView.setOnTouchListener( scrollViewListener);
+		buttomHintView = (View)findViewById(R.id.buttomHint);
 		
+		screenH = getWindowManager().getDefaultDisplay().getHeight();
+		fillScreen = fillScreenOrNot();
+		scrollDown = false;
+		loadingImage = false;
+		noMoreImage = false;
 		setWidth();
 		addPhoto.setOnClickListener( clickListener );
 		
 		setHintTv( "正在加载图片列表...");
 		getPhotoIdList();
 	}
+	
+	private OnTouchListener scrollViewListener = new OnTouchListener() {
+		
+		@Override
+		public boolean onTouch(View v1, MotionEvent event) {
+			// TODO Auto-generated method stub
+			
+			if( event.getAction() == MotionEvent.ACTION_UP )
+			{
+				Log.e("luo", "UP " + photoWallScrollView.getScrollY());
+				if( photoWallScrollView.getScrollY()-scrollViewY<2 && photoWallScrollView.getScrollY()>=scrollViewY)
+				{
+					if( true==fillScreen && false==loadingImage && noMoreImage==false)
+					{
+						buttomHintView.setVisibility(View.VISIBLE);
+						loadingImage=true;
+						scrollDown = true;
+						loadNextImage();
+					}
+				}
+				scrollViewY = photoWallScrollView.getScrollY();
+			}
+			else if( event.getAction() == MotionEvent.ACTION_DOWN  )
+			{
+				scrollViewY = photoWallScrollView.getScrollY();
+				Log.e("luo", "DOWN " + photoWallScrollView.getScrollY());
+			}
+			
+			return false;
+		}
+	};
 	
 	private void getPhotoIdList()
 	{
@@ -159,6 +209,7 @@ public class PhotosWall extends Activity
 //	             pictureDialog.setCameraButtonListener(uploadByCameraListener);
 				
 				Dialog dialog = new AlertDialog.Builder(PhotosWall.this)
+					.setCancelable(false)
 					.setTitle("请选择")
 					.setPositiveButton("相册", uploadByPhotosListener)
 					.setNeutralButton("拍照", uploadByCameraListener)
@@ -417,16 +468,7 @@ public class PhotosWall extends Activity
 			}
 		});
 		
-		
 //		photoText.setText( photoTextStr );
-		
-//		int leftHeight = leftView.getMeasuredHeight();
-//		int rightHeight = rightView.getMeasuredHeight();
-//		
-//		if( rightHeight>=leftHeight )
-//			leftView.addView( child);
-//		else
-//			rightView.addView(child);
 		
 		if( rightViewHeight>=leftViewHeight)
 		{
@@ -451,6 +493,14 @@ public class PhotosWall extends Activity
 			}
 			else
 				rightView.addView(child);
+		}
+		
+		fillScreen = fillScreenOrNot();
+		loadingImage = false;
+		if( scrollDown==true)
+		{
+			setHintTv( "向下滑动获取更多图片...");
+			buttomHintView.setVisibility(View.GONE);
 		}
 	}
 	
@@ -493,6 +543,115 @@ public class PhotosWall extends Activity
 		hintTV.setText( hint );
 	}
 	
+	private void loadNextImage()
+	{
+		if( false==scrollDown&&true==fillScreen)
+		{
+			setHintTv( "向下滑动获取更多图片...");
+			return;
+		}
+		
+		int length = photoIdList.length();
+		if( photoIdListIndex<length )
+		{
+			int photoID = 0;
+			try {
+				photoID = photoIdList.getInt(photoIdListIndex);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+			
+			setHintTv( "正在获取图片" + photoID + "...");
+			photoWallGetImage( photoID );
+		}
+		else
+		{
+			setHintTv( "正在获取图片列表...");
+			getPhotoIdList();
+		}
+	}
+	
+	public void photoWallGetImage( final int photoID )
+	{
+		new Thread()
+		{
+			public void run()
+			{
+				File file = new File( imageUtil.PHOTO_WALL_PATH + photoID + ".jpg" );
+				Bitmap bitmap = null;
+				if( file.exists() )
+				{
+					bitmap = BitmapFactory.decodeFile( imageUtil.PHOTO_WALL_PATH + photoID + ".jpg" );	
+					Message message = Message.obtain();
+		            message.what = IMAGE_IN_FILE;
+		            Map<String, Object> param = new HashMap<String, Object>();
+					param.put("bm", bitmap);
+					param.put("photoID", photoID);
+		            message.obj = param;
+		            imageHandler.sendMessage(message);
+				}
+				else
+				{
+					Message message = Message.obtain();
+		            message.what = IMAGE_NOT_IN_FILE;
+		            message.obj = photoID;
+		            imageHandler.sendMessage(message);
+				}
+			}
+		}.start();
+		
+	}
+	
+	private boolean fillScreenOrNot()
+	{
+		return leftViewHeight>=screenH || rightViewHeight>=screenH;
+	}
+	
+	class ImageMessageHandler extends Handler
+	{
+		public ImageMessageHandler(Looper looper)
+		{
+			super(looper);
+		}
+		
+		public void handleMessage(Message msg)
+		{
+			int photoID;
+			switch (msg.what) {
+			case IMAGE_IN_FILE:
+				Map<String, Object> param = (Map<String, Object>) msg.obj;
+				bm = (Bitmap) param.get("bm");
+				photoID = (Integer) param.get("photoID");
+				
+				if( null!=bm)
+				{
+					addAPhoto(bm, "本地缓存的", photoID, TOVIEWBOTTOM);
+				}
+				
+				photoIdListIndex++;
+				
+				if( scrollDown==false )
+					loadNextImage();
+				break;
+				
+			case IMAGE_NOT_IN_FILE:
+				photoID = (Integer) msg.obj;
+				setHintTv( "正在下载图片" + photoID + "...");
+				SimpleKeyValue []kvs = 
+					{ 
+						new SimpleKeyValue("photo_id", photoID),
+						new SimpleKeyValue("cmd", "download")
+					};
+				HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+	
 	class MsgHandler extends Handler
 	{
 		public MsgHandler(Looper looper)
@@ -510,7 +669,7 @@ public class PhotosWall extends Activity
 			if( !"DEFAULT".equals(returnStr))
 			{
 				switch ( msg.what) {
-				case OperationCode.UPLOAD_PHOTO:     //处理HttpHelperPlus发送请求之后，得到的结果
+				case OperationCode.UPLOAD_PHOTO:     //图片上传结果
 							progressDialog.dismiss();			
 					try {											
 							respJson  = new JSONObject(returnStr);
@@ -519,13 +678,9 @@ public class PhotosWall extends Activity
 							
 							if(ReturnCode.NORMAL_REPLY == cmd )
 							{
-								//addAPhoto(bm, "本地上传的");
-//								int photoId = (int)respJson.optLong("photo_id");
-								String photoIdStr = respJson.optString("photo_id");
-								
+								String photoIdStr = respJson.optString("photo_id");						
 								int photoId = Integer.parseInt( photoIdStr.substring(0, photoIdStr.length()-1));
-//								int photoId = respJ/son.optLong("photo_id");
-//								Log.i(TAG, "photoId: "+photoId);								
+						
 								addAPhoto(bm, "本地的", photoId, TOVIEWTOP);
 								forImageUtil.photoWallsavePhoto(photoId, bm);
 								forImageUtil.photoWallDeleteImg(saveFilePath);
@@ -542,7 +697,7 @@ public class PhotosWall extends Activity
 					}					
 					break;
 					
-				case OperationCode.GET_PHOTO_LIST:
+				case OperationCode.GET_PHOTO_LIST:   // 获取图片列表结果
 					try {											
 						respJson  = new JSONObject(returnStr);
 						cmd = respJson.getInt("cmd");
@@ -559,41 +714,13 @@ public class PhotosWall extends Activity
 								//down first image 
 								photoIdListIndex = 0;                             //index initialize
 								
-								//get images in file
-								int photoID;
-								while( photoIdListIndex<length )
-								{
-									photoID = photoIdList.getInt(photoIdListIndex);								
-									Bitmap bm = forImageUtil.photoWallGetImage( photoID );
-									if( null!=bm)
-									{
-										addAPhoto(bm, "本地缓存的", photoID, TOVIEWBOTTOM);
-										photoIdListIndex++;
-									}
-									else 
-									{
-										setHintTv( "正在下载图片" + photoID + "...");
-										SimpleKeyValue []kvs = 
-											{ 
-												new SimpleKeyValue("photo_id", photoID),
-												new SimpleKeyValue("cmd", "download")
-											};
-										HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
-										
-										break;   //记住跳出循环体
-									}
-								}
-								
-								if( photoIdListIndex>=length)
-								{
-									getPhotoIdList();
-									setHintTv( "正在获取图片列表...");
-								}
+								loadNextImage();
 							}
 							else
 							{
-								setHintTv( "没有更多图片了. 去上传吧=>");
-								//Toast.makeText(PhotosWall.this, "没有更多图片了", Toast.LENGTH_SHORT).show();
+								setHintTv( "没有更多图片了. 去上传吧 =>");
+								noMoreImage = true;
+								buttomHintView.setVisibility(View.GONE);
 							}
 						}
 						else
@@ -606,7 +733,7 @@ public class PhotosWall extends Activity
 					}		
 					break;
 					
-				case OperationCode.DOWNLOAD_PHOTO:
+				case OperationCode.DOWNLOAD_PHOTO:   //返回图片
 
 					byte is[] = (byte[])msg.obj;
 					int photoID;
@@ -623,49 +750,10 @@ public class PhotosWall extends Activity
 							forImageUtil.photoWallsavePhoto(photoID, bm);
 						}
 										
-						photoIdListIndex++;   
+						photoIdListIndex++; 
+						if( scrollDown==false )
+							loadNextImage();
 						
-						//download the next image from the server if there are more images
-						int length = photoIdList.length();
-						if( photoIdListIndex < length)
-						{
-
-							while( photoIdListIndex<length )
-							{
-								photoID = photoIdList.getInt(photoIdListIndex);								
-								Bitmap bm = forImageUtil.photoWallGetImage( photoID );
-								if( null!=bm)
-								{
-									addAPhoto(bm, "本地缓存的", photoID, TOVIEWBOTTOM);
-									photoIdListIndex++;
-								}
-								else 
-								{
-									setHintTv( "正在下载图片" + photoID + "...");
-									
-									SimpleKeyValue []kvs = 
-										{ 
-											new SimpleKeyValue("photo_id", photoIdList.getInt(photoIdListIndex)),
-											new SimpleKeyValue("cmd", "download")
-										};
-									HttpHelperPlus.getInstance().sendRequest(kvs, OperationCode.DOWNLOAD_PHOTO, mhandler);
-									
-									break;   //记住跳出循环体
-								}
-							}			
-							
-							if( photoIdListIndex >= length)
-							{
-								getPhotoIdList();
-								setHintTv( "正在获取图片列表...");
-							}
-						}
-						//
-						else
-						{
-							getPhotoIdList();
-							setHintTv( "正在获取图片列表...");
-						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
